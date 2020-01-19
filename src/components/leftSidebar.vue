@@ -42,7 +42,7 @@
         //         //     flag: !index?true:false
         //         // });
         //     });
-        //     // console.log(this.leftBarData);
+        //     // console.log(this.leftBarData);//测试提交
         // }
     }
 </script>
