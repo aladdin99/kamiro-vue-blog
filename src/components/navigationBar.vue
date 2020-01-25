@@ -1,7 +1,7 @@
 <template>
     <div class="nav">
         <div class="banner-left">
-            <span style="margin-right: 15px;">MDSN</span>
+            <span style="margin-right: 1.5rem;">MDSN</span>
             <ul>
                 <li v-for="(item,index) in bannerData" :key="index" @click="nextInfo(index)"><span :class="{'checked':(item.flag)}" :title="item.name">{{item.name}}</span></li>
             </ul>
@@ -18,13 +18,13 @@
         <div class="banner-right">
             <span class="blogging">
                 <i class="el-icon-edit" style="padding-right: 5px;"></i>
-                <span>写博客</span>
+                <span><router-link to="/md/blogging" style="text-decoration: none;color: #2c3e50;">写博客</router-link></span>
             </span>
             <el-badge :value="12" class="item">
                 <i class="el-icon-message-solid message"></i>
             </el-badge>
-
-            <span class="logister">登陆/注册</span>
+            <span class="logister" v-show="isLogin">登陆/注册</span>
+            <span class="logister" v-show="!isLogin"><router-link to="/personal/index"><img :src="circleUrl"></router-link></span>
         </div>
     </div>
 </template>
@@ -55,7 +55,9 @@
                     "South Dakota", "Tennessee", "Texas",
                     "Utah", "Vermont", "Virginia",
                     "Washington", "West Virginia", "Wisconsin",
-                    "Wyoming"]
+                    "Wyoming"],
+                circleUrl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                isLogin: false
             }
         },
         mounted() {
@@ -91,7 +93,7 @@
 <style lang="less">
     *{margin: 0;padding: 0;}
     .nav{
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,.05);height: 4.5rem;padding: 0 12%;background-color: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.05);height: 4.5rem;padding: 0 12vw;background-color: #fff;
         display: flex;justify-content: space-between;align-items: center;cursor: pointer;}
     .banner-left{
         ul {list-style-type:none;display:inline-block;
@@ -102,7 +104,7 @@
         .el-select{margin-left: 1.5rem;}
     }
     .banner-right{display: flex;justify-content: space-between;align-items: center;
-        .blogging{color: #D92E2E;display: inline-block;height:100%;;padding: 0 1.5rem;line-height: 4.8rem;
+        .blogging{color: #D92E2E;display: inline-block;height:100%;padding: 0 1.5rem;line-height: 4.5rem;box-sizing: border-box;
             &:hover{background-color: #fff1f1;transition: background-color .5s;}
         }
         .item{padding: 0 2rem;
@@ -111,7 +113,9 @@
             font-size: .8rem;height: 1.2rem;line-height: 1.5rem;padding: 0px .4rem;
         }}
         .message{color: #C3C3C3;font-size: 1.6rem;}
-        .logister{display: inline-block;height: 100%;padding: 0 1.5rem;line-height: 4.8rem;transition: background-color .5s;}
+        .logister{display: inline-block;height: 4.5rem;padding: 0 1.5rem;line-height: 4.5rem;transition: background-color .5s;
+            img{width: 3rem;height:3rem;border-radius: 50%;margin-top: 50%;transform: translateY(-25%);}
+        }
         .logister:hover{background-color: #F0F0F0;transition: background-color .5s;}
     }
 </style>
