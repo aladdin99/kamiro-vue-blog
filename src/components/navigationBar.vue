@@ -24,7 +24,39 @@
                 <i class="el-icon-message-solid message"></i>
             </el-badge>
             <span class="logister" v-show="isLogin">登陆/注册</span>
-            <span class="logister" v-show="!isLogin"><router-link to="/personal/index"><img :src="circleUrl"></router-link></span>
+            <span class="logister" v-show="!isLogin">
+                <router-link to="/personal/index"><img :src="circleUrl"></router-link>
+                <ul class="lohisterInner">
+                    <li><icon-svg icon-class="icon-guanzhu" class="iconClass" style="padding-left: 1rem;"/><span>我的关注</span></li>
+                    <li><icon-svg icon-class="icon-icon-test" class="iconClass"/><span>我的收藏</span></li>
+                    <li><icon-svg icon-class="icon-gerenzhongxin" class="iconClass"/><span>个人中心</span></li>
+                    <li><icon-svg icon-class="icon-Account-Settings" class="iconClass"/><span>账号设置</span></li>
+                    <li><icon-svg icon-class="icon-bokeyuan" class="iconClass"/><span>我的博客</span></li>
+                    <li><icon-svg icon-class="icon-guanli" class="iconClass"/><span>管理博客</span></li>
+                    <li><icon-svg icon-class="icon-bangzhu" class="iconClass"/><span>帮助</span></li>
+                    <li><icon-svg icon-class="icon-icon_tuichu-" class="iconClass"/><span><router-link to="/" style="text-decoration: none;color: #2c3e50;">退出</router-link></span></li>
+                </ul>
+            </span>
+<!--            <el-popover-->
+<!--                    placement="top-end"-->
+<!--                    width="100"-->
+<!--                    :visible-arrow="false"-->
+<!--                    trigger="hover"-->
+<!--            >-->
+<!--                <div style="background-color: #D92E2E;">-->
+<!--                    <ul style="list-style: none;">-->
+<!--                        <li><icon-svg icon-class="icon-guanzhu"/>我的关注</li>-->
+<!--                        <li><icon-svg icon-class="icon-icon-test"/>我的收藏</li>-->
+<!--                        <li><icon-svg icon-class="icon-gerenzhongxin"/>个人中心</li>-->
+<!--                        <li><icon-svg icon-class="icon-Account-Settings"/>账号设置</li>-->
+<!--                        <li><icon-svg icon-class="icon-wode"/>我的博客</li>-->
+<!--                        <li><icon-svg icon-class="icon-guanli"/>管理博客</li>-->
+<!--                        <li><icon-svg icon-class="icon-bangzhu"/>帮助</li>-->
+<!--                        <li><icon-svg icon-class="icon-icon_tuichu-"/>退出</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--                <span class="logister" slot="reference" v-show="!isLogin"><router-link to="/personal/index"><img :src="circleUrl"></router-link></span>-->
+<!--            </el-popover>-->
         </div>
     </div>
 </template>
@@ -84,6 +116,7 @@
                 this.bannerData.forEach(item=>{
                     item.flag = false;
                 });
+                this.$router.push('/index');//跳转到首页
                 this.bannerData[index].flag=true;
             }
         }
@@ -113,9 +146,21 @@
             font-size: .8rem;height: 1.2rem;line-height: 1.5rem;padding: 0px .4rem;
         }}
         .message{color: #C3C3C3;font-size: 1.6rem;}
-        .logister{display: inline-block;height: 4.5rem;padding: 0 1.5rem;line-height: 4.5rem;transition: background-color .5s;
+        .logister{display: inline-block;height: 4.5rem;padding: 0 1.5rem;line-height: 4.5rem;transition: background-color .5s;position: relative;
             img{width: 3rem;height:3rem;border-radius: 50%;margin-top: 50%;transform: translateY(-25%);}
+            .lohisterInner{padding:.5rem 0;background-color:#D92E2E;color:#fff;list-style: none;width: 12rem;height: 35rem;position: absolute;right:0rem;top:4.5rem;text-align:left;
+                border-bottom-left-radius: .5rem;border-bottom-right-radius: .5rem; display: none;
+                li{padding: 0 1rem;}
+                span{display: inline-block;margin-left: 1rem;}
+                .iconClass{padding-left: 1rem;}
+            }
         }
-        .logister:hover{background-color: #F0F0F0;transition: background-color .5s;}
+        .logister:hover{background-color: #F0F0F0;transition: background-color .5s;
+            .lohisterInner{z-index: 1000;visibility: block; display: block;
+                li:hover{background-color: #D92E2E;color: #fff;
+                    &:hover{background-color: #9C2828;}
+                }
+            }
+        }
     }
 </style>

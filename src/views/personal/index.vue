@@ -41,7 +41,71 @@
                         <ul class="part3">
                             <li>
                                 <div>昵称: <span>Aladdin99</span></div>
-                                <span>修改资料</span>
+                                <span>
+                                    <el-button type="text" @click="dialogFormVisible = true">修改资料</el-button>
+                                    <el-dialog title="修改资料" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="50rem">
+                                        <ul style="padding: 0 2rem;list-style: none;">
+                                            <li></li>
+                                            <li>昵称:
+                                                <input type="text" style="padding:0 2rem;box-sizing:border-box;font-size:1.4rem;color:#4d4d4d;height: 3.5rem;width:17rem;border-radius: .4rem;border: 1px solid #dcdfe6!important;margin-left: 1.5rem;"><span>一个月只能修改一次</span>
+                                            </li>
+                                            <li>实名:
+                                                <input type="text" style="padding:0 2rem;box-sizing:border-box;font-size:1.4rem;color:#4d4d4d;height: 3.5rem;width:17rem;border-radius: .4rem;border: 1px solid #dcdfe6!important;margin-left: 1.5rem;">
+                                            </li>
+                                            <li>职位:
+                                                <input type="text" style="padding:0 2rem;box-sizing:border-box;font-size:1.4rem;color:#4d4d4d;height: 3.5rem;width:17rem;border-radius: .4rem;border: 1px solid #dcdfe6!important;margin-left: 1.5rem;">
+                                            </li>
+                                            <li>性别:
+                                                <el-select v-model="form.sex" placeholder="男" style="width:17rem;margin-left: 1.5rem;" size="small">
+                                                    <el-option label="男" value="0"></el-option>
+                                                    <el-option label="女" value="1"></el-option>
+                                                </el-select>
+                                            </li>
+                                            <li>生日:
+                                                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 17rem;padding-left: 1.5rem;" size="small"></el-date-picker>
+                                            </li>
+                                            <li>行业:
+                                                <el-select v-model="form.trade" placeholder="请选择" style="width:17rem;margin-left: 1.5rem;" size="small">
+                                                    <el-option label="互联网.电子商务" value="0"></el-option>
+                                                    <el-option label="电子.微电子" value="1"></el-option>
+                                                    <el-option label="批发.零售" value="2"></el-option>
+                                                    <el-option label="贸易.进出口" value="3"></el-option>
+                                                    <el-option label="广告.会展.公关" value="4"></el-option>
+                                                </el-select>
+                                            </li>
+                                            <li>地区:
+                                                <el-select v-model="form.state" placeholder="请选择" style="width:10rem;margin-left: 1.5rem;" size="small">
+                                                    <el-option label="中国" value="0"></el-option>
+                                                    <el-option label="美国" value="1"></el-option>
+                                                    <el-option label="英国" value="2"></el-option>
+                                                    <el-option label="法国" value="3"></el-option>
+                                                    <el-option label="俄罗斯" value="4"></el-option>
+                                                </el-select>
+                                                <el-select v-model="form.province" placeholder="请选择" style="width:10rem;margin-left: 1.5rem;" size="small">
+                                                    <el-option label="北京" value="0"></el-option>
+                                                    <el-option label="天津" value="1"></el-option>
+                                                    <el-option label="福建省" value="2"></el-option>
+                                                    <el-option label="河北省" value="3"></el-option>
+                                                    <el-option label="山西省" value="4"></el-option>
+                                                </el-select>
+                                                <el-select v-model="form.city" placeholder="请选择" style="width:10rem;margin-left: 1.5rem;" size="small">
+                                                    <el-option label="福州市" value="0"></el-option>
+                                                    <el-option label="厦门市" value="1"></el-option>
+                                                    <el-option label="莆田市" value="2"></el-option>
+                                                    <el-option label="三明市" value="3"></el-option>
+                                                    <el-option label="泉州市" value="4"></el-option>
+                                                </el-select>
+                                            </li>
+                                            <li>简介:
+                                                <textarea maxlength="300" style="margin-left: 1.5rem;width: 35rem;height: 5rem;border-radius: .4rem;border: 1px solid #dcdfe6!important;resize: none;"></textarea>
+                                            </li>
+                                            </ul>
+                                        <div slot="footer" class="dialog-footer">
+                                            <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                                        </div>
+                                    </el-dialog>
+                                </span>
                             </li>
                             <li>实名: <span>underfine</span></li>
                             <li>性别: <span>男</span></li>
@@ -69,6 +133,23 @@
             return{
                 bannerScroll:false,
                 leftScroll:false,
+                dialogFormVisible: false,
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: '',
+                    trade: "",
+                    sex: "",
+                    state:"",
+                    province:"",
+                    city:"",
+                },
+                formLabelWidth: '120px'
             }
         },
         methods:{

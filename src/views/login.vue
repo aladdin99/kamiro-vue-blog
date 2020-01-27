@@ -21,29 +21,50 @@
                 <span :class="{login:!isLogin}" @click="change(false)">注册登录</span>
               </div>
               <div class="input-item" v-show="isLogin">
-                <el-input v-model="accuount" placeholder="手机号/邮箱/用户名" size="small" maxlength="11"></el-input>
-                <el-input v-model="password" placeholder="密码" stext-linkhow-password size="small" maxlength="6"></el-input>
+                <el-input v-model="registerData.email" placeholder="手机号/邮箱/用户名" size="small" type="email"></el-input>
+                <el-input v-model="registerData.pass" placeholder="密码" stext-linkhow-password size="small" maxlength="6"></el-input>
                 <a href="#" class="text-link">忘记密码</a>
               </div>
               <div class="input-item" v-show="!isLogin">
-                <!--                            .el-select-dropdown__item-->
-                <div class="register-number">
-                  <el-select v-model="value" placeholder="请选择" size="small" style="width: 120px;" popper-class="select-down">
-                    <el-option
-                            v-for="item in cities"
-                            :key="item.area"
-                            :label="item.prefix"
-                            :value="item.area">
-                      <span style="float: left">{{ item.prefix }}</span>
-                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.area }}</span>
-                    </el-option>
-                  </el-select>
-                  <el-input v-model="accuount" placeholder="手机号/邮箱/用户名" size="small" maxlength="11" style="width: 55%;margin:0;"></el-input>
-                </div>
-                <el-input v-model="password" placeholder="密码" stext-linkhow-password size="small" maxlength="6"></el-input>
-                <a href="#" class="text-link">忘记密码</a>
+                <el-form :model="registerData" ref="registerData" label-width="100px" class="demo-dynamic">
+                <el-form-item
+                        prop="name"
+                        label="昵称"
+                        hide-required-asterisk="true"
+                        :rules="[
+                { required: true, message: '请输入昵称', trigger: 'blur' },
+                ]"
+                >
+                  <el-input v-model="registerData.name" size="small"></el-input>
+                </el-form-item>
+                <el-form-item
+                      prop="email"
+                      label="邮箱"
+                      :rules="[
+                { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+                ]"
+                >
+                    <el-input v-model="registerData.email" size="small"></el-input>
+                </el-form-item>
+                <el-form-item
+                      label="密码"
+                      prop="pass"
+                      :rules="[
+                { required: true, message: '请输入密码', trigger: 'blur' },
+                ]"
+                >
+                  <el-input type="password" v-model="registerData.pass" autocomplete="off" size="small"></el-input>
+                </el-form-item>
+                </el-form>
+                <a href="#" class="text-link" v-show="isLogin" >忘记密码</a>
               </div>
-              <router-link to="/index"><el-button size="medium" :disabled="!accuount||!password" :class="{'login-test':(accuount&&password)}">登录</el-button></router-link>
+<!--              <router-link to="/index">-->
+                <el-button size="medium" :disabled="!registerData.email||!registerData.pass"
+                           :class="{'login-test':(registerData.email&&registerData.pass)}" v-show="isLogin"  @click="login">登录</el-button>
+<!--              </router-link>-->
+                <el-button size="medium" v-show="!isLogin" :disabled="!registerData.email||!registerData.pass||!registerData.name"
+                           :class="{'login-test':(registerData.email&&registerData.pass&&registerData.name)}" @click="register">注册</el-button>
             </div>
             <div><el-divider content-position="right">不信戳进来看</el-divider></div>
           </el-card>
@@ -78,19 +99,73 @@ export default {
   data() {
     return {
       isLogin: true,
-      accuount: "",
-      password: "",
-      cities: [{prefix:"+86",area:"中国"},{prefix:"+1",area:"美国"},{prefix:"+1",area:"加拿大"},{prefix:"+81",area:"日本"},
-        {prefix:"+65",area:"新加坡"},{prefix:"+852",area:"中国香港"},{prefix:"+886",area:"中国台湾"},],
-      value: "",
+      registerData: {
+          email: '',
+          name: '',
+          pass: ''
+      }
     }
   },
   methods: {
-    change(flag){
+    change(flag){   //登录/注册切换标识
       this.isLogin = flag?true:false;
-      this.accuount = "";
-      this.password = "";
-    }
+      this.registerData.email = "";
+      this.registerData.pass = "";
+      this.registerData.name = "";
+    },
+    register(){// Get请求_账号注册
+      let self = this;
+      this.$axios.get('http://localhost/graduation_project/blog2/src/php/register',{
+          params: {
+              email: this.registerData.email,
+              password: this.registerData.pass,
+              nickName: this.registerData.name
+          }
+      }).then(function(res){
+        if(res.data.status){
+          alert("该账号已存在!");
+        }else{
+          alert("已发送验证链接到您的邮箱~");
+          self.change(true);
+        }
+      }).catch(function(res){
+        console.log(res);
+      });
+    },
+    login(){// Get请求_账号登录
+      let self = this;
+      this.$axios.get('http://localhost/graduation_project/blog2/src/php/login',{
+        params: {
+          email: self.registerData.email,
+          password: self.registerData.pass,
+        }
+      }).then(function(res){
+        console.log(res.data.isLogin);//0:密码错误;1:验证成功;-1:账号不存在
+        if(res.data.isLogin==1){//验证成功
+          this.$router.push({
+            path:'./index',
+            // 路由传参(此处数据暂时没有用到)
+            query: {
+              // name: obj[i].name,
+              email: this.registerData.email,
+              // password: obj[i].password
+            }
+          })
+        }
+      }).catch(function(res){
+        console.log(res);
+      });
+    },
+    submitForm(formName) {//表单验证
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+              alert('submit!');
+          } else {
+              console.log('error submit!!');
+              return false;
+          }
+      });
+    },
   },
   mounted() {
     this.change(true);
@@ -117,16 +192,17 @@ export default {
     height: 60vh;width:60vh;margin-top: 5vh;margin-left: 15px;
     .box-inner{
       width:80%;margin-left:50%;transform:translateX(-50%);padding:5% 0;
-      span{padding: 0 20px;}
+      span{padding: 0 2rem;}
       .head-item{display:flex;width: 80%; justify-content:space-around;border-bottom: 2px solid #f5f5f5;cursor: pointer;margin-left: 50%;transform: translateX(-50%)}
       .input-item{margin-top: 30px;
+        .register{padding: 1.5rem 0;}
         .el-input{width: 80%;
-          &:nth-child(2){margin-top: 20px;}
+          &:nth-child(2){margin-top: 2rem;}
         }
-        .text-link{display:inline-block;margin-top: 20px;width: 80%;text-align: right;text-decoration: none;}
+        .text-link{display:inline-block;margin-top: 2rem;width: 80%;text-align: right;text-decoration: none;}
         span{padding: 0!important;}
       }
-      .el-button{width: 80%;margin-top: 60px;background-color: #f5f5f5;color: #ccc;}
+      .el-button{width: 80%;margin-top: 5rem;background-color: #f5f5f5;color: #ccc;}
       .login-test{color: #fff;background-color: #ca0c16;}
       .register-number{
         display:flex;width: 80%;margin-left: 50%;transform: translateX(-50%);

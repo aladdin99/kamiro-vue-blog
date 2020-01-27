@@ -33,7 +33,7 @@
                 var formdata = new FormData();
                 formdata.append('image', $file);
                 this.img_file[pos] = $file;
-                console.log(this.content);
+                // console.log(this.content);
                 // this.$http({
                 //     url: '/api/edit/uploadimg',
                 //     method: 'post',
@@ -55,8 +55,8 @@
 
 <style lang="less">
     .blogging{padding: 1rem;
-        .articleTitle{display: flex;padding: 1rem;justify-content: left;align-items: center;
-            &>div:nth-child(1){flex: 1;font-size: 2rem;text-align: left;cursor: pointer;}
+        .articleTitle{display: flex;padding: .5rem 1rem;justify-content: left;align-items: center;
+            &>div:nth-child(1){flex: 1;font-size: 1.8rem;text-align: left;cursor: pointer;line-height: 3rem;}
             &>div:nth-child(2){flex: 5;
                 input{display: inline-block;width: 100%;height: 3rem;padding: .5rem;font-size: 1.8rem;outline-style: none;}
             }
