@@ -8,10 +8,10 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
 //引入PHPMailer的核心文件 使用require_once包含避免出现PHPMailer类重复定义的警告
-require_once("./PHPMail/PHPMailer.php");
-require_once("./PHPMail/Exception.php");
-require_once("./PHPMail/POP3.php");
-require_once("./PHPMail/SMTP.php");
+require_once("../PHPMail/PHPMailer.php");
+require_once("../PHPMail/Exception.php");
+require_once("../PHPMail/POP3.php");
+require_once("../PHPMail/SMTP.php");
 
 function sendMail($to,$title,$content){
     $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
