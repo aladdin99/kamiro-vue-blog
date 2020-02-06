@@ -48,7 +48,7 @@
         echo "0 结果";
     }
     //$get = json_encode($data[0]['region'],JSON_UNESCAPED_UNICODE);
-    print_r(json_encode($data[0],JSON_UNESCAPED_UNICODE)); //JSON_UNESCAPED_UNICODE防止中文乱码
+    print_r(json_encode($data[0])); //JSON_UNESCAPED_UNICODE防止中文乱码
     //print_r(json_decode($region,true)); 解码（取数据库）
 
 ?>

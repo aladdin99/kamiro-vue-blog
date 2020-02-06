@@ -8,15 +8,15 @@
         <el-container class="mainbody" style="width: 100%;background-color: #f5f6f7;">
             <!--Left user information bar-->
             <el-tabs :tab-position="tabPosition" style="background-color: #fff;">
-                <el-tab-pane label="个人资料"> <personalData></personalData></el-tab-pane>
-                <el-tab-pane label="我的收藏">我的收藏</el-tab-pane>
-                <el-tab-pane label="我的勋章">我的勋章</el-tab-pane>
-                <el-tab-pane label="我关注的人">我关注的人</el-tab-pane>
-                <el-tab-pane label="我的粉丝">我的粉丝</el-tab-pane>
-                <el-tab-pane label="我的标签">我的标签</el-tab-pane>
-                <el-tab-pane label="我的博客">我的博客</el-tab-pane>
-                <el-tab-pane label="签到赢福利">签到赢福利</el-tab-pane>
-                <el-tab-pane label="抽奖">抽奖</el-tab-pane>
+                <el-tab-pane label="个人资料"><personalData></personalData></el-tab-pane>
+                <el-tab-pane label="我的收藏"><collection></collection></el-tab-pane>
+                <el-tab-pane label="我的勋章">我的勋章（暂未开发）</el-tab-pane>
+                <el-tab-pane label="我关注的人">我关注的人（暂未开发）</el-tab-pane>
+                <el-tab-pane label="我的粉丝">我的粉丝（暂未开发）</el-tab-pane>
+                <el-tab-pane label="我的标签">我的标签（暂未开发）</el-tab-pane>
+                <el-tab-pane label="我的博客">我的博客（暂未开发）</el-tab-pane>
+                <el-tab-pane label="签到赢福利">签到赢福利（暂未开发）</el-tab-pane>
+                <el-tab-pane label="抽奖">抽奖（暂未开发）</el-tab-pane>
             </el-tabs>
 <!--            <el-aside width="20rem">-->
 <!--                <ul class="leftBar">-->
@@ -45,10 +45,11 @@
 <script>
     import navigationBar from "components/navigationBar.vue";
     import personalData from "components/personal/dataInfo.vue";
+    import collection from "../../components/personal/collection";
     export default {
         name: "user",
         components: {
-            navigationBar,personalData
+            navigationBar,personalData,collection
         },
         data(){
             return{
