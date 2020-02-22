@@ -46,7 +46,7 @@
 
     // 3、插入数据(id是收藏夹的唯一值 主键；bind是邮箱号作为外键 识别该收藏夹对应的用户)
     if($status==1){
-        $sql_search = "SELECT * FROM `collection_clip`  WHERE `id` = '$id'";//校验是否存在该收藏夹
+        $sql_search = "SELECT * FROM `collection_clip`  WHERE `id` = '$id'";//检索收藏夹
         $result_search = $conn->query($sql_search);
         if($result_search->num_rows > 0){//如果收藏夹已经存在，那么就去更新收藏夹
             $sql = "UPDATE collection_clip SET `title` = '$title',`describe` = '$describe',`power` = '$power' WHERE `id` = '$id'";

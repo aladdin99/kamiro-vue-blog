@@ -220,7 +220,8 @@ export default {
                 // password: obj[i].password
               }
             });
-            localStorage.setItem('email',self.registerData.email)
+            localStorage.setItem('email',self.registerData.email);
+            localStorage.setItem('nickName',res.data.nickName);
             break;
           default:
             alert('账号不存在!');

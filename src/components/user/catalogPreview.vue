@@ -2,51 +2,66 @@
     <div class="catalogPreview">
         <div class="banner">
             <div><el-checkbox v-model="checked">只看原创</el-checkbox></div>
-            <div class="sort">
-                <span>排序:</span>
-                <span class="selected">默认</span>
-                <span>按更新时间</span>
-                <span>按访问量</span>
-                <span>RSS订阅</span>
-            </div>
+            <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" style="box-shadow:none;padding:0;border:1px solid #ede9ff;display:block;text-align:center;">
+                <el-tab-pane label="默认" name="first"></el-tab-pane>
+                <el-tab-pane label="按更新时间" name="second"></el-tab-pane>
+                <el-tab-pane label="按访问量" name="third"></el-tab-pane>
+                <el-tab-pane label="RSS订阅" name="fourth"></el-tab-pane>
+            </el-tabs>
         </div>
-        <div class="catalog" v-for="item in 20" :key="item">
-            <div class="title"><router-link to="/index/user/details" style="text-decoration: none;"><span class="titleInner"> python专题文件操作 </span></router-link></div>
+        <div class="catalog" v-for="(item,index) in checked?original:alldata" :key="index">
+            <div class="title">
+                <router-link :to="{path:'/index/user/details',query:{userId:userId,articleId:item.uniqueId}}" style="text-decoration: none;">
+                    <span class="titleInner"> {{item.title}} </span>
+                </router-link>
+            </div>
             <div class="contentt">
-                <router-link to="/index/user/details" style="text-decoration: none;"><span class="innerContent">
-                一 前言 本篇文章主要对文件操作进行说明，知识追寻者创作必属精品，读完本篇你将获得基础的文件操作能力，深入理解文件操作API，
-                基础真的很重要，不管学什么知识，故看知识追寻者的专题系列真的很不错。 二 open函数介绍 2.1 open函数概览 open(file, mode=‘r’, buffering=None, encoding=None, errors=None, newline=None, closefd=True)
+                <router-link :to="{path:'/index/user/details',query:{userId:userId,articleId:item.uniqueId}}" style="text-decoration: none;"><span class="innerContent">
+                    {{item.content}}
                 </span></router-link>
             </div>
             <div class="bottomMark">
-                <span class="time">2020-01-22 10:28:45</span>
+                <span class="time">{{item.time}}</span>
                 <el-divider direction="vertical"></el-divider>
-                <span class="readingNum">阅读数 <span style="color: #428bca;">419</span></span>
+                <span class="readingNum" @click="sort_time(item.content)">阅读数 <span style="color: #428bca;">419</span></span>
                 <el-divider direction="vertical"></el-divider>
                 <span class="commentNum">评论数 <span style="color: #428bca;">4</span></span>
             </div>
         </div>
-        <div class="block" style="margin-bottom: 20rem;display: flex;align-items: center;justify-content: center;padding: 1.5rem;">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage3"
-                    :page-size="100"
-                    layout="prev, pager, next, jumper"
-                    :total="1000">
-            </el-pagination>
-        </div>
+<!--        底部分页 后期再添加-->
+<!--        <div class="block" style="margin-bottom: 20rem;display: flex;align-items: center;justify-content: center;padding: 1.5rem;">-->
+<!--            <el-pagination-->
+<!--                    :page-size="100"-->
+<!--                    layout="prev, pager, next, jumper"-->
+<!--                    :total="1000">-->
+<!--            </el-pagination>-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
     export default {
         name: "catalogPreview",
+        props: ["userId","alldata",'original'],
         data(){
             return{
                 checked: false,
+                show_data: '',
+                activeName: 'first'
             }
-        }
+        },
+        methods:{
+            sort_time(content){
+                console.log(content);
+            },
+            handleClick(tab, event) {
+                this.$emit('changeData',tab.index);
+                console.log(tab.index, event);
+            },
+            updated(){
+                alert('挂载完成!');
+            }
+        },
     }
 </script>
 
@@ -54,18 +69,22 @@
     .catalogPreview{
         height: 100%;
         background-color: #fff;
+        padding: 0 0 2rem 0;
     }
-    .banner{display: flex;height: 4rem;align-items: center;border-bottom: 1px solid #000;padding: .5rem 2rem;
-        div{flex: 1;display: flex;
+    .el-tabs--border-card>.el-tabs__content{padding:0;}
+    .banner{display: flex;height: 4rem;align-items: center;border-bottom: 1px solid #000;padding: .5rem 1rem .5rem 2rem;
+        div{flex: 1;display: flex;justify-content:space-between;
             span{flex: 1;cursor: default;text-align:center;cursor: pointer;
-                &:hover{color: #ca0c16;}
+                &:hover{color: #409EFF;}
                 &:nth-child(1){color: #999;cursor: auto; &:hover{color: none;}}
 
             }
             .selected{color: #ca0c16}
         }
     }
-    .catalog{display: flex;flex-direction:column;padding: 1rem 2rem;border-bottom: 1px solid #000;transition: background-color .25s; &:hover{background-color: #F4F4F4;transition: background-color .25s;}
+    .catalog{display: flex;flex-direction:column;padding: 1rem 2rem;border-bottom: 1px solid #000;transition: background-color .25s;
+        &:last-child{border-bottom: none;}
+        &:hover{background-color: #F4F4F4;transition: background-color .25s;}
         .title{display: flex;flex: 2;font-size: 1.8rem;color: #3d3d3d;font-weight: bold;padding-bottom: .5rem;cursor:pointer;
             .titleInner{color: #3d3d3d;&:hover{color: #B66300;}}
         }

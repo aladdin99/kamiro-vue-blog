@@ -44,14 +44,34 @@ const routes = [
     component: () => import("../../views/homePage/user/details/details.vue"),
   },
   {
+    path: "/index/user/sorts",
+    name: "sorts",
+    component: () => import("../../views/homePage/user/sorts.vue"),
+  },
+  {
     path: "/personal/index",
     name: "personal",
     component: () => import("../../views/personal/index.vue"),
   },
   {
-    path: "/md/blogging",
-    name: "personal",
-    component: () => import("../../views/md/blogging.vue"),
+    path: "/md/mavon",
+    name: "mavon",
+    component: () => import("../../views/md/mavon.vue"),
+  },
+  {
+    path: "/md/mavon/released",
+    name: "released",
+    component: () => import("../../views/md/released.vue"),
+  },
+  {
+    path: "/manage/managing",
+    name: "managing",
+    component: () => import("../../views/manage/managing.vue"),
+  },
+  {
+    path: "/settings/account_settings",
+    name: "settings",
+    component: () => import("../../views/settings/account_settings"),
   },
 ];
 

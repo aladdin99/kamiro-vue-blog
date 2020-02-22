@@ -30,7 +30,7 @@
     if(($conn->query($sql_insert_regist) === TRUE) && ($conn->query($sql_insert_info) === TRUE)) {
       echo "新纪录插入成功！";
     }else {
-    echo "Error: " . $sql_insert . "<br>" . $conn->error;
+    echo "Error: " . $sql_insert_regist . "<br>" . $conn->error;
     }
 
     // 5、关闭数据库

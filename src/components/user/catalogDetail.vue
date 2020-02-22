@@ -2,15 +2,27 @@
     <div class="catalogDetail">
         <div class="article">
             <div class="bannera">
-                <div class="title">Python专题文件操作</div>
+                <div class="title">{{article_data.title}}</div>
                 <div class="detailInfo">
-                    <span class="autoName">知识追寻者</span>
-                    <span class="time">最后发布于2020-01-23 21:36:04</span>
+                    <span class="autoName">{{article_data.author}}</span>
+                    <span class="time">最后发布于{{article_data.time}}</span>
                     <span>阅读数 10</span>
                 </div>
             </div>
             <div class="contentArticle">
-                说明:此处是由数据库中取markDown编写的文章格式 来直接展示的，不做内部样式的调整!
+                <div>
+                    <mavon-editor
+                            style="z-index: 1;"
+                            class="md"
+                            :value="rd_content"
+                            :subfield = "false"
+                            :defaultOpen = "'preview'"
+                            :toolbarsFlag = "false"
+                            :editable="false"
+                            :scrollStyle="true"
+                            :ishljs = "true"
+                    ></mavon-editor>
+                </div>
                 <div class="operate">
                     <span>点赞</span>
                     <span>收藏</span>
@@ -41,7 +53,31 @@
             return{
                 nickName: "不脱发的程序员",
                 circleUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                articleId: "",//文章ID
+                userId: '',//登陆者ID
+                article_data: [],//文章内容
+                rd_content: "",
             }
+        },
+        methods:{
+            get_collection_clip(){
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/article/article_get_item',{
+                    params: {
+                        uniqueId: self.articleId,
+                        related: self.userId
+                    }
+                }).then(function(res){
+                    self.article_data = res.data;
+                    self.rd_content = self.article_data.content;
+                    console.log(self.article_data);
+                });
+            }
+        },
+        mounted(){
+            this.articleId = this.$route.query.articleId;
+            this.userId = this.$route.query.userId;
+            this.get_collection_clip();
         }
     }
 </script>

@@ -3,9 +3,9 @@
         <!--Basic information of users-->
         <div class="userInfo">
             <div class="userDetail">
-                <div class="avatar"><img :src="circleUrl"></div>
+                <div class="avatar"><img :src="user_circleUrl"></div>
                 <div class="userName">
-                    <div class="nickName" :title="nickName">{{nickName}}</div>
+                    <div class="nickName" :title="user_name">{{user_name}}</div>
                     <div class="index">Ta的个人主页></div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                     <span>访问</span>
                 </div>
                 <div class="interaction num">
-                    <span>84</span>
+                    <span>{{originalNum}}</span>
                     <span>8495</span>
                     <span>12</span>
                     <span>215</span>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="part2">
                     <span>积分: 1877</span>
-                    <span>勋章: 恒</span>
+                    <span>勋章: 持之以恒</span>
                 </div>
             </div>
             <div class="relaction">
@@ -44,53 +44,27 @@
         <div class="commonArticles">
             <span class="commonName">最新文章</span>
             <ul class="articles commonUl">
-                <li>python专题文件操作</li>
-                <li>我终于学会了使用python操作postgresql</li>
-                <li>跟着知识追寻者学BeautifulSoup,你学不会打不还口，骂不还手</li>
-                <li>那些不懂hystrix秘密</li>
-                <li>学会springboot多环境配置方案不用五分钟</li>
+                <li v-for="(item,index) in lastest" :key="index">
+                    <router-link target="_blank" :to="{path:'/index/user/details',query:{userId:userId,articleId:item.uniqueId}}" class="Newest_title">
+                        {{item.title}}
+                    </router-link>
+                </li>
             </ul>
         </div>
         <!--commonArticles-->
         <div class="commonArticles">
             <span class="commonName">分类专栏</span>
             <ul class="special commonUl">
-                <li>
-                    <span class="img">
-                        <img :src="circleUrl">
-                    </span>
-                    <span class="colum">python爬虫</span>
-                    <span>3篇</span>
+                <li v-for="(item,index) in collection_clip" :key="index" @click="router_link">
+<!--                    <router-link :to="{path:'/index/user/sorts',query:{userId:userId,articleId:item.uniqueId}}" class="Newest_title">-->
+                        <span class="img">
+                            <img :src="item.picture">
+                        </span>
+                        <span class="colum">{{item.name}}</span>
+                        <span>{{item.essay.length}}</span>
+<!--                    </router-link>-->
                 </li>
-                <li>
-                    <span class="img">
-                        <img :src="circleUrl">
-                    </span>
-                    <span class="colum">python基础</span>
-                    <span>2篇</span>
-                </li>
-                <li>
-                    <span class="img">
-                        <img :src="circleUrl">
-                    </span>
-                    <span class="colum">python数据分析可视化</span>
-                    <span>1篇</span>
-                </li>
-                <li>
-                    <span class="img">
-                        <img :src="circleUrl">
-                    </span>
-                    <span class="colum">springboot</span>
-                    <span>19篇</span>
-                </li>
-                <li>
-                    <span class="img">
-                        <img style="" :src="circleUrl">
-                    </span>
-                    <span class="colum">springcloud</span>
-                    <span>9篇</span>
-                </li>
-                <div class="develop">展开</div>
+<!--                <div class="develop">展开</div>-->
             </ul>
         </div>
         <!--File-->
@@ -147,63 +121,94 @@
             </ul>
         </div>
         <!--gateway-->
-        <div class="extra">
-            <div class="QRcode">
-               <span class="QRitem">
-                   <img :src="circleUrl" alt="" style="width: 10rem;">
-               </span>
-                <span  class="QRitem">
-                   <img :src="circleUrl" alt="" style="width: 10rem;">
-               </span>
-            </div>
-            <div class="QRname">
-                <span>MSDN学院</span>
-                <span>MSDN招聘</span>
-            </div><br><hr><br>
-            <div class="contact">
-                <icon-svg icon-class="icon-QQ" style="width: 1.8rem;height: 1.8rem;padding-right: .5rem;color: rgb(92,92,92);"/>
-                <span style="display: inline-block;flex: 1;">QQ客服</span>
-                <icon-svg icon-class="icon-youxiang" style="width: 1.8rem;height: 1.8rem;padding-right: .5rem;color: rgb(92,92,92);"/>
-                <span style="display: inline-block;flex: 1;">kefu@msdn.net</span>
-            </div>
-            <div class="contact">
-                <icon-svg icon-class="icon-dianhua" class="number"/>
-                <span>400-660-0108</span>
-                <icon-svg icon-class="icon-icon" class="forum"/>
-                <span>论坛</span>
-            </div>
-            <br><hr><br>
-            <div class="about">
-                <span>关于我们</span>
-                <el-divider direction="vertical"></el-divider>
-                <span>招聘</span>
-                <el-divider direction="vertical"></el-divider>
-                <span>广告服务</span>
-            </div>
-            <div class="record">
-                <div>京ICP备19004658号 经营性网站备案信息</div>
-                <div>公安备案号 11010502030143</div>
-                <div>©1999-2020 北京未定义网络技术有限公司</div>
-            </div>
-            <br><hr><br>
-            <div class="record">
-                <div>网络110报警服务</div>
-                <div>北京互联网违法和不良信息举报中心</div>
-                <div>中国互联网举报中心 家长监护 版权申诉</div>
-            </div>
-        </div>
+<!--        <div class="extra">-->
+<!--            <div class="QRcode">-->
+<!--               <span class="QRitem">-->
+<!--                   <img :src="circleUrl" alt="" style="width: 10rem;">-->
+<!--               </span>-->
+<!--                <span  class="QRitem">-->
+<!--                   <img :src="circleUrl" alt="" style="width: 10rem;">-->
+<!--               </span>-->
+<!--            </div>-->
+<!--            <div class="QRname">-->
+<!--                <span>MSDN学院</span>-->
+<!--                <span>MSDN招聘</span>-->
+<!--            </div><br><hr><br>-->
+<!--            <div class="contact">-->
+<!--                <icon-svg icon-class="icon-QQ" style="width: 1.8rem;height: 1.8rem;padding-right: .5rem;color: rgb(92,92,92);"/>-->
+<!--                <span style="display: inline-block;flex: 1;">QQ客服</span>-->
+<!--                <icon-svg icon-class="icon-youxiang" style="width: 1.8rem;height: 1.8rem;padding-right: .5rem;color: rgb(92,92,92);"/>-->
+<!--                <span style="display: inline-block;flex: 1;">kefu@msdn.net</span>-->
+<!--            </div>-->
+<!--            <div class="contact">-->
+<!--                <icon-svg icon-class="icon-dianhua" class="number"/>-->
+<!--                <span>400-660-0108</span>-->
+<!--                <icon-svg icon-class="icon-icon" class="forum"/>-->
+<!--                <span>论坛</span>-->
+<!--            </div>-->
+<!--            <br><hr><br>-->
+<!--            <div class="about">-->
+<!--                <span>关于我们</span>-->
+<!--                <el-divider direction="vertical"></el-divider>-->
+<!--                <span>招聘</span>-->
+<!--                <el-divider direction="vertical"></el-divider>-->
+<!--                <span>广告服务</span>-->
+<!--            </div>-->
+<!--            <div class="record">-->
+<!--                <div>京ICP备19004658号 经营性网站备案信息</div>-->
+<!--                <div>公安备案号 11010502030143</div>-->
+<!--                <div>©1999-2020 北京未定义网络技术有限公司</div>-->
+<!--            </div>-->
+<!--            <br><hr><br>-->
+<!--            <div class="record">-->
+<!--                <div>网络110报警服务</div>-->
+<!--                <div>北京互联网违法和不良信息举报中心</div>-->
+<!--                <div>中国互联网举报中心 家长监护 版权申诉</div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
 export default {
     name: "userLeftBar",
+    props: ["userId","originalNum","lastest",'collection_clip'],
     data(){
         return{
-            nickName: "不脱发的程序员",
-            circleUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+            user_circleUrl: '',//用户头像
+            user_name: '',//用户昵称
+            circleUrl: '',
         }
-    }
+    },
+    methods: {
+        getInfo(){//仅获取用户头像/昵称
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/getData',{
+                params: {
+                    id: self.userId//账户id
+                }
+            }).then(function(res){
+                let personal = res.data;
+                self.user_circleUrl = personal.avatarUrl;
+                self.user_name = personal.nickName;
+                // alert(self.user_circleUrl+"111");
+                // console.log(self.user_circleUrl,self.user_name);
+            });
+        },
+        router_link(){//分类栏路由跳转
+            // this.$router.push({ path:'/index/user/sorts', query: { userId: this.userId }});
+            this.$router.push({ name:'sorts', params: { userId: this.userId }});
+        }
+    },
+    watch:{
+        userId:function(newVal){
+            let self = this;
+            console.log(newVal);
+            this.$nextTick(function(){
+                self.getInfo();
+            })
+        },
+    },
 }
 </script>
 
@@ -215,7 +220,7 @@ export default {
     }
 
     .userInfo{padding: 1.5rem;background-color: #fff;
-        .userDetail{display: flex;cursor: pointer;
+        .userDetail{display: flex;cursor: pointer;height:5rem;
             .avatar{flex: 1;img{display:inline-block;width: 4rem;height: 4rem;border-radius: 50%;}}
             .userName{display:flex;flex:4;flex-direction:column;padding-left: 1rem;text-align: left;line-height: 2rem;
                 .nickName{flex: 1;color: #ffa200;font-size: 1.4rem;&:hover{color: #B66300;}}
@@ -243,7 +248,10 @@ export default {
         .commonName{display: inline-block;width: 100%;text-align: left;background-color: #E9E6E6;color:#3D3D3D;font-weight: bold;padding: 1.5rem;box-sizing: border-box;}
         .commonUl{display: inline-block;margin-top: 1rem;text-align: left;padding: 1.5rem;cursor: pointer;list-style: none;}
         .articles{
-            li{line-height: 2rem;display: inline-block;padding-bottom: 1rem;color: #ffa200;&:hover{color: #A86200;}}
+            li{line-height: 2rem;display: inline-block;padding-bottom: 1rem;color: #ffa200;width: 100%;
+                .Newest_title{text-decoration: none;color: #ffa200;}
+                .Newest_title:hover{color: #A86200;}
+            }
         }
         .special{width:90%;
             li{display: flex;padding-bottom: 2rem;color: #ffa200;&:hover{color: #A86200;}

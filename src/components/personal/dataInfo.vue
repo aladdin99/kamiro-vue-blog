@@ -7,8 +7,9 @@
                     <el-upload
                             style="padding: 0;"
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action="http://localhost/graduation_project/blog2/src/php/personal/getAvatar"
                             :show-file-list="false"
+                            :data="uploadData"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
                       <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -105,6 +106,9 @@ export default {
     name: "dataInfo",
     data(){
         return{
+            uploadData: {//上传时附带的额外参数
+              id:'',
+            },
             dialogFormVisible: false,
             industrys: [ "互联网.电子商务","电子.微电子","批发.零售","贸易.进出口","广告.会展.公关" ],
             valueSt: '',
@@ -207,24 +211,24 @@ export default {
             });
         },
 
-        saveImg(imageUrl){ //保存头像
-            let self = this;
-            this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
-                status: 0,//代表修改头像
-                avatarUrl: imageUrl,
-                id: self.form.id
-            },{
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-            }).then(function(res){
-                console.log(res);
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
+        // saveImg(imageUrl){ //保存头像
+        //     let self = this;
+        //     this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
+        //         status: 0,//代表修改头像
+        //         avatarUrl: imageUrl,
+        //         id: self.form.id
+        //     },{
+        //         headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+        //     }).then(function(res){
+        //         console.log(res);
+        //     }).catch(function(res){
+        //         console.log(res);
+        //     });
+        // },
         //上传头像的两个方法
         handleAvatarSuccess(res, file) {
             this.imageUrl = URL.createObjectURL(file.raw);
-            this.saveImg(this.imageUrl);
+            // this.saveImg(this.imageUrl);
             // console.log(this.imageUrl);
         },
         beforeAvatarUpload(file) {
@@ -242,6 +246,7 @@ export default {
     },
     mounted() {
         this.form.id = localStorage.getItem('email');//当前登陆id
+        this.uploadData.id = this.form.id;
         this.getInfo();
     }
 }

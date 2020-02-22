@@ -31,6 +31,7 @@
         //echo $password.$row['email_key'];
             if($pass == $row['email_key']){
                 $back['isLogin'] = '1';//账号密码正确
+                $back['nickName'] = $row['nickName'];
             }else{
                 $back['isLogin'] = '0';//密码错误
             }

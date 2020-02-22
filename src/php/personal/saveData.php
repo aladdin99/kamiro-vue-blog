@@ -1,5 +1,5 @@
 <?php
-    header("Content-type: text/html; charset=utf-8");
+    header("Content-type: text/html; charset=utf-8; image/pjpeg");
     header('Access-Control-Allow-Origin:*');  // 解决跨域问题
     // 包含数据库配置信息
     include_once('../config.php');
@@ -47,6 +47,8 @@
     }
 
     // 3、插入数据//以id(邮箱号)作为主键 进行有选择的插入
+    //此句是更新注册表中的昵称
+
     if(!$status){
        //$sql = "INSERT INTO personal_info SELECT (`avatarUrl`) VALUES ('$avatarUrl') WHERE `id`='$id'";
        $sql = "UPDATE personal_info SET `avatarUrl` = '$avatarUrl' WHERE `id` = '$id'";
@@ -56,6 +58,7 @@
        $sql = "UPDATE personal_info SET `nickName` = '$nickName',`realName` = '$realName',`sexName` = '$sexName',`birthday` = '$birthday'
         ,`region` = '$region',`industry` = '$industry',`position` = '$position',`introduction` = '$introduction'
         WHERE `id` = '$id'";
+       $sql_update = "UPDATE user_regist SET `nickName` = '$nickName' WHERE `email` = '$id'";
     };
 
     //print_r(json_decode($region,true)); 解码（取数据库）
@@ -65,6 +68,14 @@
         echo "记录更新成功！";
     }else {
         echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    if($status){
+        if($conn->query($sql_update) === TRUE) {
+            echo "记录更新成功！";
+        }else {
+            echo "Error: " . $sql_update . "<br>" . $conn->error;
+        }
     }
 
     // 5、关闭数据库

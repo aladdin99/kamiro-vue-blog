@@ -23,7 +23,7 @@
     }
 }
 
-html {font-size: 62.5%;}
+html {font-size: 62.5%; *{margin: 0;padding: 0;}}
 body {
     font-size: 1.4rem;color: #4d4d4d;font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,"sans-serif";
 }

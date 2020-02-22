@@ -188,7 +188,7 @@ export default {
 
 <style lang="less">
     .collection{display: inline-block;width: 65vw;padding-right: 5rem;padding-left:2em;
-        .bannerTop{font-size: 1.6rem;color: #3d3d3d;line-height: 6rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;display: flex;justify-content: space-between;
+        .bannerTop{font-size: 1.6rem;color: #3d3d3d;line-height: 5rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;display: flex;justify-content: space-between;
             span:nth-child(1){border-bottom: .2rem solid #ca0c16;}
             span:nth-child(2){color: #6b6b6b;font-weight: 400;cursor: pointer; i{padding-right: .5rem;}}
         }

@@ -18,7 +18,7 @@
         <div class="banner-right">
             <span class="blogging">
                 <i class="el-icon-edit" style="padding-right: 5px;"></i>
-                <span><router-link to="/md/blogging" style="text-decoration: none;color: #2c3e50;">写博客</router-link></span>
+                <span><router-link to="/md/mavon" style="text-decoration: none;color: #2c3e50;">写博客</router-link></span>
             </span>
             <el-badge :value="12" class="item">
                 <i class="el-icon-message-solid message"></i>
@@ -28,13 +28,13 @@
                 <router-link to="/personal/index"><img :src="circleUrl"></router-link>
                 <ul class="lohisterInner">
                     <li><icon-svg icon-class="icon-guanzhu" class="iconClass" style="padding-left: 1rem;"/><span>我的关注</span></li>
-                    <li><icon-svg icon-class="icon-icon-test" class="iconClass"/><span>我的收藏</span></li>
-                    <li><icon-svg icon-class="icon-gerenzhongxin" class="iconClass"/><span>个人中心</span></li>
-                    <li><icon-svg icon-class="icon-Account-Settings" class="iconClass"/><span>账号设置</span></li>
-                    <li><icon-svg icon-class="icon-bokeyuan" class="iconClass"/><span>我的博客</span></li>
-                    <li><icon-svg icon-class="icon-guanli" class="iconClass"/><span>管理博客</span></li>
+                    <li><icon-svg icon-class="icon-icon-test" class="iconClass"/><span><router-link :to="{path:'/personal/index',query:{activeCode:'1'}}" style="text-decoration: none;color: #fff;">我的收藏</router-link></span></li>
+                    <li><icon-svg icon-class="icon-gerenzhongxin" class="iconClass"/><span><router-link to="/personal/index">个人中心</router-link></span></li>
+                    <li><icon-svg icon-class="icon-Account-Settings" class="iconClass"/><span><router-link to="/settings/account_settings">账号设置</router-link></span></li>
+                    <li><i class="el-icon-document-copy iconClass"></i><span ><router-link :to="{path:'/index/user',query:{id:author}}">我的博客</router-link></span></li>
+                    <li><icon-svg icon-class="icon-guanli" class="iconClass"/><span><router-link to="/manage/managing" style="text-decoration: none;color: #fff;">管理博客</router-link></span></li>
                     <li><icon-svg icon-class="icon-bangzhu" class="iconClass"/><span>帮助</span></li>
-                    <li><icon-svg icon-class="icon-icon_tuichu-" class="iconClass"/><span><router-link to="/" style="text-decoration: none;color: #2c3e50;">退出</router-link></span></li>
+                    <li><icon-svg icon-class="icon-icon_tuichu-" class="iconClass"/><span><router-link to="/" style="text-decoration: none;color: #fff;">退出</router-link></span></li>
                 </ul>
             </span>
 <!--            <el-popover-->
@@ -66,6 +66,7 @@
         name: "navigationBar",
         data() {
             return {
+                author: '',//当前用户id
                 bannerData: [{name:"首页",flag:true},{name:"博客",flag:false},{name:"问答",flag:false},{name:"活动",flag:false}],
                 options: [],
                 value: [],
@@ -88,14 +89,9 @@
                     "Utah", "Vermont", "Virginia",
                     "Washington", "West Virginia", "Wisconsin",
                     "Wyoming"],
-                circleUrl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                circleUrl:"",
                 isLogin: false
             }
-        },
-        mounted() {
-            this.list = this.states.map(item => {
-                return { value: `value:${item}`, label: `${item}` };
-            });
         },
         methods: {
             remoteMethod(query) {//快捷搜索
@@ -118,13 +114,35 @@
                 });
                 this.$router.push('/index');//跳转到首页
                 this.bannerData[index].flag=true;
+            },
+            getavata(){
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/getData',{
+                    params: {
+                        id: self.author//账户id
+                    }
+                }).then(function(res){
+                    let personal = res.data;
+                    self.circleUrl = personal.avatarUrl;
+                });
             }
-        }
+        },
+        mounted() {
+            this.list = this.states.map(item => {
+                return { value: `value:${item}`, label: `${item}` };
+            });
+            this.author = localStorage.getItem('email');//当前登陆id
+            this.getavata();
+        },
     }
 </script>
 
 <style lang="less">
     *{margin: 0;padding: 0;}
+    a{
+        text-decoration: none;
+        color: #fff;
+    }
     .nav{
         box-shadow: 0 2px 4px 0 rgba(0,0,0,.05);height: 4.5rem;padding: 0 12vw;background-color: #fff;
         display: flex;justify-content: space-between;align-items: center;cursor: pointer;}

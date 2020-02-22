@@ -7,16 +7,16 @@
         </div>
         <el-container class="mainbody" style="width: 100%;background-color: #f5f6f7;">
             <!--Left user information bar-->
-            <el-tabs :tab-position="tabPosition" style="background-color: #fff;">
-                <el-tab-pane label="个人资料"><personalData></personalData></el-tab-pane>
-                <el-tab-pane label="我的收藏"><collection></collection></el-tab-pane>
-                <el-tab-pane label="我的勋章">我的勋章（暂未开发）</el-tab-pane>
-                <el-tab-pane label="我关注的人">我关注的人（暂未开发）</el-tab-pane>
-                <el-tab-pane label="我的粉丝">我的粉丝（暂未开发）</el-tab-pane>
-                <el-tab-pane label="我的标签">我的标签（暂未开发）</el-tab-pane>
-                <el-tab-pane label="我的博客">我的博客（暂未开发）</el-tab-pane>
-                <el-tab-pane label="签到赢福利">签到赢福利（暂未开发）</el-tab-pane>
-                <el-tab-pane label="抽奖">抽奖（暂未开发）</el-tab-pane>
+            <el-tabs v-model="activeCode" :tab-position="tabPosition" style="background-color: #fff;" @tab-click="blogManage">
+                <el-tab-pane label="个人资料" name="0"><personalData></personalData></el-tab-pane>
+                <el-tab-pane label="我的收藏" name="1"><collection></collection></el-tab-pane>
+                <el-tab-pane label="我的勋章" name="2"><medal></medal></el-tab-pane>
+                <el-tab-pane label="我的关注" name="3"><follow></follow></el-tab-pane>
+                <el-tab-pane label="我的粉丝" name="4"><star></star></el-tab-pane>
+                <el-tab-pane label="我的标签" name="5">我的标签（暂未开发）</el-tab-pane>
+                <el-tab-pane label="我的博客" name="6" ></el-tab-pane>
+                <el-tab-pane label="签到赢福利" name="7">签到赢福利（暂未开发）</el-tab-pane>
+<!--                <el-tab-pane label="抽奖" name="8">抽奖（暂未开发）</el-tab-pane>-->
             </el-tabs>
 <!--            <el-aside width="20rem">-->
 <!--                <ul class="leftBar">-->
@@ -45,17 +45,21 @@
 <script>
     import navigationBar from "components/navigationBar.vue";
     import personalData from "components/personal/dataInfo.vue";
-    import collection from "../../components/personal/collection";
+    import collection from "components/personal/collection.vue";
+    import follow from "components/personal/follow.vue";
+    import star from "components/personal/star.vue";
+    import medal from "components/personal/medal.vue";
     export default {
         name: "user",
         components: {
-            navigationBar,personalData,collection
+            navigationBar,personalData,collection,follow,star,medal
         },
         data(){
             return{
                 bannerScroll:false,
                 leftScroll:false,
-                tabPosition: 'left'
+                tabPosition: 'left',
+                activeCode: '0',
             }
         },
         methods:{
@@ -69,11 +73,17 @@
                 this.bannerScroll = (top>45)?true:false;
                 this.leftScroll = (searchBar<currentHeigh)?true:false;
                 return {top,left}
+            },
+            blogManage(targetName){
+                if(targetName.index=='6'){
+                    this.$router.push('/manage/managing');
+                }
             }
         },
         mounted() {
+            this.activeCode = this.$route.query.activeCode?this.$route.query.activeCode:'0';
             //监听banner栏坐标
-            window.addEventListener('scroll',this.getScrollPosition,false)
+            window.addEventListener('scroll',this.getScrollPosition,false);
         },
         destroyed() {
             //监听banner栏坐标(摧毁)
