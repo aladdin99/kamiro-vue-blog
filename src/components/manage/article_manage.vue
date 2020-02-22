@@ -179,7 +179,7 @@
             </el-tab-pane>
         </el-tabs>
 
-<!--    删除文章的提示弹窗-->
+        <!--    删除文章的提示弹窗-->
         <el-dialog
                 style="text-align:left;"
                 title="提示"
@@ -198,205 +198,205 @@
 </template>
 
 <script>
-import none from "assets/none.jpg";//1.引入图片地址
-export default {
-    name: "article_manage",
-    data(){
-        return{
-            visible: false,
-            author: '',//当前登陆者id
-            none: none,//2.赋值图片地址,然后在:src中可以直接使用
-            dialogVisible: false,
-            activeName: 'first',
-            year: [{
-                value: '不限',
-            }, {
-                value: '2020',
-            }, {
-                value: '2019',
-            }, {
-                value: '2018',
-            }],
-            year_value: '',
-            type: [{
-                value: '不限类型',
-            }, {
-                value: '原创',
-            }, {
-                value: '转载',
-            }, {
-                value: '翻译',
-            }],
-            type_value: '',
-            sort: [{
-                value: '不限',
-            }, {
-                value: '程序人生',
-            }, {
-                value: '前端',
-            }, {
-                value: '后端',
-            }, {
-                value: '数据结构与算法',
-            }, {
-                value: '生活记录',
-            }],
-            sort_value: '',
-            keyword: '',//关键字
-            // comment_limit: 1,//1.代表评论公开 2.代表评论审核后公开
-            getAllData: [],//获取所有文章
-            showData: [],//应展示的文章
-            publicData: [],//公开文章
-            privateData: [],//私密文章
-            draftsData: [],//草稿箱
-            labelAll: "0",
-            labelPublic: '0',
-            labelPrivate: '0',
-            labelDrafts: '0',
-            article_id: '',//文章id
-        }
-    },
-    methods:{
-        //'全部'下通过条件检索文章
-        searchInfo(){
-            this.showData = [];
-            //筛选时间段
-            if(this.year_value == '不限' || this.year_value == ''){
-                this.showData = this.getAllData;
-            }else{
-                this.getAllData.forEach(item=>{
-                    if(item.time.split('-')[0] == this.year_value){
-                        this.showData.push(item);
-                    }
-                });
+    import none from "assets/none.jpg";//1.引入图片地址
+    export default {
+        name: "article_manage",
+        data(){
+            return{
+                visible: false,
+                author: '',//当前登陆者id
+                none: none,//2.赋值图片地址,然后在:src中可以直接使用
+                dialogVisible: false,
+                activeName: 'first',
+                year: [{
+                    value: '不限',
+                }, {
+                    value: '2020',
+                }, {
+                    value: '2019',
+                }, {
+                    value: '2018',
+                }],
+                year_value: '',
+                type: [{
+                    value: '不限类型',
+                }, {
+                    value: '原创',
+                }, {
+                    value: '转载',
+                }, {
+                    value: '翻译',
+                }],
+                type_value: '',
+                sort: [{
+                    value: '不限',
+                }, {
+                    value: '程序人生',
+                }, {
+                    value: '前端',
+                }, {
+                    value: '后端',
+                }, {
+                    value: '数据结构与算法',
+                }, {
+                    value: '生活记录',
+                }],
+                sort_value: '',
+                keyword: '',//关键字
+                // comment_limit: 1,//1.代表评论公开 2.代表评论审核后公开
+                getAllData: [],//获取所有文章
+                showData: [],//应展示的文章
+                publicData: [],//公开文章
+                privateData: [],//私密文章
+                draftsData: [],//草稿箱
+                labelAll: "0",
+                labelPublic: '0',
+                labelPrivate: '0',
+                labelDrafts: '0',
+                article_id: '',//文章id
             }
-            //筛选文章类型
-            if(this.type_value == '不限类型' || this.type_value == ''){
-                this.showData = this.showData;
-            }else{
-                let type_data = [];
-                this.showData.forEach(item=>{
-                    if(item.type == this.type_value){
-                        type_data.push(item);
-                    }
-                });
-                this.showData = type_data;
-            }
-            //筛选分类专栏
-            if(this.sort_value == '不限' || this.sort_value == ''){
-                this.showData = this.showData;
-            }else{
-                let sort_data = [];
-                this.showData.forEach(item=>{
-                    if(item.category == this.sort_value){
-                        sort_data.push(item);
-                    }
-                });
-                this.showData = sort_data;
-            }
-            //关键字搜索
-            if(this.keyword == ''){
-                this.showData = this.showData;
-            }else{
-                let keyword_data = [];
-                this.showData.forEach(item=>{
-                    if(item.title.indexOf(this.keyword) != -1){
-                        keyword_data.push(item);
-                    }
-                });
-                this.showData = keyword_data;
-            }
-            // console.log(this.showData);
         },
-        sendId(id){
-          this.article_id = id;
-        },
-        //删除文章
-        deleteArticle(id){
-            // alert('删除'+id+this.author);
-            let self = this;
-            this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_delete',{
-                params: {
-                    id: self.author,
-                    uniqueId: id
+        methods:{
+            //'全部'下通过条件检索文章
+            searchInfo(){
+                this.showData = [];
+                //筛选时间段
+                if(this.year_value == '不限' || this.year_value == ''){
+                    this.showData = this.getAllData;
+                }else{
+                    this.getAllData.forEach(item=>{
+                        if(item.time.split('-')[0] == this.year_value){
+                            this.showData.push(item);
+                        }
+                    });
                 }
-            }).then(function(res){
-                console.log(res);
-                self.searchAll();
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
-        searchAll(){
-            let self = this;
-            self.publicData = [];//先清空公开的文章
-            self.privateData = [];//先清空私密的文章
-            self.draftsData = [];//先清空草稿的文章
-            this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_manage',{
-                params: {
-                    id: self.author,
+                //筛选文章类型
+                if(this.type_value == '不限类型' || this.type_value == ''){
+                    this.showData = this.showData;
+                }else{
+                    let type_data = [];
+                    this.showData.forEach(item=>{
+                        if(item.type == this.type_value){
+                            type_data.push(item);
+                        }
+                    });
+                    this.showData = type_data;
                 }
-            }).then(function(res){
-                self.getAllData = res.data;
-                self.labelAll = self.getAllData.length;//全部num
-                self.showData = self.getAllData;
-                // self.publicData =
-                self.getAllData.forEach(item=>{
-                    if(item.shape == 0 && item.draftsFlag!='0'){//文章公开且非草稿
-                        self.publicData.push(item);
+                //筛选分类专栏
+                if(this.sort_value == '不限' || this.sort_value == ''){
+                    this.showData = this.showData;
+                }else{
+                    let sort_data = [];
+                    this.showData.forEach(item=>{
+                        if(item.category == this.sort_value){
+                            sort_data.push(item);
+                        }
+                    });
+                    this.showData = sort_data;
+                }
+                //关键字搜索
+                if(this.keyword == ''){
+                    this.showData = this.showData;
+                }else{
+                    let keyword_data = [];
+                    this.showData.forEach(item=>{
+                        if(item.title.indexOf(this.keyword) != -1){
+                            keyword_data.push(item);
+                        }
+                    });
+                    this.showData = keyword_data;
+                }
+                // console.log(this.showData);
+            },
+            sendId(id){
+                this.article_id = id;
+            },
+            //删除文章
+            deleteArticle(id){
+                // alert('删除'+id+this.author);
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_delete',{
+                    params: {
+                        id: self.author,
+                        uniqueId: id
                     }
-                    if(item.shape == 1 && item.draftsFlag!='0'){//文章私密且非草稿
-                        self.privateData.push(item);
-                    }
-                    if(item.draftsFlag=='0'){//文章是草稿
-                        self.draftsData.push(item);
-                    }
+                }).then(function(res){
+                    console.log(res);
+                    self.searchAll();
+                }).catch(function(res){
+                    console.log(res);
                 });
-                self.labelPublic = self.publicData.length;
-                self.labelPrivate = self.privateData.length;
-                self.labelDrafts = self.draftsData.length;
-                console.log(self.publicData);
-                // var date = self.getAllData[0].time;
-                // alert(date.split('-')[0]);
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
-        handleClick(tab, event) {
-            console.log(tab, event);
-        },
-        changeLimit(flag,limitValue,index,uniqueId){//flag.是在哪个列表下的(0-'全部'，1-'公开',2-'私密')  limitValue.评论权限值   index.文章位置  uniqueId.文章id
-            switch(flag){
-                case 0:
-                    this.showData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开(全部)
-                    break;
-                case 1:
-                    this.publicData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开（公开）
-                    break;
-                case 2:
-                    this.privateData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开（私密）
-                    break;
-            }
+            },
+            searchAll(){
+                let self = this;
+                self.publicData = [];//先清空公开的文章
+                self.privateData = [];//先清空私密的文章
+                self.draftsData = [];//先清空草稿的文章
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_manage',{
+                    params: {
+                        id: self.author,
+                    }
+                }).then(function(res){
+                    self.getAllData = res.data;
+                    self.labelAll = self.getAllData.length;//全部num
+                    self.showData = self.getAllData;
+                    // self.publicData =
+                    self.getAllData.forEach(item=>{
+                        if(item.shape == 0 && item.draftsFlag!='0'){//文章公开且非草稿
+                            self.publicData.push(item);
+                        }
+                        if(item.shape == 1 && item.draftsFlag!='0'){//文章私密且非草稿
+                            self.privateData.push(item);
+                        }
+                        if(item.draftsFlag=='0'){//文章是草稿
+                            self.draftsData.push(item);
+                        }
+                    });
+                    self.labelPublic = self.publicData.length;
+                    self.labelPrivate = self.privateData.length;
+                    self.labelDrafts = self.draftsData.length;
+                    console.log(self.publicData);
+                    // var date = self.getAllData[0].time;
+                    // alert(date.split('-')[0]);
+                }).catch(function(res){
+                    console.log(res);
+                });
+            },
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            changeLimit(flag,limitValue,index,uniqueId){//flag.是在哪个列表下的(0-'全部'，1-'公开',2-'私密')  limitValue.评论权限值   index.文章位置  uniqueId.文章id
+                switch(flag){
+                    case 0:
+                        this.showData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开(全部)
+                        break;
+                    case 1:
+                        this.publicData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开（公开）
+                        break;
+                    case 2:
+                        this.privateData[index].comment_limit = limitValue;//赋值处理，用于切换评论公开与审核后公开（私密）
+                        break;
+                }
 
-            let self = this;
-            this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_comment_limit',{
-                params: {
-                    id: self.author,
-                    uniqueId: uniqueId,
-                    comment_limit: limitValue //评论权限 0.评论公开 1.审核后公开
-                }
-            }).then(function(res){
-                console.log(res);
-            }).catch(function(res){
-                console.log(res);
-            });
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_comment_limit',{
+                    params: {
+                        id: self.author,
+                        uniqueId: uniqueId,
+                        comment_limit: limitValue //评论权限 0.评论公开 1.审核后公开
+                    }
+                }).then(function(res){
+                    console.log(res);
+                }).catch(function(res){
+                    console.log(res);
+                });
+            },
         },
-    },
-    mounted() {
-        this.author = localStorage.getItem('email');//当前登陆id
-        this.searchAll();
+        mounted() {
+            this.author = localStorage.getItem('email');//当前登陆id
+            this.searchAll();
+        }
     }
-}
 </script>
 
 <style lang="less">

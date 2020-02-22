@@ -102,154 +102,154 @@
 </template>
 
 <script>
-export default {
-    name: "dataInfo",
-    data(){
-        return{
-            uploadData: {//上传时附带的额外参数
-              id:'',
-            },
-            dialogFormVisible: false,
-            industrys: [ "互联网.电子商务","电子.微电子","批发.零售","贸易.进出口","广告.会展.公关" ],
-            valueSt: '',
-            valuePr: '',
-            valueCi: '',
-            state:[{value: 1,label:"中国"},{value: 2,label:"美国"},{value: 3,label:"英国"},{value: 4,label:"法国"},{value: 5,label:"俄罗斯"}],
-            province: [],
-            city: [],
-            form: {
-                id: '',
-                nickName: '',
-                realName: '',
-                position: '',//职位
-                birthday: '',//生日
-                industry: "",//行业
-                sexName: "",
-                region: {
-                    state:"",//地区
-                    province:"",//省份
-                    city:"",//城市
+    export default {
+        name: "dataInfo",
+        data(){
+            return{
+                uploadData: {//上传时附带的额外参数
+                    id:'',
                 },
-                introduction: ''//简介
+                dialogFormVisible: false,
+                industrys: [ "互联网.电子商务","电子.微电子","批发.零售","贸易.进出口","广告.会展.公关" ],
+                valueSt: '',
+                valuePr: '',
+                valueCi: '',
+                state:[{value: 1,label:"中国"},{value: 2,label:"美国"},{value: 3,label:"英国"},{value: 4,label:"法国"},{value: 5,label:"俄罗斯"}],
+                province: [],
+                city: [],
+                form: {
+                    id: '',
+                    nickName: '',
+                    realName: '',
+                    position: '',//职位
+                    birthday: '',//生日
+                    industry: "",//行业
+                    sexName: "",
+                    region: {
+                        state:"",//地区
+                        province:"",//省份
+                        city:"",//城市
+                    },
+                    introduction: ''//简介
+                },
+                formLabelWidth: '120px',
+                imageUrl: ''
+            }
+        },
+        methods:{
+            dialogVisible(flag){
+                return this.dialogFormVisible = flag;
             },
-            formLabelWidth: '120px',
-            imageUrl: ''
-        }
-    },
-    methods:{
-        dialogVisible(flag){
-            return this.dialogFormVisible = flag;
-        },
-        changeState(){//处理级联数据(目前只做了简单的福建部分地区级联，后期改造方法再做全国的级联)
-            if(this.valueSt==1){//省级数据(后期通过接口获取)
-                this.province = [{value: 1,label:"北京"},{value: 2,label:"天津"},{value: 3,label:"福建省"},{value: 4,label:"河北省"},{value: 5,label:"山西省"}];
-            }else{
-                this.province = [];
-                this.city = [];
-                this.valuePr = '';
-                this.valueCi = '';
-            };
-            if(this.valuePr==3){//市级数据(后期通过接口获取)
-                this.city = [{value: 1,label:"福州市"},{value: 2,label:"厦门市"},{value: 3,label:"莆田市"},{value: 4,label:"三明市"},{value: 5,label:"泉州市"}];
-            }else{
-                this.city = [];
-                this.valueCi = '';
-            }
-        },
-        getInfo(){//获取个人资料页面信息
-            let self = this;
-            this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/getData',{
-                params:{
-                    id: self.form.id
+            changeState(){//处理级联数据(目前只做了简单的福建部分地区级联，后期改造方法再做全国的级联)
+                if(this.valueSt==1){//省级数据(后期通过接口获取)
+                    this.province = [{value: 1,label:"北京"},{value: 2,label:"天津"},{value: 3,label:"福建省"},{value: 4,label:"河北省"},{value: 5,label:"山西省"}];
+                }else{
+                    this.province = [];
+                    this.city = [];
+                    this.valuePr = '';
+                    this.valueCi = '';
+                };
+                if(this.valuePr==3){//市级数据(后期通过接口获取)
+                    this.city = [{value: 1,label:"福州市"},{value: 2,label:"厦门市"},{value: 3,label:"莆田市"},{value: 4,label:"三明市"},{value: 5,label:"泉州市"}];
+                }else{
+                    this.city = [];
+                    this.valueCi = '';
                 }
-            }).then(function (res) {
-                let personal = res.data;
-                self.form.nickName = personal.nickName;
-                self.form.realName = personal.realName;
-                self.form.sexName = personal.sexName;
-                self.form.birthday = personal.birthday;
-                if(personal.region){
-                    self.form.region = JSON.parse(personal.region);
-                }
-                self.form.industry = personal.industry;
-                self.form.position = personal.position;
-                self.form.introduction = personal.introduction;
-                self.imageUrl = personal.avatarUrl;
-                console.log(self.imageUrl);
-            }).catch(function (res) {
-                console.log(res);
-            });
-        },
-        screen(value,arr){//筛选级联出来的值
-            let result = '';
-            if(arr){
-                arr.forEach(item=>{
-                    if(item.value == value){
-                        result = item.label;
+            },
+            getInfo(){//获取个人资料页面信息
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/getData',{
+                    params:{
+                        id: self.form.id
                     }
+                }).then(function (res) {
+                    let personal = res.data;
+                    self.form.nickName = personal.nickName;
+                    self.form.realName = personal.realName;
+                    self.form.sexName = personal.sexName;
+                    self.form.birthday = personal.birthday;
+                    if(personal.region){
+                        self.form.region = JSON.parse(personal.region);
+                    }
+                    self.form.industry = personal.industry;
+                    self.form.position = personal.position;
+                    self.form.introduction = personal.introduction;
+                    self.imageUrl = personal.avatarUrl;
+                    console.log(self.imageUrl);
+                }).catch(function (res) {
+                    console.log(res);
                 });
-            }
-            return result;
-        },
-        submit(){//修改资料/提交
-            let self = this;
-            //传入级联后的值
-            self.form.region.state = this.screen(self.valueSt,self.state);
-            self.form.region.province = this.screen(self.valuePr,self.province);
-            self.form.region.city = this.screen(self.valueCi,self.city);
+            },
+            screen(value,arr){//筛选级联出来的值
+                let result = '';
+                if(arr){
+                    arr.forEach(item=>{
+                        if(item.value == value){
+                            result = item.label;
+                        }
+                    });
+                }
+                return result;
+            },
+            submit(){//修改资料/提交
+                let self = this;
+                //传入级联后的值
+                self.form.region.state = this.screen(self.valueSt,self.state);
+                self.form.region.province = this.screen(self.valuePr,self.province);
+                self.form.region.city = this.screen(self.valueCi,self.city);
 
-            this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
-                status: 1,//代表修改资料
-                personal_info: self.form
-            },{
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-            }).then(function(res){
-                // console.log(JSON.parse(self.form.region));
-                console.log(res);
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
+                this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
+                    status: 1,//代表修改资料
+                    personal_info: self.form
+                },{
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+                }).then(function(res){
+                    // console.log(JSON.parse(self.form.region));
+                    console.log(res);
+                }).catch(function(res){
+                    console.log(res);
+                });
+            },
 
-        // saveImg(imageUrl){ //保存头像
-        //     let self = this;
-        //     this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
-        //         status: 0,//代表修改头像
-        //         avatarUrl: imageUrl,
-        //         id: self.form.id
-        //     },{
-        //         headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-        //     }).then(function(res){
-        //         console.log(res);
-        //     }).catch(function(res){
-        //         console.log(res);
-        //     });
-        // },
-        //上传头像的两个方法
-        handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
-            // this.saveImg(this.imageUrl);
-            // console.log(this.imageUrl);
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
+            // saveImg(imageUrl){ //保存头像
+            //     let self = this;
+            //     this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/saveData',{
+            //         status: 0,//代表修改头像
+            //         avatarUrl: imageUrl,
+            //         id: self.form.id
+            //     },{
+            //         headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+            //     }).then(function(res){
+            //         console.log(res);
+            //     }).catch(function(res){
+            //         console.log(res);
+            //     });
+            // },
+            //上传头像的两个方法
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                // this.saveImg(this.imageUrl);
+                // console.log(this.imageUrl);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
+        },
+        mounted() {
+            this.form.id = localStorage.getItem('email');//当前登陆id
+            this.uploadData.id = this.form.id;
+            this.getInfo();
         }
-    },
-    mounted() {
-        this.form.id = localStorage.getItem('email');//当前登陆id
-        this.uploadData.id = this.form.id;
-        this.getInfo();
     }
-}
 </script>
 
 <style lang="less">

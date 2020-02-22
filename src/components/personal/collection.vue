@@ -70,11 +70,11 @@
         </div>
         <el-dialog
                 style="text-align: left;"
-            title="删除收藏夹"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :close-on-click-modal="false"
-            :show-close="false">
+                title="删除收藏夹"
+                :visible.sync="dialogVisible"
+                width="30%"
+                :close-on-click-modal="false"
+                :show-close="false">
             <el-radio v-model="radio" label="1">一经删除（操作不可恢复！）</el-radio>
             <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -85,105 +85,105 @@
 </template>
 
 <script>
-export default {
-    name: "collection",
-    data(){
-        return{
-            dialogFormVisible: false,
-            bookMark: '',//收藏夹名称
-            describe: '',//描述内容
-            limit: 1,
-            userId: '',//当前登陆者
-            favorites: [],//收藏夹
-            markFlag: true,
-            changeFlag: true,
-            inner: {
-                title: '',
-                describe: '',
-                power: 1,
-                id: ''
+    export default {
+        name: "collection",
+        data(){
+            return{
+                dialogFormVisible: false,
+                bookMark: '',//收藏夹名称
+                describe: '',//描述内容
+                limit: 1,
+                userId: '',//当前登陆者
+                favorites: [],//收藏夹
+                markFlag: true,
+                changeFlag: true,
+                inner: {
+                    title: '',
+                    describe: '',
+                    power: 1,
+                    id: ''
+                },
+                dialogVisible: false,
+                radio: '1'
+            }
+        },
+        methods: {
+            dialogForm(flag){
+                return this.dialogFormVisible = flag;
             },
-            dialogVisible: false,
-            radio: '1'
-        }
-    },
-    methods: {
-        dialogForm(flag){
-            return this.dialogFormVisible = flag;
-        },
-        done(flag,title,describe,power,id){
-            this.changeFlag = flag;
-            this.inner.title = title;
-            this.inner.describe = describe;
-            this.inner.power = power;
-            this.inner.id = id;
+            done(flag,title,describe,power,id){
+                this.changeFlag = flag;
+                this.inner.title = title;
+                this.inner.describe = describe;
+                this.inner.power = power;
+                this.inner.id = id;
 
-            this.bookMark = title;
-            this.describe = describe;
-            this.limit = power
+                this.bookMark = title;
+                this.describe = describe;
+                this.limit = power
+            },
+            buildCollection(){//新建收藏夹
+                let self = this;
+                //console.log(self.userId,self.bookMark,self.describe,self.limit);
+                this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
+                    status: 1,//新建收藏夹
+                    bind: self.userId,//传入用户id
+                    title: self.bookMark,//收藏夹标题
+                    describe: self.describe,//收藏夹的描述
+                    power: self.limit,//收藏夹权限
+                    id: self.inner.id//收藏夹的id号（新建收藏夹时时没有,更新编辑收藏夹时才有）
+                },{
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+                }).then(function(res){
+                    // console.log(JSON.parse(self.form.region));
+                    console.log(res);
+                    self.bookMark = '';
+                    self.describe = '';
+                    self.limit = 1;
+                    self.previewCollection();
+                }).catch(function(res){
+                    console.log(res);
+                });
+            },
+            previewCollection(){//预览收藏夹
+                let self = this;
+                this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
+                    status: 2,//查询预览文件夹
+                    bind: self.userId,//传入用户id
+                },{
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+                }).then(function(res){
+                    self.favorites = res.data;
+                    console.log(self.favorites[0]);
+                    if(self.favorites[0]==0){
+                        self.markFlag = false;
+                    }
+                }).catch(function(res){
+                    console.log(res);
+                });
+            },
+            deleteCollection(){//删除收藏夹
+                let self = this;
+                this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
+                    status: 3,//删除文件夹
+                    id: self.inner.id,//传入收藏夹id
+                    bind: self.userId,//传入用户id
+                },{
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+                }).then(function(res){
+                    console.log(res);
+                    self.changeFlag = true;
+                    self.previewCollection();
+                }).catch(function(res){
+                    console.log(res);
+                });
+            }
         },
-        buildCollection(){//新建收藏夹
-            let self = this;
-            //console.log(self.userId,self.bookMark,self.describe,self.limit);
-            this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
-                status: 1,//新建收藏夹
-                bind: self.userId,//传入用户id
-                title: self.bookMark,//收藏夹标题
-                describe: self.describe,//收藏夹的描述
-                power: self.limit,//收藏夹权限
-                id: self.inner.id//收藏夹的id号（新建收藏夹时时没有,更新编辑收藏夹时才有）
-            },{
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-            }).then(function(res){
-                // console.log(JSON.parse(self.form.region));
-                console.log(res);
-                self.bookMark = '';
-                self.describe = '';
-                self.limit = 1;
-                self.previewCollection();
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
-        previewCollection(){//预览收藏夹
-            let self = this;
-            this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
-                status: 2,//查询预览文件夹
-                bind: self.userId,//传入用户id
-            },{
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-            }).then(function(res){
-                self.favorites = res.data;
-                console.log(self.favorites[0]);
-                if(self.favorites[0]==0){
-                    self.markFlag = false;
-                }
-            }).catch(function(res){
-                console.log(res);
-            });
-        },
-        deleteCollection(){//删除收藏夹
-            let self = this;
-            this.$axios.post('http://localhost/graduation_project/blog2/src/php/personal/collection/collection',{
-                status: 3,//删除文件夹
-                id: self.inner.id,//传入收藏夹id
-                bind: self.userId,//传入用户id
-            },{
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-            }).then(function(res){
-                console.log(res);
-                self.changeFlag = true;
-                self.previewCollection();
-            }).catch(function(res){
-                console.log(res);
-            });
+        mounted() {
+            this.userId = localStorage.getItem('email');//当前登陆id
+            this.previewCollection();//查询文件夹
         }
-    },
-    mounted() {
-        this.userId = localStorage.getItem('email');//当前登陆id
-        this.previewCollection();//查询文件夹
     }
-}
 </script>
 
 <style lang="less">
