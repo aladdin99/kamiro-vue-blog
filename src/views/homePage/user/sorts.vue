@@ -18,13 +18,15 @@
                             :userId="userId"
                             :originalNum="original.length"
                             :lastest="lastest"
-                            :collection_clip="collection_clip"></userLeftBar>
+                            :collection_clip="collection_clip"
+                            @get_collection_clip_detail="get_collection_clip_detail"></userLeftBar>
                     <span ref="searchBar"></span>
                 </div>
             </el-aside>
             <!--Middle content preview section-->
             <el-main class="mainstay">
 <!--                <catalogPreview :userId="userId" :alldata="alldata" :original="original" @changeData="changeData"></catalogPreview>-->
+                <sortPreview :collection_clip_detail="collection_clip_detail" :userId="userId"></sortPreview>
             </el-main>
         </el-container>
     </div>
@@ -33,20 +35,23 @@
 <script>
     import navigationBar from "components/navigationBar.vue";
     import userLeftBar from "components/user/userLeftBar.vue";
+    import sortPreview from "components/user/sortPreview";
     export default {
         name: "user",
         components: {
-            navigationBar, userLeftBar
+            navigationBar, userLeftBar,sortPreview
         },
         data(){
             return{
                 bannerScroll:false,
                 leftScroll:false,
                 userId: '',//当前页面的用户ID
+                sortId: '',//分类栏ID
                 alldata: '',//所有文章
                 original: '',//原创文章
                 lastest: '',//最新文章
-                collection_clip: ""//分类专栏
+                collection_clip: "",//分类专栏
+                collection_clip_detail: ''//当前选中的分类专栏
             }
         },
         methods: {
@@ -130,20 +135,53 @@
                             });
                         }
                     });
+                    self.get_collection_clip_detail();
                 });
-            }
+            },
+            get_collection_clip_detail(data){
+                let sortFlag = data?data:this.sortId;
+                this.collection_clip.forEach(item=>{
+                    if(item.id == sortFlag){
+                        this.collection_clip_detail = item;
+                    }
+                });
+                // console.log(this.collection_clip_detail);
+            },
+            goBack () {//监听浏览器返回
+                sessionStorage.clear();
+                window.history.back();
+                history.pushState(null, null, document.URL);
+            },
         },
         mounted() {
             //监听banner栏坐标
             window.addEventListener('scroll',this.getScrollPosition,false);
-            this.userId = this.$route.params.userId;
-            alert(this.userId);
+            this.userId = this.$route.query.userId;
+            this.sortId = this.$route.query.sortId;
             this.getArticle();
             this.get_collection_clip();
+
+            //监听浏览器返回
+            if (window.history && window.history.pushState) {
+                // 向历史记录中插入了当前页
+                history.pushState(null, null, document.URL);
+                window.addEventListener('popstate', this.goBack, false);
+            }
         },
         destroyed() {
             //监听banner栏坐标(摧毁)
             window.removeEventListener('scroll',this.getScrollPosition,false);
+            //监听浏览器返回(摧毁)
+            window.removeEventListener('popstate', this.goBack, false);
+        },
+        watch: {
+            sortId:function(newVal) {
+                this.$router.replace({
+                    path: '/index/user/sorts',
+                    name: 'sorts',
+                    query: {userId: this.userId,sortId: newVal}
+                });
+            },
         }
     }
 </script>

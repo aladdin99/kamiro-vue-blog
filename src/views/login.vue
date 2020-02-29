@@ -210,7 +210,8 @@ export default {
             alert('密码错误!');
             break;
           case 1:
-            // alert('验证成功!');
+            localStorage.setItem('email',self.registerData.email);
+            localStorage.setItem('nickName',res.data.nickName);
             self.$router.push({
               path:'./index',
               // 路由传参(此处数据暂时没有用到)
@@ -220,8 +221,6 @@ export default {
                 // password: obj[i].password
               }
             });
-            localStorage.setItem('email',self.registerData.email);
-            localStorage.setItem('nickName',res.data.nickName);
             break;
           default:
             alert('账号不存在!');

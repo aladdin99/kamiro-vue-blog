@@ -29,20 +29,22 @@ $result = $conn->query($sql_search);
 $back = array();
 
 if($result->num_rows > 0){
+    $num = 0;
     // 输出数据 fetch_assoc，遍历表中的每一行数据
     while($row = $result->fetch_assoc()) {
+        $num++;
+        if($num>4) break;//获取10篇文章的数量
         $tmp = array(); // 临时数组整合信息
         $tmp['uniqueId'] = $row['uniqueId'];
         $tmp['title'] = $row['title'];
         $tmp['content'] = $row['content'];
-        $tmp['category'] = json_decode($row['category'],JSON_UNESCAPED_UNICODE);
-        $tmp['type'] = $row['type'];
         $tmp['time'] = $row['time'];
         $data[] = $tmp; // 自增
     }
     $return[] = $data;
 } else {
-    $return[] = 0;
+    $return['result'] = 0;
+    echo "0 结果";
 }
 //$get = json_encode($data[0]['region'],JSON_UNESCAPED_UNICODE);
 print_r(json_encode($return[0])); //JSON_UNESCAPED_UNICODE防止中文乱码

@@ -6,7 +6,11 @@
                 <div class="avatar"><img :src="user_circleUrl"></div>
                 <div class="userName">
                     <div class="nickName" :title="user_name">{{user_name}}</div>
-                    <div class="index">Ta的个人主页></div>
+                    <div class="index">
+                        <router-link :to="{path:'/index/webpage',query:{userId:userId}}" style="color: #3399ea;">
+                            Ta的个人主页>
+                        </router-link>
+                    </div>
                 </div>
             </div>
             <div class="interact">
@@ -55,7 +59,7 @@
         <div class="commonArticles">
             <span class="commonName">分类专栏</span>
             <ul class="special commonUl">
-                <li v-for="(item,index) in collection_clip" :key="index" @click="router_link">
+                <li v-for="(item,index) in collection_clip" :key="index" @click="router_link(item.id)">
 <!--                    <router-link :to="{path:'/index/user/sorts',query:{userId:userId,articleId:item.uniqueId}}" class="Newest_title">-->
                         <span class="img">
                             <img :src="item.picture">
@@ -68,7 +72,7 @@
             </ul>
         </div>
         <!--File-->
-        <div class="commonArticles">
+        <div class="commonArticles" v-show="false">
             <span class="commonName">归档</span>
             <ul class="file commonUl">
                 <li>
@@ -99,7 +103,7 @@
             </ul>
         </div>
         <!--Hot articles-->
-        <div class="commonArticles">
+        <div class="commonArticles" v-show="false">
             <span class="commonName">热门文章</span>
             <ul class="hotArticles commonUl">
                 <li>
@@ -195,9 +199,10 @@ export default {
                 // console.log(self.user_circleUrl,self.user_name);
             });
         },
-        router_link(){//分类栏路由跳转
+        router_link(id){//分类栏路由跳转
             // this.$router.push({ path:'/index/user/sorts', query: { userId: this.userId }});
-            this.$router.push({ name:'sorts', params: { userId: this.userId }});
+            this.$router.push({ path:'/index/user/sorts', query: { userId: this.userId, sortId: id}});
+            this.$emit('get_collection_clip_detail',id);
         }
     },
     watch:{

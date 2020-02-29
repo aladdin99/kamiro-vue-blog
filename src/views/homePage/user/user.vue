@@ -68,6 +68,7 @@ export default {
                 }
             }).then(function(res){
                 let article = res.data;
+                article = article?article:[];
                 article.forEach(item=>{
                     item.sortFlag = self.character(item.time);//插入sortFlag,根据这个排序更新时间
                     item.content = self.getSimpleText(item.content);//文章预览页面.只展示纯文本!
@@ -137,6 +138,7 @@ export default {
                 }
             }).then(function(res){
                 self.collection_clip = res.data;
+                self.collection_clip = self.collection_clip?self.collection_clip:[];
                 self.alldata.forEach(item=>{
                     if(item.category){
                         let ins = item.category[0].id;

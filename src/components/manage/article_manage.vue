@@ -65,6 +65,10 @@
                         </div>
                     </li>
                 </ul>
+                <div class="article_none" v-show="!labelPrivate">
+                    <img :src="none"><div>空空如也</div>
+                    <router-link to="/md/mavon" style="text-decoration: none;"><span>写博客</span></router-link>
+                </div>
             </el-tab-pane>
             <el-tab-pane :label="'公开('+labelPublic+')'" name="second">
                 <ul class="article_info" v-show="labelPublic">
@@ -338,6 +342,7 @@
                     }
                 }).then(function(res){
                     self.getAllData = res.data;
+                    self.getAllData = self.getAllData?self.getAllData:[];
                     self.labelAll = self.getAllData.length;//全部num
                     self.showData = self.getAllData;
                     // self.publicData =
@@ -428,7 +433,7 @@
                 }
             }
         }
-        .article_none{
+        .article_none{margin-top: 10rem;
             img{width: 35rem;height: 25rem;}
             div{font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;margin: 1.5rem 0;}
             span{display: inline-block;background-color: #CA0C16;color: #fff;padding: 1rem 10rem;margin-top: 1.5rem;font-size: 1.8rem;border-radius: .5rem;cursor: pointer;}

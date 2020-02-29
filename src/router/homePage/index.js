@@ -39,6 +39,16 @@ const routes = [
     component: () => import("../../views/homePage/user/user.vue"),
   },
   {
+    path: "/index/webpage",
+    name: "webpage",
+    component: () => import("../../views/homePage/webpage.vue"),
+  },
+  {
+    path: "/index/webpage_collect",
+    name: "webpage_collect",
+    component: () => import("../../views/homePage/webpage_collect.vue"),
+  },
+  {
     path: "/index/user/details",
     name: "details",
     component: () => import("../../views/homePage/user/details/details.vue"),

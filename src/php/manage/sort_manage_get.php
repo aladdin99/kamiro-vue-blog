@@ -42,8 +42,7 @@ if($result->num_rows > 0){
     }
     $return[] = $data;//赋值输出的每一组数据
 } else {
-    $return['result'] = 0;
-    echo "0 结果";
+    $return[] = 0;
 }
 //$get = json_encode($data[0]['region'],JSON_UNESCAPED_UNICODE);
 print_r(json_encode($return[0])); //JSON_UNESCAPED_UNICODE防止中文乱码

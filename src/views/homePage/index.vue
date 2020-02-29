@@ -13,28 +13,28 @@
                 </div>
             </el-aside>
             <!--Content preview section-->
-            <el-main class="mainstay">
-                <div class="advert">MDSN已关闭该广告</div>
-                <div class="recommend">
-                    <div class="block">
-                        <el-carousel trigger="click" height="190px">
-                            <el-carousel-item v-for="item in 4" :key="item">
-                                <h3 class="small">{{ item }}</h3>
-                            </el-carousel-item>
-                        </el-carousel>
-                    </div>
-                    <div class="recbox" >
-                        <div style="flex: 1;background-color: #fff1f1;margin-bottom: 2.5px;"></div>
-                        <div style="flex: 1;background-color: antiquewhite;margin-top: 2.5px;"></div>
-                    </div>
-                </div>
-                <div class="content" v-for="item in 150" :key="item">
+            <el-main class="mainstay_index">
+<!--                <div class="advert">MDSN已关闭该广告</div>-->
+<!--                <div class="recommend">-->
+<!--                    <div class="block">-->
+<!--                        <el-carousel trigger="click" height="190px">-->
+<!--                            <el-carousel-item v-for="item in 4" :key="item">-->
+<!--                                <h3 class="small">{{ item }}</h3>-->
+<!--                            </el-carousel-item>-->
+<!--                        </el-carousel>-->
+<!--                    </div>-->
+<!--                    <div class="recbox" >-->
+<!--                        <div style="flex: 1;background-color: #fff1f1;margin-bottom: 2.5px;"></div>-->
+<!--                        <div style="flex: 1;background-color: antiquewhite;margin-top: 2.5px;"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="content" v-for="(item,index) in article_data" :key="index">
 <!--                    每一篇文章简介-->
                     <div>
-                        <router-link to="/index/user/details" style="text-decoration: none;"><div class="title">MIT博士99 行代码就能实现《冰雪奇缘》的特效引擎入门-用Taichi画太极-用Taichi画太-用Taichi画太</div></router-link>
+                        <router-link :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;"><div class="title">{{item.title}}</div></router-link>
                         <div class="introduction">可能最近不少读者也像我一样被某公号的那篇《清华毕业生开发新特效编程语言，99行代码实现《冰雪奇缘》，网友：大神碉堡！创世的快乐》吓了一大跳</div>
                         <div class="root">
-                            <div><el-avatar size="small" :src="circleUrl"></el-avatar><router-link to="/index/user"><span class="nickName">不脱发的程序员</span></router-link></div>
+                            <div><el-avatar size="small" :src="item.avatarUrl"></el-avatar><router-link to="/index/user"><span class="nickName">{{item.author}}</span></router-link></div>
                             <div class="partake">
                                 <span><icon-svg icon-class="icon-dianzan"/></span>
                                 <el-divider direction="vertical"></el-divider>
@@ -73,6 +73,7 @@ export default {
             leftScroll:false,
             rightScroll:false,
             circleUrl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+            article_data: [],//首页展示的所有文章
         }
     },
     methods:{
@@ -87,11 +88,18 @@ export default {
             this.leftScroll = (top>65)?true:false;
             this.rightScroll = (searchBar<currentHeigh)?true:false;
             return {top,left}
+        },
+        get_article(){
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/index/get_index_article').then(function(res){
+                self.article_data = res.data;
+            });
         }
     },
     mounted() {
         //监听banner栏坐标
-        window.addEventListener('scroll',this.getScrollPosition,false)
+        window.addEventListener('scroll',this.getScrollPosition,false);
+        this.get_article();
     },
     destroyed() {
         //监听banner栏坐标(摧毁)
@@ -123,7 +131,7 @@ export default {
             .advert{display:inline-block;width:100%;height: 8rem;background: #fafafa;text-align: center;line-height: 8rem;color: rgba(0,0,0,.4);font-size: 16px;}
             .recommend{margin-top: 2rem;display: flex;height: 19rem;border: 1px solid pink;background-color: #ca0c16;margin-bottom: 2rem;}
         }
-        .mainstay{padding: 0 2rem;text-align: left;height: 100%;
+        .mainstay_index{padding: 0 2rem;text-align: left;height: 100%;
             .advert{display:inline-block;width:100%;height: 8rem;background: #fafafa;text-align: center;line-height: 8rem;color: rgba(0,0,0,.4);font-size: 16px;}
             .recommend{margin-top: 2rem;display: flex;height: 19rem;border: 1px solid pink;margin-bottom: 2rem;
                 .block{display:inline-block;width:98%;flex: 2;padding-right: 1rem;}

@@ -35,7 +35,7 @@
                         </div>
                     </li></ul>
                     <div v-show="!sort_data.length">
-                        <img :src="none" style="width: 35rem;height: 25rem;">
+                        <img :src="none" style="width: 35rem;height: 25rem;margin-top:10rem;">
                         <div style="font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;margin: 1.5rem 0;">空空如也</div>
                     </div>
                 </el-tab-pane>

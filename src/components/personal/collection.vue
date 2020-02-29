@@ -81,14 +81,20 @@
             <el-button type="primary" @click="dialogVisible = false,deleteCollection()">确 定</el-button>
             </span>
         </el-dialog>
+        <div class="article_none" v-show="!favorites">
+            <img :src="none">
+            <div>空空如也</div>
+        </div>
     </div>
 </template>
 
 <script>
+    import none from "assets/none.jpg";//1.引入图片地址
     export default {
         name: "collection",
         data(){
             return{
+                none:none,
                 dialogFormVisible: false,
                 bookMark: '',//收藏夹名称
                 describe: '',//描述内容
@@ -224,5 +230,9 @@
                 }
             }
         }
+    }
+    .article_none{margin-top: 10rem;
+        img{width: 35rem;height: 25rem;}
+        div{font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;margin: 1.5rem 0;}
     }
 </style>

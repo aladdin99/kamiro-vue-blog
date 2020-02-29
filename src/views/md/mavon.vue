@@ -287,8 +287,6 @@
                                 self.uniqueId = res.data.replace('\r\n\r\n','');//直接只返回文章的id（稍作处理'\n'符）
                             }
                         }
-                    }).catch(function (res) {
-                        console.log(res);
                     });
                 }
             },

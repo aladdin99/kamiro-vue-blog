@@ -39,10 +39,22 @@
         die("连接失败: " . $conn->connect_error);
     }
 
+    $avartar = '';
+    $seach_avartar = "SELECT avatarUrl FROM `personal_info`  WHERE `id` = '$related'";
+    $avartar_result = $conn->query($seach_avartar);
+    if($avartar_result->num_rows > 0){
+        // 输出数据 fetch_assoc，遍历表中的每一行数据
+        while($row = $avartar_result->fetch_assoc()) {
+            $avartar = $row['avatarUrl'];
+        }
+    } else {
+        echo '0结果!';
+    }
+
     // 3、插入数据//以id(邮箱号)作为主键 进行有选择的插入
     if(!$uniqueIdFlag){//如果没有文章唯一键，那么就是新文章，插入新记录
-        $sql = "INSERT INTO article (`uniqueId`,`related`,`author`,`title`,`content`,`tag`,`category`,`type`,`links`,`shape`,`draftsFlag`) VALUES
-               ('$uniqueId','$related','$nickName','$title','$content','$tag','$category','$type','$links','$shape','$draftsFlag')";
+        $sql = "INSERT INTO article (`uniqueId`,`related`,`author`,`title`,`content`,`tag`,`category`,`type`,`links`,`shape`,`draftsFlag`,`avatarUrl`) VALUES
+               ('$uniqueId','$related','$nickName','$title','$content','$tag','$category','$type','$links','$shape','$draftsFlag','$avartar')";
     }else{//如果有了文章唯一键，那么就是草稿，需要更新文章
         echo $draftsFlag;
         if($draftsFlag==1){//如果是'发布文章',那么更新以下的所有数据
