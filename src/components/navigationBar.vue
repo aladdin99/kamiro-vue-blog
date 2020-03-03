@@ -1,7 +1,7 @@
 <template>
     <div class="nav">
         <div class="banner-left">
-            <span style="margin-right: 1.5rem;">MDSN</span>
+            <span style="margin-right: 1.5rem;">ALADDIN</span>
             <ul>
                 <li v-for="(item,index) in bannerData" :key="index" @click="nextInfo(index)"><span :class="{'checked':(item.flag)}" :title="item.name">{{item.name}}</span></li>
             </ul>

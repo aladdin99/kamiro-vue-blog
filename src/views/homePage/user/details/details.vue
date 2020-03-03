@@ -141,7 +141,7 @@
 <style lang="less">
     .user{
         height: 100%;
-        background-color: #343536;
+        background: url("../../../../assets/theme.jpg");
     }
     .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
     .UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)

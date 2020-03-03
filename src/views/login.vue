@@ -5,8 +5,9 @@
         <el-main style="display: flex;justify-content:center;">
           <el-card class="box-left">
             <el-carousel trigger="click" style="margin-top: 15px;">
-              <el-carousel-item v-for="item in 4" :key="item">
-                <h3 class="small">{{ item }}</h3>
+              <el-carousel-item v-for="item in assets" :key="item">
+<!--                <h3 class="small">{{ item }}</h3>-->
+                <img :src="item" style="object-fit:cover;width: 100%;height: 100%;">
               </el-carousel-item>
             </el-carousel>
             <div>
@@ -144,7 +145,10 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
-
+import JPG1 from "assets/login/01.jpg";//1.引入图片地址
+import JPG2 from "assets/login/02.jpg";//1.引入图片地址
+import JPG3 from "assets/login/03.jpg";//1.引入图片地址
+import JPG4 from "assets/login/04.jpg";//1.引入图片地址
 export default {
   name: "login",
   components: {
@@ -152,6 +156,7 @@ export default {
   },
   data() {
     return {
+      assets: [JPG1,JPG2,JPG3,JPG4],//轮播图
       isLogin: true,
       registerData: {//注册/登录(邮箱.用户名.密码)
           email: '',

@@ -5,7 +5,7 @@
         <div :class="{'UbannerMenu':bannerScroll}">
             <navigationBar></navigationBar>
         </div>
-        <el-container class="mainbody" style="width: 100%;background-color: #f5f6f7;">
+        <el-container class="mainbody" style="width: 100%;">
             <!--Left user information bar-->
             <el-tabs v-model="activeCode" :tab-position="tabPosition" style="background-color: #fff;" @tab-click="blogManage">
                 <el-tab-pane label="个人资料" name="0"><personalData></personalData></el-tab-pane>
@@ -94,8 +94,9 @@
 
 <style lang="less">
     .personal{
-        height: 100%;
-        background-color: #f5f6f7;
+        height: 100vh;
+        /*background-color: #f5f6f7;*/
+        background: url("../../assets/theme.jpg");
     }
 
     .personal{

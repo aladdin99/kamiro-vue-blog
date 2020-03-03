@@ -1,11 +1,11 @@
 <template>
     <div class="webpage">
-        <div :class="{'UbannerMenu':bannerScroll}">
+        <div :class="{'UbannerMenu':bannerScroll}" style="background-color: #fff;">
             <navigationBar></navigationBar>
         </div>
         <el-container class="mainbody">
             <!--Middle content preview section-->
-            <el-main class="mainstay">
+            <el-main class="mainstay" style="background-color: #fff;">
                 <div style="display: inline-block;width: 100%;height: 100%;">
                     <div class="info_banner">
                         <div class="part1">
@@ -131,7 +131,30 @@
                                     </el-tab-pane>
                                 </el-tabs>
                             </el-tab-pane>
-                            <el-tab-pane label="留言 13" name="fourth">留言</el-tab-pane>
+                            <el-tab-pane label="留言 13" name="fourth">
+                                <div style="display: flex;align-items: center;justify-content: center;"><h1>欢迎留言</h1></div>
+                                <textarea placeholder="想对作者说点什么?" maxlength="500"></textarea>
+                                <div><span style="padding: .5rem 1rem;border-radius: .5rem;background-color: #177cb0;
+display: inline-block;color: #fff;">立即留言</span></div>
+                                <div class="commentt_box">
+                                    <div>
+                                        <img :src="circleUrl" style="position: relative;">
+                                        <span>中二少年爱幻想</span>
+                                        <span>11小时前</span>
+                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>
+                                    </div>
+                                    <div style="color: #687a87;">这是第一条留言呀！！！</div>
+                                </div>
+                                <div class="commentt_box">
+                                    <div style="position: relative;">
+                                        <img :src="circleUrl" style="position: relative;">
+                                        <span>中二少年爱幻想</span>
+                                        <span>3小时前</span>
+                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>
+                                    </div>
+                                    <div style="color: #687a87;">好好加油！！！</div>
+                                </div>
+                            </el-tab-pane>
                         </el-tabs>
                     </div>
                 </div>
@@ -141,7 +164,7 @@
                     <div class="right_record">
                         <div class="medal">
                             <div>
-                                <span>MDSN身份</span>
+                                <span>ALADDIN身份</span>
                             </div>
                             <div>
                                 <div class="medal_item" v-for="(item,index) in gained" :key="index" v-show="index<3">
@@ -152,7 +175,7 @@
                         </div>
                         <div class="focus" style="background-color: #fff;">
                             <span>
-                                <div>1K+</div>
+                                <div>2</div>
                                 <div>他的粉丝</div>
                             </span>
                             <span>
@@ -188,6 +211,7 @@
         },
         data(){
             return{
+                circleUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
                 none: none,
                 bannerScroll:false,
                 gained: [{
@@ -295,12 +319,13 @@
 
 <style lang="less">
     .webpage{
-        height: 100%;
-        background-color: #343536;
+        height: 100vh;
+        /*background-color: #343536;*/
+        background: url("../../assets/theme.jpg");
     }
     .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
-    .mainbody{padding: 0 12vw;margin-top: 1.5rem;background-color: #78A5F1;
-        .mainstay{text-align: left;height: 100%;background-color: #9C2828;color: #42b983;display: flex;}
+    .mainbody{padding: 0 12vw;margin-top: 1.5rem;
+        .mainstay{text-align: left;height: 100%;color: #42b983;display: flex;}
     }
 
     .none_sort{display: flex;align-items: center;justify-content: center;padding: 2rem 0;flex-direction: column;
@@ -308,11 +333,11 @@
         div{margin: 2rem 0;font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;}
     }
 
-    .info_banner{display: flex;background-color: #2e2f30!important;width: 100%;height: 100%;padding: 1rem 0;
+    .info_banner{display: flex;width: 100%;height: 100%;padding: 1rem 0;
         .part1{
           display: flex;
         }
-        .part2{flex: 6;background-color: #fff;color: #000;margin-left: 1rem;display: flex;flex-direction: column;padding: 1rem;
+        .part2{flex: 6;color: #000;margin-left: 1rem;display: flex;flex-direction: column;padding: 1rem;
             &>div{flex: 1;justify-content: space-between;display: flex;
                 &>div:nth-child(1){font-size: 2.6rem;color: #4d4d4d;}
                 &>div:nth-child(2) {
@@ -337,6 +362,20 @@
         &>span:nth-child(2){display: flex;justify-content: space-between;font-size: 1.4rem;color: #999;align-items: center;
             &>div:nth-child(2) {color: #9C2828;padding: .5rem 1.5rem;border: 1px solid  #ced2d9;border-radius: .5rem;cursor: pointer;}
         }
+    }
+
+    textarea{width: 100%;height: 100%;resize: none;padding: 1rem;box-sizing: border-box;border-radius: .8rem;color: #d2d4d7;margin: 1rem 0;display: inline-block;
+        &:hover{outline: none;}
+        &::-webkit-input-placeholder{color: #d7d4d4;}
+    }
+
+    .commentt_box{padding: 1rem 0;
+        &>div:nth-child(1){display: flex;align-items: center;
+            img{display: inline-block; width: 3rem;height: 3rem;border-radius: 50%;z-index: 100;}
+            span:nth-child(2){margin: 0 1rem;color: #2e2e2e;}
+            span:nth-child(3){font-size: 1.2rem;color: #999;}
+        }
+        &>div:nth-child(2){padding: .5rem 0rem 1rem 4rem;border-bottom: 1px dashed #999;}
     }
 
     .right_record{display: inline-block;width: 30rem;box-sizing: border-box;

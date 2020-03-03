@@ -89,7 +89,7 @@
         data(){
             return{
                 img_file: {},
-                circleUrl:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                circleUrl:"http://localhost/graduation_project/blog2/src/assets/avatar/IMG_1066(20200214-130610).JPG",
                 dialogFormVisible: false,
                 options: [{//文章标签数据
                     value: 'shujvku',

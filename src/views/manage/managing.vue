@@ -3,7 +3,7 @@
         <navigationBar></navigationBar>
         <div class="mainmanage">
             <el-container>
-                <el-aside width="200px" style="background-color: #FDE0EC;">
+                <el-aside width="200px" style="background-color: #f5f6f7;">
                     <div class="leftManageBar" ref="leftHeight">
                         <router-link to="/md/mavon" style="text-decoration: none;" class="manage_edit_link">
                             <div class="manage_edit">
@@ -101,7 +101,7 @@ export default {
 
 <style lang="less">
 .managing{display: inline-block;width: 100%; background-color: #f5f6f7;
-    .mainmanage{padding: 0 12vw;background-color:#065279;margin-top: 1.5rem;min-height: 92vh;}
+    .mainmanage{padding: 0 12vw;background-color:#f5f6f7;margin-top: 1.5rem;min-height: 92vh;}
 }
 .leftManageBar{display: inline-block;width: 20rem;background-color: #99a9bf;cursor: pointer;border-right: .2rem solid #f5f6f7;box-sizing: border-box;
     .manage_edit{background-color: #fff;color: #CA0C16;padding: 1.5rem;font-size: 1.6rem;border-bottom: 1px solid #e9e9e9;

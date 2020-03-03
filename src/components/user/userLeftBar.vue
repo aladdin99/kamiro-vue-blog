@@ -23,19 +23,19 @@
                 </div>
                 <div class="interaction num">
                     <span>{{originalNum}}</span>
-                    <span>8495</span>
-                    <span>12</span>
-                    <span>215</span>
-                    <span>2万+</span>
+                    <span>0</span>
+                    <span>1</span>
+                    <span>1</span>
+                    <span>2</span>
                 </div>
             </div>
             <div class="record">
                 <div class="part1">
-                    <span>等级: 5级</span>
-                    <span>周排名: 2282</span>
+                    <span>等级: 1级</span>
+                    <span>周排名: 1</span>
                 </div>
                 <div class="part2">
-                    <span>积分: 1877</span>
+                    <span>积分: 5</span>
                     <span>勋章: 持之以恒</span>
                 </div>
             </div>

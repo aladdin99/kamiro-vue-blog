@@ -270,7 +270,7 @@
         background-color: #343536;
     }
     .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
-    .mainbody{padding: 0 12vw;margin-top: 1.5rem;background-color: #78A5F1;
+    .mainbody{padding: 0 12vw;margin-top: 1.5rem;
         .mainstay{text-align: left;height: 100%;background-color: #9C2828;color: #42b983;display: flex;}
     }
 
