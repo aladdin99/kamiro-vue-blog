@@ -159,7 +159,7 @@ display: inline-block;color: #fff;">立即留言</span></div>
                     </div>
                 </div>
             </el-main>
-            <!--Right user information bar-->
+            <!--Right user information bar -->
             <el-aside width="30rem" style="position: relative;box-sizing: border-box;">
                     <div class="right_record">
                         <div class="medal">
