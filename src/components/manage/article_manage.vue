@@ -44,26 +44,26 @@
                             </div>
                             <div class="article_detail_right">
                                 <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
-<!--                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>-->
-<!--                                <span v-show="item.draftsFlag!='0'">-->
-<!--                                    <el-popover-->
-<!--                                            :value="item.comment_visible?true:false"-->
-<!--                                            placement="bottom-start"-->
-<!--                                            transition="fade-in-linear"-->
-<!--                                            trigger="click">-->
-<!--                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">-->
-<!--                                            <div v-show="item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>-->
-<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>-->
-<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>-->
-<!--                                            <div v-show="item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>-->
-<!--                                        </div>-->
-<!--                                    </el-popover>-->
-<!--                                    <span slot="reference" @click="item.comment_visible=1">-->
-<!--                                        <span v-show="!item.comment_limit">评论公开</span>-->
-<!--                                        <span v-show="item.comment_limit">审核后公开</span>-->
-<!--                                        <i class="el-icon-caret-bottom"></i>-->
-<!--                                    </span>-->
-<!--                                </span>-->
+                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>
+                                <span v-show="item.draftsFlag!='0'">
+                                    <el-popover
+                                            :value="item.comment_visible?true:false"
+                                            placement="bottom-start"
+                                            transition="fade-in-linear"
+                                            trigger="click">
+                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">
+                                            <div v-show="item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>
+                                            <div v-show="!item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>
+                                            <div v-show="!item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>
+                                            <div v-show="item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>
+                                        </div>
+                                    </el-popover>
+                                    <span slot="reference" @click="item.comment_visible=1">
+                                        <span v-show="!item.comment_limit">评论公开</span>
+                                        <span v-show="item.comment_limit">审核后公开</span>
+                                        <i class="el-icon-caret-bottom"></i>
+                                    </span>
+                                </span>
                                 <el-divider direction="vertical"></el-divider>
                                 <span style="color: #CA0C16;" @click="dialogVisible = true,sendId(item.uniqueId)">删除</span>
                             </div>

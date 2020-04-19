@@ -7,7 +7,7 @@
             <!--Middle content preview section-->
             <el-main class="mainstay" style="background-color: #fff;">
                 <div style="display: inline-block;width: 100%;height: 100%;">
-                    <div class="info_banner">
+                    <div class="info_banner_webpage">
                         <div class="part1">
                             <img :src="base_data.avatarUrl" style="width: 10rem;height: 10rem;border-radius: 50%;">
                         </div>
@@ -23,9 +23,9 @@
                         </div>
                     </div>
                     <div class="blogInfo">
-                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tabs v-model="activeName" @tab-click="handleClick" style="min-height: 50rem;">
                             <el-tab-pane :label="'博客 '+article_data.length" name="first">
-                                <div class="none_sort" v-show="!sort_colum_data.length">
+                                <div class="none_sort" v-show="!article_data.length">
                                     <img :src="none">
                                     <div>空空如也</div>
                                 </div>
@@ -41,119 +41,40 @@
                                         <span>{{item.time}}</span>
                                     </div>
                                 </div>
-                                <div style="display: flex;justify-content: center;align-items: center;margin-top: 2rem;" v-show="article_data.length-1&&article_data.length">
-                                    <span style="padding: .8rem 2rem;color: #ca0c16;border: 1px solid #ca0c16;border-radius: .5rem;">查看更多</span>
-                                </div>
+<!--                                <div style="display: flex;justify-content: center;align-items: center;margin-top: 2rem;" v-show="article_data.length-1&&article_data.length">-->
+<!--                                    <span style="padding: .8rem 2rem;color: #ca0c16;border: 1px solid #ca0c16;border-radius: .5rem;">查看更多</span>-->
+<!--                                </div>-->
                             </el-tab-pane>
                             <el-tab-pane :label="'收藏 '+collection_data.length" name="second">
-                                <el-tabs type="border-card" v-model="activeCollectName">
-                                    <el-tab-pane :label="'Ta创建的收藏夹（'+collection_data.length+'）'" name="first">
-                                        <div class="none_sort" v-show="!collection_data.length">
-                                            <img :src="none">
-                                            <div>空空如也</div>
-                                        </div>
-                                        <div class="blog_collection" v-for="(item,index) in collection_data" :key="index">
-                                            <span>
-                                                <router-link
-                                                    :to="{path:'/index/webpage_collect',
-                                                    query:{userId:userId,activeName:'second',activeCollectName:'first',collection_id:item.id}}"
-                                                    style="text-decoration: none;color:#4d4d4d;">{{item.title}}
-                                                </router-link>
-                                            </span>
-                                            <span>
-                                                <div>
-                                                    <span>32条内容</span>
-                                                    <el-divider direction="vertical"></el-divider>
-                                                    <span v-show="item.followers">{{item.followers}}人关注</span>
-                                                    <span v-show="!item.followers">0人关注</span>
-                                                </div>
-                                                <div>关注</div>
-                                            </span>
-                                        </div>
-                                    </el-tab-pane>
-                                    <el-tab-pane :label="'Ta关注的收藏夹（'+collection_data.length+'）'" name="second">
-                                        <div class="none_sort" v-show="!collection_data.length">
-                                            <img :src="none">
-                                            <div>空空如也</div>
-                                        </div>
-                                        <div class="blog_collection" v-for="(item,index) in collection_data" :key="index">
-                                            <span>
-                                                <router-link
-                                                        :to="{path:'/index/webpage_collect',
-                                                    query:{userId:userId,activeName:'second',activeCollectName:'second',collection_id:item.id}}"
-                                                        style="text-decoration: none;color:#4d4d4d;">{{item.title}}
-                                                </router-link>
-                                            </span>
-                                            <span>
-                                                <div>
-                                                    <span>32条内容</span>
-                                                    <el-divider direction="vertical"></el-divider>
-                                                    <span v-show="item.followers">{{item.followers}}人关注</span>
-                                                    <span v-show="!item.followers">0人关注</span>
-                                                </div>
-                                                <div>关注</div>
-                                            </span>
-                                        </div>
-                                    </el-tab-pane>
-                                </el-tabs>
+                                <webpageCollection ref="wepage_clip" :userId="userId"></webpageCollection>
                             </el-tab-pane>
                             <el-tab-pane :label="'专栏 '+sort_colum_data.length" name="third">
-                                <el-tabs type="border-card">
-                                    <el-tab-pane :label="'Ta创建的专栏（'+sort_colum_data.length+'）'">
-                                        <div class="none_sort" v-show="!sort_colum_data.length">
-                                            <img :src="none">
-                                            <div>空空如也</div>
-                                        </div>
-                                        <div class="blog_collection" v-for="(item,index) in sort_colum_data" :key="index" @click="router_link(item.id)">
-                                            <span>{{item.name}}</span>
-                                            <span>
-                                                <div>
-                                                    <span>文章数 32</span>
-                                                </div>
-                                                <div>关注</div>
-                                            </span>
-                                        </div>
-                                    </el-tab-pane>
-                                    <el-tab-pane :label="'TA关注的专栏（'+sort_colum_data.length+'）'">
-                                        <div class="none_sort" v-show="!sort_colum_data.length">
-                                            <img :src="none">
-                                            <div>空空如也</div>
-                                        </div>
-                                        <div class="blog_collection" v-for="(item,index) in sort_colum_data" :key="index">
-                                            <span>{{item.name}}</span>
-                                            <span>
-                                                <div>
-                                                    <span>文章数 32</span>
-                                                </div>
-                                                <div>关注</div>
-                                            </span>
-                                        </div>
-                                    </el-tab-pane>
-                                </el-tabs>
+                                <webpageSort ref="wepage_sort" :userId="userId"></webpageSort>
                             </el-tab-pane>
-                            <el-tab-pane label="留言 13" name="fourth">
-                                <div style="display: flex;align-items: center;justify-content: center;"><h1>欢迎留言</h1></div>
-                                <textarea placeholder="想对作者说点什么?" maxlength="500"></textarea>
-                                <div><span style="padding: .5rem 1rem;border-radius: .5rem;background-color: #177cb0;
-display: inline-block;color: #fff;">立即留言</span></div>
-                                <div class="commentt_box">
-                                    <div>
-                                        <img :src="circleUrl" style="position: relative;">
-                                        <span>中二少年爱幻想</span>
-                                        <span>11小时前</span>
-                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>
-                                    </div>
-                                    <div style="color: #687a87;">这是第一条留言呀！！！</div>
-                                </div>
-                                <div class="commentt_box">
-                                    <div style="position: relative;">
-                                        <img :src="circleUrl" style="position: relative;">
-                                        <span>中二少年爱幻想</span>
-                                        <span>3小时前</span>
-                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>
-                                    </div>
-                                    <div style="color: #687a87;">好好加油！！！</div>
-                                </div>
+                            <el-tab-pane label="留言" name="fourth">
+                                <webpageMsg ref="wepage_msg" :userId="userId"></webpageMsg>
+<!--                                <div style="display: flex;align-items: center;justify-content: center;"><h1>欢迎留言</h1></div>-->
+<!--                                <textarea placeholder="想对作者说点什么?" maxlength="500"></textarea>-->
+<!--                                <div><span style="padding: .5rem 1rem;border-radius: .5rem;background-color: #177cb0;-->
+<!--display: inline-block;color: #fff;">立即留言</span></div>-->
+<!--                                <div class="commentt_box">-->
+<!--                                    <div>-->
+<!--                                        <img :src="circleUrl" style="position: relative;">-->
+<!--                                        <span>中二少年爱幻想</span>-->
+<!--                                        <span>11小时前</span>-->
+<!--                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>-->
+<!--                                    </div>-->
+<!--                                    <div style="color: #687a87;">这是第一条留言呀！！！</div>-->
+<!--                                </div>-->
+<!--                                <div class="commentt_box">-->
+<!--                                    <div style="position: relative;">-->
+<!--                                        <img :src="circleUrl" style="position: relative;">-->
+<!--                                        <span>中二少年爱幻想</span>-->
+<!--                                        <span>3小时前</span>-->
+<!--                                        <span style="position: absolute;right: 1rem;cursor: pointer;">回复</span>-->
+<!--                                    </div>-->
+<!--                                    <div style="color: #687a87;">好好加油！！！</div>-->
+<!--                                </div>-->
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -203,11 +124,14 @@ display: inline-block;color: #fff;">立即留言</span></div>
 
 <script>
     import navigationBar from "components/navigationBar.vue";
+    import webpageCollection from "components/webpage/webpage_collection.vue";
+    import webpageSort from "components/webpage/webpage_sort.vue";
+    import webpageMsg from "components/webpage/webpage_leaveMsg.vue";
     import none from "assets/none.jpg";//1.引入图片地址
     export default {
         name: "webpage",
         components: {
-            navigationBar,
+            navigationBar,webpageCollection,webpageSort,webpageMsg
         },
         data(){
             return{
@@ -241,8 +165,25 @@ display: inline-block;color: #fff;">立即留言</span></div>
             }
         },
         methods: {
-            handleClick(tab, event) {
-                console.log(tab, event);
+            handleClick(tab) {
+                switch (parseInt(tab.index)) {
+                    case 0:
+                        console.log("博客");
+                        break;
+                    case 1:
+                        console.log("收藏");
+                        this.$refs.wepage_clip.init();
+                        break;
+                    case 2:
+                        console.log("专栏");
+                        break;
+                    case 3:
+                        this.$refs.wepage_msg.init();
+                        console.log("留言");
+                        break;
+                    default:
+                        break;
+                }
             },
             get_articles(){//获取博文信息
                 let self = this;
@@ -319,9 +260,11 @@ display: inline-block;color: #fff;">立即留言</span></div>
 
 <style lang="less">
     .webpage{
-        height: 100vh;
+        height: 100%;
+        min-height: 100vh;
         /*background-color: #343536;*/
         background: url("../../assets/theme.jpg");
+        background-attachment: fixed;
     }
     .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
@@ -333,7 +276,7 @@ display: inline-block;color: #fff;">立即留言</span></div>
         div{margin: 2rem 0;font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;}
     }
 
-    .info_banner{display: flex;width: 100%;height: 100%;padding: 1rem 0;
+    .info_banner_webpage{display: flex;width: 100%;height: 100%;padding: 1rem 0;
         .part1{
           display: flex;
         }
@@ -351,14 +294,17 @@ display: inline-block;color: #fff;">立即留言</span></div>
         .blogInfo{background-color: #fff;margin-top: 1rem;}
     }
 
-    .blog_article{padding: 1rem 0;
+    .blog_article{padding: 1rem 0;border-bottom: 1px solid #e4e7ed;
         .article_title{font-size: 2rem;color: #5a5a5a;font-weight: 700;line-height: 3rem;}
         .article_content{font-size: 1.4rem;color: #858585;line-height: 2.4rem;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
         .article_record{display: flex;justify-content: space-between;font-size: 1.2rem;color: #999;margin-top: .8rem;}
+        &:hover{
+            .article_title{color: #177cb0;}
+        }
     }
 
-    .blog_collection{padding: 1rem 0;border-bottom: 1px solid red;
-        &>span:nth-child(1){font-size: 2rem;color: #4d4d4d;line-height: 2.7rem;cursor: pointer;}
+    .blog_collection{padding: 1rem 2rem;border-bottom: 1px solid #e4e7ed;&:last-child{border-bottom: 0px;}
+        &>span:nth-child(1){font-size: 1.8rem;color: #4d4d4d;line-height: 2.7rem;cursor: pointer;}
         &>span:nth-child(2){display: flex;justify-content: space-between;font-size: 1.4rem;color: #999;align-items: center;
             &>div:nth-child(2) {color: #9C2828;padding: .5rem 1.5rem;border: 1px solid  #ced2d9;border-radius: .5rem;cursor: pointer;}
         }

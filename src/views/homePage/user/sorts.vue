@@ -1,6 +1,6 @@
 <template>
     <div class="sorts">
-        <div :class="{'UbannerMenu':bannerScroll}">
+        <div :class="{'UbannerMenu_sort':bannerScroll}">
             <navigationBar></navigationBar>
         </div>
         <div class="banner_title">
@@ -193,8 +193,8 @@
         background: url("../../../assets/theme.jpg");
         background-attachment: fixed;
     }
-    .UbannerMenu {position: fixed;top: -5rem;width: 100%;z-index: 101;}
-    .UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
+    .UbannerMenu_sort {position: fixed;top: 0rem;width: 100%;z-index: 101;}
+    /*.UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)*/
 
     .banner_title{color:#fff;display:flex;justify-content: space-between;padding: 2rem 12vw 1rem 12vw;
         div{flex:1;display: flex;flex-direction: column;align-items: flex-start;text-align: left;

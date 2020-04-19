@@ -22,6 +22,7 @@
     $articleId = $body->articleId;//文章id
     $title = $body->title;//文章标题
     $authorId = $body->authorId;//文章作者id
+    $showFlag = $body->showFlag;//1.回复需要审核 0.回复不需要审核
 
     // mysqli 面向对象 编程
     // 1、创建连接
@@ -43,7 +44,7 @@
             echo "Error: " . $sql_reply_flag . "<br>" . $conn->error;
         }
     }else if($status == 0){//评论
-        $sql_insert = "INSERT INTO comment (userId, `userName`,`avarUrl`,`comment`,`bindId`,`title`,`authorId`) VALUES ('$userId','$userName','$avarUrl','$comment','$bindId','$title','$authorId')";
+        $sql_insert = "INSERT INTO comment (userId, `userName`,`avarUrl`,`comment`,`bindId`,`title`,`authorId`,`showFlag`) VALUES ('$userId','$userName','$avarUrl','$comment','$bindId','$title','$authorId','$showFlag')";
     }
 
     // 4、检查是否插入成功

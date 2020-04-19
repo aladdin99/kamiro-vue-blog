@@ -76,9 +76,9 @@
 <style lang="less">
     .catalogPreview{
         height: 100%;
-        min-height: 78rem;
+        min-height: 60rem;
         width: 100%;
-        background-color: #fff;
+        background-color: rgba(238, 245, 252,.8);
         padding: 0 0 10rem 0;
     }
     .el-tabs--border-card>.el-tabs__content{padding:0;}
@@ -92,15 +92,16 @@
             .selected{color: #ca0c16}
         }
     }
-    .catalog{display: flex;flex-direction:column;padding: 1rem 2rem;border-bottom: 1px solid #000;transition: background-color .25s;
+    .catalog{display: flex;flex-direction:column;padding: 1rem 2rem;border-bottom: 1px dashed rgba(0,0,0,.2)!important;transition: background-color .25s;
         &:last-child{border-bottom: none;}
+
         &:hover{background-color: #F4F4F4;transition: background-color .25s;}
         .title{display: flex;flex: 2;font-size: 1.8rem;color: #3d3d3d;font-weight: bold;padding-bottom: .5rem;cursor:pointer;
-            .titleInner{color: #3d3d3d;&:hover{color: #B66300;}}
+            .titleInner{color: #3d3d3d;&:hover{color: #409EFF;}}
         }
         .contentt{flex: 3;overflow: hidden;font-size: 1.4rem;line-height: 2.2rem;text-overflow: -o-ellipsis-lastline;overflow: hidden;max-height: 7rem;
             text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;cursor:pointer;
-            .innerContent{color: #6b6b6b;}
+            .innerContent{color: #555555;}
         }
         .bottomMark{flex: 1;padding: .5rem;font-size: 1.3rem;
             .time{color: #6b6b6b;}

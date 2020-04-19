@@ -267,11 +267,12 @@
 <style lang="less">
     .webpage{
         height: 100%;
-        background-color: #343536;
+        min-height: 68rem;
+        background-color: #fff;
     }
     .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
-        .mainstay{text-align: left;height: 100%;background-color: #9C2828;color: #42b983;display: flex;}
+        .mainstay{text-align: left;height: 100%;color: #42b983;display: flex;}
     }
 
     .info_banner{display: flex;background-color: #2e2f30!important;width: 100%;height: 100%;padding: 1rem 0;

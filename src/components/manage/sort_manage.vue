@@ -1,5 +1,5 @@
 <template>
-    <div class="sort_banner" style="min-height: 78rem;">
+    <div class="sort_banner" style="min-height: 68rem;">
         <!--分类专栏-->
         <div class="sort_index" v-show="indexFlag">
             <div class="sort_banner">分类专栏</div>
@@ -72,10 +72,10 @@
         </div>
         <!--分类管理-->
         <div class="sort_manage_content" v-show="mannerFlag">
-            <div class="banner">
+            <div class="banner_one">
                 <div class="back_manner">
                     <i class="el-icon-arrow-left"></i>
-                    <span @click="backIndex">返回分类专栏</span>
+                    <span @click="backIndex" >返回分类专栏</span>
                 </div>
                 <div>
                     <span>{{clickName}}</span>
@@ -508,12 +508,12 @@ export default {
                 }
             }
         }
-        .sort_manage_content{padding: 1.5rem 1.5rem;
-            .banner{display: flex;justify-content: space-between;align-items: center;padding: 0;border: none;
+        .sort_manage_content{padding: 1.5rem 1.5rem;padding-right: 4rem;
+            .banner_one{display: flex;justify-content: space-between;align-items: center;padding: 0;border: none;
                 div:nth-child(2){
                     /*span:nth-child(1){font-size: 1.8rem;color: #000;font-weight: bold;cursor: pointer;}*/
-                    span{font-size: 1.4rem;color: #BBB;font-weight: bold;cursor: pointer;}
-                    i{padding: 0 .5rem;font-size: 1.4rem;color: #BBB;}
+                    span{font-size: 1.4rem;color: #303133;font-weight: 500;cursor: pointer;}
+                    i{padding: 0 .5rem;font-size: 1.4rem;color: #303133;font-weight: 500;}
                 }
             }
             .content{
@@ -525,7 +525,7 @@ export default {
                 }
             }
         }
-        .back_manner{display: flex;justify-content: left;align-items: center;cursor:pointer;margin-bottom:1rem;font-size:1.6rem;color:#BBB; i{margin-right: .2rem;font-size: 1.6rem;}}
+        .back_manner{display: flex;justify-content: left;align-items: center;cursor:pointer;margin-bottom:1rem;font-size:1.6rem;color: #303133;font-weight: 500; i{margin-right: .2rem;font-size: 1.6rem;}}
         .sort_edit{padding: 1.5rem 1.5rem;
             ul{list-style: none;
                 li{display: flex;justify-content: left;align-items: flex-start;padding: 1.5rem .5rem;

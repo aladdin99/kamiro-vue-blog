@@ -31,14 +31,16 @@
         // 输出数据 fetch_assoc，遍历表中的每一行数据
         while($row = $result->fetch_assoc()) {
             $tmp = array(); // 临时数组整合信息
-            $tmp['id'] = $row['id'];
-            $tmp['avarUrl'] = $row['avarUrl'];
-            $tmp['userId'] = $row['userId'];
-            $tmp['userName'] = $row['userName'];
-            $tmp['comment'] = $row['comment'];
-            $tmp['time'] = $row['time'];
-            $tmp['replyFlag'] = $row['replyFlag'];
-            $data[] = $tmp; // 自增
+            if($row['showFlag']!=1){
+                $tmp['id'] = $row['id'];
+                $tmp['avarUrl'] = $row['avarUrl'];
+                $tmp['userId'] = $row['userId'];
+                $tmp['userName'] = $row['userName'];
+                $tmp['comment'] = $row['comment'];
+                $tmp['time'] = $row['time'];
+                $tmp['replyFlag'] = $row['replyFlag'];
+                $data[] = $tmp; // 自增
+            }
         }
         $return[] =  $data;
     } else {

@@ -23,7 +23,7 @@
                             :ishljs = "true"
                     ></mavon-editor>
                 </div>
-                <div class="operate">
+                <div class="operate_one">
                     <span @click="point" :class="{'pinted':pointData.flag==1}">点赞 <i v-show="pointData.total">{{pointData.total}}</i></span>
                     <span @click="collected">收藏</span>
 <!--                    <span>转发</span>-->
@@ -199,9 +199,9 @@
             },
             collect(item){//收藏
                 let self = this;
-                console.log('----');
-                console.log(this.collection_clip);
-                console.log('----');
+                // console.log('----');
+                // console.log(this.collection_clip);
+                // console.log('----');
                 //更新收藏状态字段视图
                 let status = item.status;
                 this.$delete(item,'status');//先删除
@@ -332,6 +332,7 @@
             },
             commit(){//提交评论
                 let self = this;
+                console.log(self.article_data.commentLimit);
                 if(!self.commit_conent){
                     alert("请填写评论内容！");
                     return;
@@ -346,6 +347,7 @@
                     title: self.article_data.title,//文章标题
                     bindId: self.replyId?self.replyId:self.article_data.uniqueId,//评论时绑定的文章id
                     articleId: self.article_data.uniqueId,//回复时绑定的文章id
+                    showFlag: (self.article_data.commentLimit==1)?1:0,//1.回复需要审核 0.回复不需要审核
                 },{
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个解决跨域
                 }).then(function () {
@@ -444,7 +446,7 @@
         }
     }
     .contentArticle{padding: 3rem 0;
-        .operate{margin: 3rem 0 0 0;
+        .operate_one{margin: 3rem 0 0 0;
             span{display:inline-block;width: 6rem;height: 3rem;background-color: #D2DDF6;text-align: center;line-height: 3rem;border-radius: 2rem;cursor: pointer;margin-right: 1.5rem;
                 &:hover{background-color: #f9ecec;}
             }
