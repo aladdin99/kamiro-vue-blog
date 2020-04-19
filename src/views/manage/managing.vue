@@ -3,7 +3,7 @@
         <navigationBar></navigationBar>
         <div class="mainmanage">
             <el-container>
-                <el-aside width="200px" style="background-color: #f5f6f7;">
+                <el-aside width="200px" style="background-color: rgba(255,255,255,.8);">
                     <div class="leftManageBar" ref="leftHeight">
                         <router-link to="/md/mavon" style="text-decoration: none;" class="manage_edit_link">
                             <div class="manage_edit">
@@ -30,7 +30,7 @@
                         </el-collapse>
                     </div>
                 </el-aside>
-                <el-main style="padding: 0;min-height:30rem;background-color: #177cb0">
+                <el-main style="padding: 0;min-height:30rem;background-color: #fff">
                     <div v-show="blog_value==0"><article_manage></article_manage></div>
                     <div v-show="blog_value==1"><comment_manage></comment_manage></div>
 <!--                    //点击左侧'分类专栏'才获取页面数据(父组件传值)-->
@@ -100,16 +100,22 @@ export default {
 </script>
 
 <style lang="less">
-.managing{display: inline-block;width: 100%; background-color: #f5f6f7;
-    .mainmanage{padding: 0 12vw;background-color:#f5f6f7;margin-top: 1.5rem;min-height: 92vh;}
+.managing{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background: url("../../assets/theme.jpg");
+    background-attachment: fixed;
+    /*background-color: #f5f6f7;*/
+    .mainmanage{padding: 0 12vw;margin-top: 1.5rem;min-height: 92vh;}
 }
-.leftManageBar{display: inline-block;width: 20rem;background-color: #99a9bf;cursor: pointer;border-right: .2rem solid #f5f6f7;box-sizing: border-box;
-    .manage_edit{background-color: #fff;color: #CA0C16;padding: 1.5rem;font-size: 1.6rem;border-bottom: 1px solid #e9e9e9;
+.leftManageBar{display: inline-block;width: 20rem;cursor: pointer;border-right: .2rem solid #f5f6f7;box-sizing: border-box;
+    .manage_edit{background-color: rgba(255,255,255,.5);color: #CA0C16;padding: 1.5rem;font-size: 1.6rem;border-bottom: 1px solid #e9e9e9;
         .manage_edit_link{text-decoration: none;color: #CA0C16;}
         &:hover{background-color:#CA0C16; color: #fff;}
     }
     .manage_blog_link{text-decoration: none;color: #2c3e50;}
-    .manage_blog{background-color: #fff;padding: 1.2rem 1.2rem 1.2rem 2.5rem;font-size: 1.6rem;letter-spacing: .2rem;border-bottom: 1px solid #e9e9e9;text-align: left;
+    .manage_blog{background-color: rgba(255,255,255,.5);padding: 1.2rem 1.2rem 1.2rem 2.5rem;font-size: 1.6rem;letter-spacing: .2rem;border-bottom: 1px solid #e9e9e9;text-align: left;
         &:hover{background-color:#CA0C16; color: #fff;}
     }
     ul{background-color: #fff;list-style: none;

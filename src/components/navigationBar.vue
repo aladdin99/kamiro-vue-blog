@@ -24,7 +24,7 @@
                 <i class="el-icon-message-solid message"></i>
             </el-badge>
             <span class="logister" v-show="isLogin">登陆/注册</span>
-            <span class="logister" v-show="!isLogin">
+            <span class="logister" v-show="!isLogin" style="z-index: 9999;">
                 <router-link to="/personal/index"><img :src="circleUrl"></router-link>
                 <ul class="lohisterInner">
                     <li><icon-svg icon-class="icon-guanzhu" class="iconClass" style="padding-left: 1rem;"/><span>我的关注</span></li>
@@ -67,7 +67,7 @@
         data() {
             return {
                 author: '',//当前用户id
-                bannerData: [{name:"首页",flag:true},{name:"博客",flag:false},{name:"问答",flag:false},{name:"活动",flag:false}],
+                bannerData: [{name:"首页",flag:true},{name:"博客",flag:false},{name:"软件工具",flag:false},{name:"生活",flag:false}],
                 options: [],
                 value: [],
                 list: [],

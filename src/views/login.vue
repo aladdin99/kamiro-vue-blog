@@ -215,6 +215,7 @@ export default {
             alert('密码错误!');
             break;
           case 1:
+            localStorage.setItem('imageUrl',res.data.avarUrl);
             localStorage.setItem('email',self.registerData.email);
             localStorage.setItem('nickName',res.data.nickName);
             self.$router.push({

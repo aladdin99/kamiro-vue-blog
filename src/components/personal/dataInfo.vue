@@ -21,7 +21,9 @@
             <div class="means">
                 <div class="part1">
                     <span>ID: {{form.id}}</span>
-                    <span>个人主页 <i class="el-icon-arrow-right"></i></span>
+                    <router-link :to="{path:'/index/webpage',query:{userId:form.id}}">
+                        <span>个人主页 <i class="el-icon-arrow-right"></i></span>
+                    </router-link>
                 </div>
                 <div class="part2">
                     <span>关注 3</span>
@@ -54,7 +56,7 @@
                                     </li>
                                     <li>行业:
                                         <el-select v-model="form.industry" placeholder="请选择" style="width:17rem;margin-left: 1.5rem;" size="small">
-                                            <el-option v-for="(item,index) in industrys" :key="item" :label=industrys[index] :value=industrys[index]></el-option>
+                                            <el-option v-for="(item,index) in industrys" :key="index" :label=industrys[index] :value=industrys[index]></el-option>
                                         </el-select>
                                     </li>
                                     <li>地区:
@@ -282,14 +284,14 @@
         display: block;
     }
 
-    .dataChange{display: inline-block;width: 65vw;padding-right: 5rem;
+    .dataChange{display: inline-block;width: 65vw;padding-right: 5rem;min-height: 68rem;
         .bannerTop{font-size: 2rem;color: #3d3d3d;line-height: 9rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;}
         .setUp{display: flex;padding: 2rem 0;text-align: left;width: 100%;
             .avatar{flex: 1;cursor: pointer;
                 span{display: inline-block;width: 10rem;height: 10rem;border-radius: 50%;margin-left: 50%;transform: translateX(-50%)}
                 div{text-align: center;color: #3399ea;}
             }
-            .means{flex: 7;padding-left: 1rem;display: inline-block;width: 100%;background-color: #fff;
+            .means{flex: 7;padding-left: 1rem;display: inline-block;width: 100%;background-color: #fff;padding-right: 1.5rem;
                 .part1{display: flex;justify-content: space-between;align-items: center;
                     span:nth-child(1){font-size: 1.4rem;color: #999;}
                     span:nth-child(2){color: #3399ea;cursor: pointer;}

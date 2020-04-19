@@ -12,7 +12,7 @@
             <div class="contentArticle">
                 <div>
                     <mavon-editor
-                            style="z-index: 1;"
+                            style="z-index: 1000;"
                             class="md"
                             :value="rd_content"
                             :subfield = "false"
@@ -85,6 +85,8 @@
                 </li>
             </ul>
         </el-dialog>
+
+        <!--评论-->
         <div class="commentt">
             <div style="display: flex;">
                 <div>
@@ -122,7 +124,7 @@
                             <span style="margin: 0 1rem;">{{info.userName}}</span>
                             <span class="time">{{info.time}}</span>
                         </div>
-                        <div style="padding-left: .5rem;">
+                        <div class="innerComment">
                             {{info.comment}}
                         </div>
                     </div>
@@ -181,6 +183,8 @@
                 }).then(function(res){
                     console.log(res);
                     self.radioFlag = false;
+                    self.input_title = "";
+                    self.textarea_content= "";
                     self.get_collection();
                 }).catch(function(res){
                     console.log(res);
@@ -222,6 +226,9 @@
                     amount: amount,//已收录数量
                     authorId: self.userId,//作者id
                     articleId: self.articleId,//文章id
+                    title: self.article_data.title,//文章标题
+                    author: self.article_data.author,//文章作者
+                    pubdate: self.article_data.time,//文章发布时间
                 },{
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个解决跨域
                 });
@@ -277,7 +284,8 @@
                     params: {
                         status: self.pointData.flag,//2.查询点赞 1.点赞 3.取消点赞
                         articleId: self.articleId,
-                        userId: self.userId,
+                        userId: self.MyId,
+                        authorId: self.userId,
                     }
                 }).then(function(res){
                     let data = res.data;
@@ -330,11 +338,13 @@
                 }
                 this.$axios.post('http://localhost/graduation_project/blog2/src/php/webpage/push_comment',{
                     status: self.replyId?1:0, //判断评论或回复 1.回复 0.评论
-                    avarUrl: self.MyInfo.avatarUrl,//评论者头像
-                    comment: self.commit_conent,//评论
                     userId: self.MyInfo.id,//评论者id
-                    bindId: self.replyId?self.replyId:self.article_data.uniqueId,//评论时绑定的文章id
+                    avarUrl: self.MyInfo.avatarUrl,//评论者头像
                     userName: self.MyInfo.nickName,//评论者昵称
+                    comment: self.commit_conent,//评论
+                    authorId: self.userId,//文章作者id
+                    title: self.article_data.title,//文章标题
+                    bindId: self.replyId?self.replyId:self.article_data.uniqueId,//评论时绑定的文章id
                     articleId: self.article_data.uniqueId,//回复时绑定的文章id
                 },{
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个解决跨域
@@ -348,7 +358,7 @@
                 let self = this;
                 this.$axios.get('http://localhost/graduation_project/blog2/src/php/webpage/get_comment',{
                     params: {
-                        bindId: self.article_data.uniqueId,//评论绑定的文章ID
+                        bindId: self.article_data.uniqueId?self.article_data.uniqueId:"",//评论绑定的文章ID
                     }
                 }).then(function(res){
                     self.comment_data = res.data;
@@ -367,11 +377,15 @@
             }
         },
         mounted(){
+            let self = this;
             this.articleId = this.$route.query.articleId;
             this.userId = this.$route.query.userId;
             this.MyId = localStorage.getItem('email');//当前登陆id
+            setTimeout(function () {
+                self.get_info_data();
+            },100);
+
             this.get_article();
-            this.get_info_data();
             this.point();
             this.getCollection();
             this.get_collection();
@@ -460,13 +474,14 @@
         }
         &>div:nth-child(2){padding: .5rem 0rem 1rem 4rem;}
         &>div:nth-child(3){display: inline-block;width: 96%;border-left: .4rem solid #c5c5c5;margin: 0 0 0 4rem;padding: .5rem 0;
-            .reply{
+            .reply{margin-bottom: 1.5rem;
                 .replays{display: flex;align-items:center;padding-left: .5rem;
                     &:nth-child(1){margin-left: .5rem;}
                     a{display: flex;align-items: center;}
                     .username{margin: 0 1rem;color: #2e2e2e;cursor: pointer;}
                     .time{font-size: 1.2rem;color: #999;margin: 0 1rem;}
                 }
+                .innerComment{padding-left: 5rem;padding-top: .5rem;}
             }
         }
     }

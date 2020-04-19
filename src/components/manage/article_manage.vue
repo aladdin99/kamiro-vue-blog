@@ -29,7 +29,12 @@
                 </div>
                 <ul class="article_info">
                     <li v-for="(item,index) in showData" :key="index">
-                        <div class="article_title" title="编辑"><span v-show="item.draftsFlag=='0'" class="drafts">草稿</span>{{item.title}}</div>
+                        <div class="article_title" title="编辑">
+                            <router-link :to="{path:'/md/mavon',query:{userId:item.related,articleId:item.uniqueId}}" style="color: #676767;">
+                                <span v-show="item.draftsFlag=='0'" class="drafts">草稿</span>
+                                {{item.title}}
+                            </router-link>
+                        </div>
                         <div class="article_detail">
                             <div class="article_detail_left">
                                 <span>{{item.type}}</span>
@@ -38,42 +43,46 @@
                                 <span><i class="el-icon-chat-dot-square"></i>0</span>
                             </div>
                             <div class="article_detail_right">
-                                <span><router-link to="/index/user" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
-                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>
-                                <span v-show="item.draftsFlag!='0'">
-                                    <el-popover
-                                            :value="item.comment_visible?true:false"
-                                            placement="bottom-start"
-                                            transition="fade-in-linear"
-                                            trigger="click">
-                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">
-                                            <div v-show="item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>
-                                            <div v-show="item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>
-                                        </div>
-                                    </el-popover>
-                                    <span slot="reference" @click="item.comment_visible=1">
-                                        <span v-show="!item.comment_limit">评论公开</span>
-                                        <span v-show="item.comment_limit">审核后公开</span>
-                                        <i class="el-icon-caret-bottom"></i>
-                                    </span>
-                                </span>
+                                <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
+<!--                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>-->
+<!--                                <span v-show="item.draftsFlag!='0'">-->
+<!--                                    <el-popover-->
+<!--                                            :value="item.comment_visible?true:false"-->
+<!--                                            placement="bottom-start"-->
+<!--                                            transition="fade-in-linear"-->
+<!--                                            trigger="click">-->
+<!--                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(0,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(0,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>-->
+<!--                                        </div>-->
+<!--                                    </el-popover>-->
+<!--                                    <span slot="reference" @click="item.comment_visible=1">-->
+<!--                                        <span v-show="!item.comment_limit">评论公开</span>-->
+<!--                                        <span v-show="item.comment_limit">审核后公开</span>-->
+<!--                                        <i class="el-icon-caret-bottom"></i>-->
+<!--                                    </span>-->
+<!--                                </span>-->
                                 <el-divider direction="vertical"></el-divider>
                                 <span style="color: #CA0C16;" @click="dialogVisible = true,sendId(item.uniqueId)">删除</span>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="article_none" v-show="!labelPrivate">
+                <div class="article_none" v-show="!showData.length">
                     <img :src="none"><div>空空如也</div>
                     <router-link to="/md/mavon" style="text-decoration: none;"><span>写博客</span></router-link>
                 </div>
             </el-tab-pane>
             <el-tab-pane :label="'公开('+labelPublic+')'" name="second">
-                <ul class="article_info" v-show="labelPublic">
+                <ul class="article_info" v-show="publicData.length">
                     <li v-for="(item,index) in publicData" :key="index">
-                        <div class="article_title" title="编辑">{{item.title}}</div>
+                        <div class="article_title" title="编辑">
+                            <router-link :to="{path:'/md/mavon',query:{userId:item.related,articleId:item.uniqueId}}" style="color: #676767;">
+                                {{item.title}}
+                            </router-link>
+                        </div>
                         <div class="article_detail">
                             <div class="article_detail_left">
                                 <span>{{item.type}}</span>
@@ -82,41 +91,45 @@
                                 <span><i class="el-icon-chat-dot-square"></i>0</span>
                             </div>
                             <div class="article_detail_right">
-                                <span><router-link to="/index/user" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
-                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>
-                                <span v-show="item.draftsFlag!='0'">
-                                    <el-popover
-                                            :value="item.comment_visible?true:false"
-                                            placement="bottom-start"
-                                            trigger="click">
-                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">
-                                            <div v-show="item.comment_limit" @click="changeLimit(1,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(1, 0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(1, 1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>
-                                            <div v-show="item.comment_limit" @click="changeLimit(1, 1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>
-                                        </div>
-                                    </el-popover>
-                                    <span slot="reference" @click="item.comment_visible=1">
-                                            <span v-show="!item.comment_limit">评论公开</span>
-                                            <span v-show="item.comment_limit">审核后公开</span>
-                                            <i class="el-icon-caret-bottom"></i>
-                                        </span>
-                                </span>
+                                <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
+<!--                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>-->
+<!--                                <span v-show="item.draftsFlag!='0'">-->
+<!--                                    <el-popover-->
+<!--                                            :value="item.comment_visible?true:false"-->
+<!--                                            placement="bottom-start"-->
+<!--                                            trigger="click">-->
+<!--                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(1,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(1, 0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(1, 1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(1, 1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>-->
+<!--                                        </div>-->
+<!--                                    </el-popover>-->
+<!--                                    <span slot="reference" @click="item.comment_visible=1">-->
+<!--                                            <span v-show="!item.comment_limit">评论公开</span>-->
+<!--                                            <span v-show="item.comment_limit">审核后公开</span>-->
+<!--                                            <i class="el-icon-caret-bottom"></i>-->
+<!--                                        </span>-->
+<!--                                </span>-->
                                 <el-divider direction="vertical"></el-divider>
                                 <span style="color: #CA0C16;" @click="dialogVisible = true,sendId(item.uniqueId)">删除</span>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="article_none" v-show="!labelPublic">
+                <div class="article_none" v-show="!publicData.length">
                     <img :src="none"><div>空空如也</div>
                     <router-link to="/md/mavon" style="text-decoration: none;"><span>写博客</span></router-link>
                 </div>
             </el-tab-pane>
             <el-tab-pane  :label="'私密('+labelPrivate+')'" name="third">
-                <ul class="article_info" v-show="labelPrivate">
+                <ul class="article_info" v-show="privateData.length">
                     <li v-for="(item,index) in privateData" :key="index">
-                        <div class="article_title" title="编辑">{{item.title}}</div>
+                        <div class="article_title" title="编辑">
+                            <router-link :to="{path:'/md/mavon',query:{userId:item.related,articleId:item.uniqueId}}" style="color: #676767;">
+                                {{item.title}}
+                            </router-link>
+                        </div>
                         <div class="article_detail">
                             <div class="article_detail_left">
                                 <span>{{item.type}}</span>
@@ -125,34 +138,34 @@
                                 <span><i class="el-icon-chat-dot-square"></i>0</span>
                             </div>
                             <div class="article_detail_right">
-                                <span><router-link to="/index/user" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
-                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>
-                                <span v-show="item.draftsFlag!='0'">
-                                    <el-popover
-                                            :value="item.comment_visible?true:false"
-                                            placement="bottom-start"
-                                            trigger="click">
-                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">
-                                            <div v-show="item.comment_limit" @click="changeLimit(2,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(2,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>
-                                            <div v-show="!item.comment_limit" @click="changeLimit(2,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>
-                                            <div v-show="item.comment_limit" @click="changeLimit(2,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>
-                                        </div>
+                                <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
+<!--                                <el-divider direction="vertical" v-show="item.draftsFlag!='0'"></el-divider>-->
+<!--                                <span v-show="item.draftsFlag!='0'">-->
+<!--                                    <el-popover-->
+<!--                                            :value="item.comment_visible?true:false"-->
+<!--                                            placement="bottom-start"-->
+<!--                                            trigger="click">-->
+<!--                                        <div id="article_detail_comment" style="cursor: pointer;box-sizing: border-box;">-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(2,0,index,item.uniqueId),item.comment_visible=0"><span style="margin-left: 3rem;">评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(2,0,index,item.uniqueId),item.comment_visible=0"><i class="el-icon-check" style="margin-right: 1.5rem;"></i><span>评论公开</span></div>-->
+<!--                                            <div v-show="!item.comment_limit" @click="changeLimit(2,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><span style="margin-left: 3rem;">审核后公开</span></div>-->
+<!--                                            <div v-show="item.comment_limit" @click="changeLimit(2,1,index,item.uniqueId),item.comment_visible=0" style="margin-top:1rem;"><i class="el-icon-check" style="margin-right: 1.5rem;"></i>审核后公开</div>-->
+<!--                                        </div>-->
 
-                                    </el-popover>
-                                    <span slot="reference" @click="item.comment_visible=1">
-                                            <span v-show="!item.comment_limit">评论公开</span>
-                                            <span v-show="item.comment_limit">审核后公开</span>
-                                            <i class="el-icon-caret-bottom"></i>
-                                    </span>
-                                </span>
+<!--                                    </el-popover>-->
+<!--                                    <span slot="reference" @click="item.comment_visible=1">-->
+<!--                                            <span v-show="!item.comment_limit">评论公开</span>-->
+<!--                                            <span v-show="item.comment_limit">审核后公开</span>-->
+<!--                                            <i class="el-icon-caret-bottom"></i>-->
+<!--                                    </span>-->
+<!--                                </span>-->
                                 <el-divider direction="vertical"></el-divider>
                                 <span style="color: #CA0C16;" @click="dialogVisible = true,sendId(item.uniqueId)">删除</span>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="article_none" v-show="!labelPrivate">
+                <div class="article_none" v-show="!privateData.length">
                     <img :src="none"><div>空空如也</div>
                     <router-link to="/md/mavon" style="text-decoration: none;"><span>写博客</span></router-link>
                 </div>
@@ -169,7 +182,7 @@
                                 <span><i class="el-icon-chat-dot-square"></i>0</span>
                             </div>
                             <div class="article_detail_right">
-                                <span><router-link to="/index/user" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
+                                <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;color: #349EDF;">查看</router-link></span>
                                 <el-divider direction="vertical"></el-divider>
                                 <span style="color: #CA0C16;" @click="dialogVisible = true,sendId(item.uniqueId)">删除</span>
                             </div>
@@ -405,7 +418,7 @@
 </script>
 
 <style lang="less">
-    .article_manage{width: 100%; background-color: #fff ;padding: 1.5rem 2rem;box-sizing: border-box;
+    .article_manage{width: 100%; background-color: #fff ;padding: 1.5rem 2rem;box-sizing: border-box;min-height: 78rem;
         .article_banner{background-color: #f2f5f7;padding: 2rem 0;box-sizing: border-box;
             .el-select{
                 &:nth-child(1){width: 8rem;}

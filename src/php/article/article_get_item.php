@@ -43,8 +43,7 @@ if($result->num_rows > 0){
         $data[] = $tmp; // 自增
     }
 } else {
-    $return['result'] = 0;
-    echo "0 结果";
+    echo $data[0]=0;
 }
 //$get = json_encode($data[0]['region'],JSON_UNESCAPED_UNICODE);
 print_r(json_encode($data[0])); //JSON_UNESCAPED_UNICODE防止中文乱码

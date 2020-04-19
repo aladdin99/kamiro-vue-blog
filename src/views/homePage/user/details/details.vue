@@ -2,22 +2,21 @@
 <template>
     <div class="user">
         <!-- Top navigation bar-->
-        <div :class="{'UbannerMenu':bannerScroll}">
+        <div :class="{'UbannerMenu':bannerScroll}" style="z-index: 9999;">
             <navigationBar></navigationBar>
         </div>
         <el-container class="mainbody">
             <!--Left user information bar-->
-            <el-aside width="30rem" style="position: relative;">
-                <div>
-                    <userLeftBar
-                            :class="{'UleftMenu':leftScroll}"
-                            :userId="userId"
-                            :originalNum="original.length"
-                            :lastest="lastest"
-                            :collection_clip="collection_clip"
-                    ></userLeftBar>
-                    <span ref="searchBar"></span>
-                </div>
+            <el-aside width="30rem" style="position: relative;" :class="{'leftScroll':leftScroll}">
+                <userLeftBar
+                        :class="{'UleftMenu':leftScroll}"
+                        :userId="userId"
+                        :originalNum="original.length"
+                        :lastest="lastest"
+                        :leftScroll="leftScroll"
+                        :collection_clip="collection_clip"
+                ></userLeftBar>
+                <span ref="searchBar"></span>
             </el-aside>
             <!--Middle content preview section-->
             <el-main class="mainstay">
@@ -44,7 +43,7 @@
                 alldata: '',//所有文章
                 original: '',//原创文章
                 lastest: '',//最新文章
-                collection_clip: ""//分类专栏
+                collection_clip: "",//分类专栏
             }
         },
         methods:{
@@ -57,6 +56,7 @@
                 let currentHeigh = window.innerHeight;//当前内容高度  1235///680
                 this.bannerScroll = (top>45)?true:false;
                 this.leftScroll = (searchBar<currentHeigh)?true:false;
+                console.log(this.leftScroll);
                 return {top,left}
             },
             getArticle(){//获取文章信息
@@ -109,7 +109,7 @@
                 }).then(function(res){
                     self.collection_clip = res.data;
                     self.alldata.forEach(item=>{
-                        if(item.category){
+                        if(item.category[0]){
                             let ins = item.category[0].id;
                             self.collection_clip.forEach(info=>{
                                 if(!info.essay){//如果不存在该字段 那么就添加
@@ -141,12 +141,14 @@
 <style lang="less">
     .user{
         height: 100%;
+        min-height: 100vh;
         background: url("../../../../assets/theme.jpg");
         background-repeat:no-repeat;//背景图不重复
         background-attachment:fixed;//固定背景图位置
+        /*background-color: rgba(0,0,0,.3);*/
     }
-    .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
-    .UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
+    .UbannerMenu {position: fixed;top:-5rem;width: 100%;z-index: 10000001;}
+    .UleftMenu {position: fixed;z-index: 100;width:30rem;top: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
 
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
         .mainstay{padding: 0 2rem;text-align: left;height: 100%;}

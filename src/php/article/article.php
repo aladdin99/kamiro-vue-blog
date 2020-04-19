@@ -59,7 +59,7 @@
         echo $draftsFlag;
         if($draftsFlag==1){//如果是'发布文章',那么更新以下的所有数据
             $sql = "UPDATE article SET `title` = '$title',`content` = '$content',`tag` = '$tag',`category` = '$category',
-        `type` = '$type',`type` = '$type',`links` = '$links',`shape` = '$shape',`draftsFlag` = '$draftsFlag' WHERE `uniqueId` LIKE '$uniqueIdFlag' And `related` LIKE '$related'";
+        `type` = '$type',`links` = '$links',`shape` = '$shape',`draftsFlag` = '$draftsFlag' WHERE `uniqueId` LIKE '$uniqueIdFlag' And `related` LIKE '$related'";
         }else{//如果还是'保存草稿'，那么只更新文章的标题个文章内容
             $sql = "UPDATE article SET `title` = '$title',`content` = '$content' WHERE `uniqueId` LIKE '$uniqueIdFlag' And `related` LIKE '$related'";
         }

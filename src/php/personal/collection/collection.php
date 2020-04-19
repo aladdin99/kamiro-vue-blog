@@ -11,13 +11,13 @@
     $body = json_decode($body)  ;//反序列化
 
     //获取字段数据
-    $status = $body->status;//1-新建收藏夹 2-查询收藏夹
+    $status = $body->status;//1-新建收藏夹 2-查询收藏夹 3-删除收藏夹
 
-    $bind = $body->bind;//bind
+    $bind = $body->bind;//bind 用户id
     $title = $body->title;//title
     $describe = $body->describe;//describe
     $power = $body->power;//power
-    $id = $body->id;//power
+    $id = $body->id;//收藏夹id
 
     //通过调用PHP中uniquid方法随机生成一个唯一的id,避免出现冲突的收藏夹
     $idNew = uniqid();
@@ -66,16 +66,18 @@
                 $tmp['title'] = $row['title'];
                 $tmp['describe'] = $row['describe'];
                 $tmp['power'] = $row['power'];
+                $tmp['amount'] = $row['amount'];
                 $data[] = $tmp; // 自增
             }
             $return[] = $data;//赋值输出的每一组数据
         } else {
-          $return['result'] = 0;
-            echo "0 结果";
+          $return[0] = 0;
         }
     }else if($status==3){
         $sql_del = "DELETE FROM `collection_clip` WHERE `id` LIKE '$id'";
+        $sql_del_article = "DELETE FROM `collection_detail` WHERE `pathId` LIKE '$id' AND `bindId` LIKE '$bind'";
         echo $conn->query($sql_del);
+        echo $conn->query($sql_del_article);
     }
     print_r(json_encode($return[0],JSON_UNESCAPED_UNICODE));//返回给前端的数据
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="sort_banner">
+    <div class="sort_banner" style="min-height: 78rem;">
         <!--分类专栏-->
         <div class="sort_index" v-show="indexFlag">
             <div class="sort_banner">分类专栏</div>
@@ -26,12 +26,12 @@
                         </div>
                         <div class="sort_setUp_content">
                             <div>
-                                <span @click="manage">管理</span><el-divider direction="vertical"></el-divider>
+                                <span @click="manage(item.id,item.name)">管理</span><el-divider direction="vertical"></el-divider>
                                 <span @click="edit(1,item.name,item.describe,item.picture,item.id)">编辑</span>
                                 <el-divider direction="vertical"></el-divider><span @click="deleted(item.id)">删除</span>
                             </div>
                             <div><el-switch :value="item.show==1?true:false" active-color="#13ce66" inactive-color="#ff4949" @change="switchs(index,item.show,item.id)"></el-switch></div>
-                            <div>66</div>
+                            <div>{{item.total}}</div>
                         </div>
                     </li></ul>
                     <div v-show="!sort_data.length">
@@ -78,20 +78,26 @@
                     <span @click="backIndex">返回分类专栏</span>
                 </div>
                 <div>
-                    <span>Mysql</span>
+                    <span>{{clickName}}</span>
                     <i class="el-icon-arrow-right"></i>
                     <span>管理文章</span>
                 </div>
             </div>
             <div class="content">
-                <ul>
-                    <li v-for="item in 5" :key="item"><div>数据库基本操作—表（一）</div>
+                <ul v-show="single_sort.length">
+                    <li v-for="(item,index) in single_sort" :key="index">
+                        <div>{{item.title}}</div>
                         <div>
-                            <span><router-link to="/index/user/details" style="color: #349EDF;">查看</router-link></span>
+                            <span><router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="color: #349EDF;">查看</router-link></span>
                             <el-divider direction="vertical"></el-divider>
-                            <span><el-button type="text" @click="deleted" size="small">删除</el-button></span>
-                        </div></li>
+                            <span><el-button type="text" @click="delArticle(item.related,item.uniqueId,index)" size="small">删除</el-button></span>
+                        </div>
+                    </li>
                 </ul>
+                <div v-show="!single_sort.length">
+                    <img :src="none" style="width: 35rem;height: 25rem;margin-top:10rem;">
+                    <div style="font-size: 1.6rem;color: #6B6B6B;font-weight: bold;letter-spacing: .2rem;margin: 1.5rem 0;">空空如也</div>
+                </div>
             </div>
         </div>
         <!--分类编辑-->
@@ -148,7 +154,7 @@ export default {
     data() {
         return {
             none: none,
-            author: '',
+            author: '',//当前登录账号
             imageUrl:'',
             activeName: 'first',
             value: true,
@@ -164,13 +170,53 @@ export default {
             sort_data_del: [],//存放获取到的回收分类栏数据
             submitFlag: '',//1.编辑分类栏  0.新建分类栏
             sort_id: '',//单个分类栏ID
+            sort_detail: [],//所有分类夹内的文章
+            single_sort: [],//指定分类夹内的文章
+            clickName: "",
         }
     },
     methods: {
-        manage(){
+        delArticle(related,uniqueId,index){
+            let self = this;
+            this.$confirm('确定要删除当前文章?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/article_delete',{
+                    params: {
+                        id: related,//作者id
+                        uniqueId: uniqueId,//文章id
+                    }
+                }).then(function(res){
+                    self.getSort();
+                    self.getSortDetail();
+                    // index
+                    self.single_sort.splice(index,1);
+                    console.log(res);
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        manage(id,name){//管理
             this.indexFlag = false;
             this.mannerFlag = true;
             this.editFlag = false;
+            this.single_sort = [];
+            this.sort_detail.forEach(item=>{
+                if(item.id == id) {
+                    this.single_sort.push(item);
+                }
+            });
+            this.clickName = name;
         },
         edit(flag,name,describe,picture,id){
             this.indexFlag = false;
@@ -302,15 +348,38 @@ export default {
             }).then(function(res){
                 // self.sort_data = res.data;
                 res.data.forEach(item=>{
+                    item.total = 0;
                     if(item.recover=='0'){// 0.未回收的全部分类栏
                         self.sort_data.push(item);
                     }else if(item.recover=='1'){// 1.已回收的全部分类栏
                         self.sort_data_del.push(item);
                     }
                 });
-                console.log(self.sort_data);
             });
         },
+        getSortDetail(){//获取分类栏中的所有文章标题 id 以及分类
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/sort_manage_detail',{
+                params: {
+                    bind: self.author,//账户id
+                }
+            }).then(function(res){
+                let data = res.data;
+                data.forEach(item=>{
+                    item.id = item.category.id;
+                    item.value = item.category.value;
+                });
+                data.forEach(item=>{
+                    self.sort_data.forEach(info=>{
+                        if(item.id == info.id){
+                            info.total++;
+                        }
+                    });
+                });
+                self.sort_detail = data;
+            });
+        },
+
         checkd(){//检查是否都填完了
             if(!this.sort.name){
                 alert('分类专栏名称不能为空！');
@@ -369,6 +438,7 @@ export default {
         sortFlag:function(newVal){
             if(newVal){
                 this.getSort();
+                this.getSortDetail();
             }
         }
     }

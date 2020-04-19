@@ -1,5 +1,5 @@
 <template>
-    <div class="collection">
+    <div class="collectionPik">
         <div class="bannerTop">
             <span v-show="changeFlag">我的收藏夹</span>
             <span @click="dialogForm(true)" v-show="changeFlag"><i class="el-icon-plus"></i>新建收藏夹</span>
@@ -10,11 +10,11 @@
                 <div class="collectionName">
                     <span><i class="el-icon-lock" v-show="item.power==2" style="margin-right: .5rem;font-weight: bold;"></i>{{item.title}}</span>
                     <div>
-                        <span>0条内容</span>
+                        <span>{{item.amount}}条内容</span>
                         <span>0人关注</span>
                     </div>
                 </div>
-                <span class="collectionInto" @click="done(false,item.title,item.describe,item.power,item.id)"><i class="el-icon-arrow-right"></i></span>
+                <span class="collectionInto" @click="done(false,item.title,item.describe,item.power,item.id,item.amount)"><i class="el-icon-arrow-right"></i></span>
             </li>
         </ul>
         <el-dialog class="newlyBuild" title="新建收藏夹" :visible.sync="dialogFormVisible" :close-on-click-modal="false" :show-close="false" width="35%">
@@ -58,13 +58,25 @@
                 <div><i class="el-icon-lock" v-show="inner.power==2"></i>{{inner.title}}</div>
                 <div>收藏夹描述：{{inner.describe}}</div>
                 <div>
-                    <span>0条内容</span>
+                    <span>{{inner.amount}}条内容</span>
                     <el-divider direction="vertical"></el-divider>
                     <span>0人关注</span>
                     <el-divider direction="vertical"></el-divider>
                     <span class="opera" @click="dialogForm(true)">编辑</span>
                     <el-divider direction="vertical"></el-divider>
                     <span class="opera" @click="dialogVisible = true">删除</span>
+                </div>
+            </div>
+            <div class="collect-article" v-for="(item,index) in collectArticles" :key="index" v-show="collectArticles.length">
+                <div class="collect-article-title">
+                    <router-link :to="{path:'/index/user/details',query:{userId:item.authorId,articleId:item.articleId}}"><span>{{item.title}}</span></router-link>
+                    <span @click="delCollect(item.pathId,item.bindId,item.articleId,index)">取消收藏</span>
+                </div>
+<!--                <div class="collect-article-describe">简介：1、用处vue的脚手架弄成功后(用命令 vue init webpack my-project)，是JavaScript</div>-->
+                <div class="collect-article-by">
+                    <span>{{item.author}}</span>
+                    <el-divider direction="vertical"></el-divider>
+                    <span>{{item.pubdate}}</span>
                 </div>
             </div>
         </div>
@@ -81,8 +93,8 @@
             <el-button type="primary" @click="dialogVisible = false,deleteCollection()">确 定</el-button>
             </span>
         </el-dialog>
-        <div class="article_none" v-show="!favorites">
-            <img :src="none">
+        <div class="article_none" v-show="!favorites.length">
+            <img :src="none" >
             <div>空空如也</div>
         </div>
     </div>
@@ -107,26 +119,59 @@
                     title: '',
                     describe: '',
                     power: 1,
-                    id: ''
+                    id: '',
+                    amount: 0,
                 },
                 dialogVisible: false,
-                radio: '1'
+                radio: '1',
+                collectArticles: [],//收藏文章
             }
         },
         methods: {
+            delCollect(pathId,bindId,articleId,index){//取消收藏
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/collection/delCollection',{
+                    params: {
+                        pathId: pathId,//收藏夹id
+                        bindId: bindId,//收藏夹用户id
+                        articleId: articleId,//文章id
+                        amount: self.inner.amount-1,//收藏夹内文章数减一
+                    }
+                }).then(function(){
+                    self.inner.amount--;
+                    self.collectArticles.splice(index, 1);
+                });
+            },
             dialogForm(flag){
+                if(flag){
+                    this.previewCollection();
+                }
                 return this.dialogFormVisible = flag;
             },
-            done(flag,title,describe,power,id){
+            done(flag,title,describe,power,id,amount){
                 this.changeFlag = flag;
                 this.inner.title = title;
                 this.inner.describe = describe;
                 this.inner.power = power;
                 this.inner.id = id;
+                this.inner.amount = amount;
 
                 this.bookMark = title;
                 this.describe = describe;
-                this.limit = power
+                this.limit = power;
+                this.getCollection(id);
+            },
+            getCollection(pathId){//获取某个收藏夹内的所有文章
+                let self = this;
+                self.collectArticles = [];
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/collection/getCollection',{
+                    params: {
+                        pathId: pathId,//收藏夹id
+                        bindId: self.userId,//当前用户id
+                    }
+                }).then(function(res){
+                    self.collectArticles = res.data;
+                });
             },
             buildCollection(){//新建收藏夹
                 let self = this;
@@ -160,7 +205,6 @@
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
                 }).then(function(res){
                     self.favorites = res.data;
-                    console.log(self.favorites[0]);
                     if(self.favorites[0]==0){
                         self.markFlag = false;
                     }
@@ -193,7 +237,7 @@
 </script>
 
 <style lang="less">
-    .collection{display: inline-block;width: 65vw;padding-right: 5rem;padding-left:2em;
+    .collectionPik{display: inline-block;width: 65vw;padding-right: 5rem;padding-left:2em;margin-bottom: 4rem;min-height: 68rem;
         .bannerTop{font-size: 1.6rem;color: #3d3d3d;line-height: 5rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;display: flex;justify-content: space-between;
             span:nth-child(1){border-bottom: .2rem solid #ca0c16;}
             span:nth-child(2){color: #6b6b6b;font-weight: 400;cursor: pointer; i{padding-right: .5rem;}}
@@ -219,7 +263,7 @@
                 .el-radio{margin-bottom: .5rem;}
             }
         }
-        .collect-detail{display: flex;flex-direction: column;align-items: flex-start;margin-top: 1.5rem;
+        .collect-detail{display: flex;flex-direction: column;align-items: flex-start;margin-top: 1.5rem;border-bottom: 1px solid #e0e0e0;;
             &>div{line-height: 3.5rem;
                 &:nth-child(1){font-weight: bold;font-size: 1.6rem;
                     i{margin-right: .5rem;font-weight: bold;font-size: 1.6rem;}
@@ -229,6 +273,21 @@
                     .opera{color: #6B6B6B;cursor: pointer;}
                 }
             }
+        }
+        .collect-article{text-align: left;padding: 2rem 2.5rem;background-color: #fafafa;margin-top: 1rem;
+            &>div{padding-bottom: 1rem;}
+            .collect-article-title{
+                display: flex;justify-content: space-between;width: 100%;overflow: hidden;
+                text-overflow:ellipsis;white-space: nowrap;align-items: center;cursor: pointer;
+                span:nth-child(1){flex: 9;text-align: left;font-size: 1.6rem;color: #4d4d4d;font-weight: bold;}
+                span:nth-child(2){flex: 1;text-align: right;color: #6b6b6b;font-size: 1.4rem;}
+            }
+            .collect-article-describe{color: #999;font-size: 1.4rem;}
+            .collect-article-by{
+                &>span:nth-child(1){color: #6b6b6b;}
+                &>span:last-child(1){color: #999;}
+            }
+            &:hover{background-color: #eff2f5;}
         }
     }
     .article_none{margin-top: 10rem;

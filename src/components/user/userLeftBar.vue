@@ -19,14 +19,14 @@
                     <span>粉丝</span>
                     <span>获赞</span>
                     <span>评论</span>
-                    <span>访问</span>
+<!--                    <span>访问</span>-->
                 </div>
                 <div class="interaction num">
                     <span>{{originalNum}}</span>
-                    <span>0</span>
+                    <span>{{starTotal}}</span>
+                    <span>{{pointTotal}}</span>
                     <span>1</span>
-                    <span>1</span>
-                    <span>2</span>
+<!--                    <span>2</span>-->
                 </div>
             </div>
             <div class="record">
@@ -39,9 +39,9 @@
                     <span>勋章: 持之以恒</span>
                 </div>
             </div>
-            <div class="relaction">
-                <div><span class="follow">关注</span></div>
-                <div><span class="priLetter">私信</span></div>
+            <div class="relaction" v-show="!(currentId==userId)">
+                <div><span class="follower" :class="{ stared: starFlag }" @click="follow(true)">关注</span></div>
+<!--                <div><span class="priLetter">私信</span></div>-->
             </div>
         </div>
         <!--Latest articles-->
@@ -56,10 +56,10 @@
             </ul>
         </div>
         <!--commonArticles-->
-        <div class="commonArticles">
+        <div class="commonArticles" v-show="collection_clip.length">
             <span class="commonName">分类专栏</span>
             <ul class="special commonUl">
-                <li v-for="(item,index) in collection_clip" :key="index" @click="router_link(item.id)">
+                <li v-for="(item,index) in collection_clip" :key="index" @click="router_link(item.id)" v-show="parseInt(item.show)">
 <!--                    <router-link :to="{path:'/index/user/sorts',query:{userId:userId,articleId:item.uniqueId}}" class="Newest_title">-->
                         <span class="img">
                             <img :src="item.picture">
@@ -176,15 +176,74 @@
 <script>
 export default {
     name: "userLeftBar",
-    props: ["userId","originalNum","lastest",'collection_clip'],
+    props: ["userId","originalNum","lastest",'collection_clip',"leftScroll"],
     data(){
         return{
             user_circleUrl: '',//用户头像
             user_name: '',//用户昵称
             circleUrl: '',
+            currentId: "",//当前登录者id
+            currentName:"",
+            currentImg: "",
+            starTotal: "",//粉丝数量
+            pointTotal: "",//点赞量
+            starFlag: false,//是否已关注
         }
     },
     methods: {
+        follow(flag=false){//关注
+            if(flag){
+                this.starFlag = !this.starFlag;
+            }
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/saveStar',{
+                params: {
+                    status: self.starFlag?1:3,//1.关注标识 3.取消关注标识
+                    sufferId: self.userId,//被关注者id
+                    sufferName: self.user_name,//被关注者昵称
+                    sufferImg: self.user_circleUrl,//被关注者头像
+                    noticer: self.currentId,//关注者id
+                    noticerName: self.currentName,//关注者昵称
+                    noticerImg: self.currentImg,//关注头像者
+                }
+            }).then(function(res){
+                console.log(res);
+                self.star();
+            });
+        },
+        star(){//获取粉丝
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/saveStar',{
+                params: {
+                    status: 2,//粉丝标识
+                    sufferId: self.userId,//被关注者id
+                    sufferName: self.user_name,//被关注者昵称
+                    sufferImg: self.user_circleUrl,//被关注者头像
+                    noticer: self.currentId,//关注者id
+                    noticerName: "",//关注者昵称
+                    noticerImg: "",//关注头像者
+                }
+            }).then(function(res){
+                self.starTotal = res.data.length;
+                if(self.starTotal){
+                    res.data.forEach(item=>{
+                        if(item.sufferId == self.userId){
+                            self.starFlag = true;
+                        }
+                    });
+                }
+            });
+        },
+        point(){//获取点赞量
+            let self = this;
+            this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/getPoint',{
+                params: {
+                    authorId: self.userId
+                }
+            }).then(function(res){
+                self.pointTotal = res.data?res.data:0;
+            });
+        },
         getInfo(){//仅获取用户头像/昵称
             let self = this;
             this.$axios.get('http://localhost/graduation_project/blog2/src/php/personal/getData',{
@@ -205,12 +264,19 @@ export default {
             this.$emit('get_collection_clip_detail',id);
         }
     },
+    mounted() {
+        this.currentId = localStorage.getItem('email');//当前登陆id
+        this.currentName = localStorage.getItem('nickName');//当前登陆者名称
+        this.currentImg = localStorage.getItem('imageUrl');//当前登陆头像
+    },
     watch:{
         userId:function(newVal){
             let self = this;
             console.log(newVal);
             this.$nextTick(function(){
                 self.getInfo();
+                self.star();
+                self.point();
             })
         },
     },
@@ -223,7 +289,8 @@ export default {
         /*background-color: #474747;*/
         /*height: 20rem;*/
     }
-
+    .overLeft{height: 20rem;}
+.UbannerMenu{margin-top: 50px;}
     .userInfo{padding: 1.5rem;background-color: #fff;
         .userDetail{display: flex;cursor: pointer;height:5rem;
             .avatar{flex: 1;img{display:inline-block;width: 4rem;height: 4rem;border-radius: 50%;}}
@@ -241,9 +308,11 @@ export default {
             div{display: flex;padding:.35rem 0;span{flex: 1;padding-right: .25rem;}}
         }
         .relaction{display: flex;align-items: center;justify-content: space-between;padding: 1.5rem 0;cursor:pointer;border-top:1px solid #EDE9FF; div{flex: 1;}
-            .follow{width: 90%;background-color: #ca0c16;display: inline-block;padding: .5rem 0;border-radius: .5rem;color: #fff;
-                &:hover{background-color: #BE0E1A;color: olive;}
+            .follower{width: 90%;background-color: #fff;display: inline-block;padding: .5rem 0;border-radius: .5rem;
+                color: #ca0c16;border: 1px solid #ca0c16;
+                &:hover{background-color: #BE0E1A;color: #fff;}
             }
+            .stared{background-color: #ca0c16;color: #fff;}
             .priLetter{width: 90%;background-color: #fff;display: inline-block;padding: .5rem 0;border-radius: .5rem;color: #ca0c16;border: 1px solid #ca0c16;
                 &:hover{background-color: #FDE0EC;}
             }
