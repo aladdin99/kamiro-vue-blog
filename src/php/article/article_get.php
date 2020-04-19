@@ -32,13 +32,15 @@ if($result->num_rows > 0){
     // 输出数据 fetch_assoc，遍历表中的每一行数据
     while($row = $result->fetch_assoc()) {
         $tmp = array(); // 临时数组整合信息
-        $tmp['uniqueId'] = $row['uniqueId'];
-        $tmp['title'] = $row['title'];
-        $tmp['content'] = $row['content'];
-        $tmp['category'] = json_decode($row['category'],JSON_UNESCAPED_UNICODE);
-        $tmp['type'] = $row['type'];
-        $tmp['time'] = $row['time'];
-        $data[] = $tmp; // 自增
+        if($row['shape'] != 1){//shape=1 文章为私密，不作展示。
+            $tmp['uniqueId'] = $row['uniqueId'];
+            $tmp['title'] = $row['title'];
+            $tmp['content'] = $row['content'];
+            $tmp['category'] = json_decode($row['category'],JSON_UNESCAPED_UNICODE);
+            $tmp['type'] = $row['type'];
+            $tmp['time'] = $row['time'];
+            $data[] = $tmp; // 自增
+        }
     }
     $return[] = $data;
 } else {

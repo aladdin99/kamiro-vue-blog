@@ -1,27 +1,29 @@
 <template>
     <div class="article_manage">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="我的文章评论" name="first">
                 <ul>
-                    <li v-for="item in 10" :key="item">
+                    <li v-for="(item,index) in comment_data" :key="index">
                         <div class="comment">
                             <div class="comment_detail">
-                                <span style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;background-color: #42b983;transform: translateY(.8rem);margin-right:1.5rem;"></span>
-                                <span>Aladdin99</span>
-                                <span>9分钟前</span>
+                                <img :src="item.avarUrl" style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;transform: translateY(.8rem);margin-right: 1.5rem;">
+                                <span>{{item.userName}}</span>
+                                <span>{{item.time}}</span>
                                 <span>回复了你的文章</span>
-                                <span class="author_color">Aladdin的前端之路</span>
+                                <router-link target="_blank" :to="{path:'/index/user/details', query:{userId:item.authorId,articleId:item.bindId}}" class="author_color">
+                                    {{item.title}}
+                                </router-link>
                             </div>
 
                             <div class="handle">
                                 <span @click="replay_now(true)">快速回复</span>
                                 <el-divider direction="vertical"></el-divider>
-                                <span @click="open">删除</span>
+                                <span @click="open(item.id)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
                             <i class="el-icon-position"></i>
-                            感谢《囧妈》这部电影，和电影到底怎么样是两码事
+                            {{item.comment}}
                         </div>
                         <div class="replay" v-show="repaly_flag">
                             <span style="display: inline-block;width: 3rem;height: 3rem;border-radius: 50%;background-color: #42b983;margin-left: 3.5rem;margin-right: 1rem;"></span>
@@ -38,26 +40,28 @@
                     <span class="openOne">一键公开</span>
                 </div>
                 <ul>
-                    <li v-for="item in 10" :key="item">
+                    <li v-for="(item,index) in comment_data" :key="index">
                         <div class="comment">
                             <div class="comment_detail">
                                 <el-checkbox v-model="checkAll" style="margin: 0 1rem;"></el-checkbox>
-                                <span style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;background-color: #42b983;transform: translateY(.8rem);margin-left: 0;"></span>
-                                <span>Aladdin99</span>
-                                <span>9分钟前</span>
+                                <img :src="item.avarUrl" style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;transform: translateY(.8rem);margin-right: 1.5rem;">
+                                <span>{{item.userName}}</span>
+                                <span>{{item.time}}</span>
                                 <span>回复了你的文章</span>
-                                <span class="author_color">Aladdin的前端之路</span>
+                                <router-link target="_blank" :to="{path:'/index/user/details', query:{userId:item.authorId,articleId:item.bindId}}" class="author_color">
+                                    {{item.title}}
+                                </router-link>
                             </div>
 
                             <div class="handle">
                                 <span @click="public_now(true)">公开</span>
                                 <el-divider direction="vertical"></el-divider>
-                                <span @click="open">删除</span>
+                                <span @click="open(item.id)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
                             <i class="el-icon-position"></i>
-                            感谢《囧妈》这部电影，和电影到底怎么样是两码事
+                            {{item.comment}}
                         </div>
                         <!--                 <div style="margin-top:10rem;font-size: 1.8rem;letter-spacing: .5rem;color:#999;">当前没有任何评论</div>-->
                     </li>
@@ -65,23 +69,25 @@
             </el-tab-pane>
             <el-tab-pane label="我发表的评论" name="third">
                 <ul>
-                    <li v-for="item in 10" :key="item">
+                    <li v-for="(item,index) in comment_data" :key="index">
                         <div class="comment">
                             <div class="comment_detail">
-                                <span style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;background-color: #42b983;transform: translateY(.8rem);margin-right: 1.5rem;"></span>
-                                <span>Aladdin99</span>
-                                <span>9分钟前</span>
+                                <img :src="item.avarUrl" style="display: inline-block;width: 2.5rem;height: 2.5rem;border-radius: 50%;transform: translateY(.8rem);margin-right: 1.5rem;">
+                                <span>{{item.userName}}</span>
+                                <span>{{item.time}}</span>
                                 <span>回复了你的文章</span>
-                                <span class="author_color">Aladdin的前端之路</span>
+                                <router-link target="_blank" :to="{path:'/index/user/details', query:{userId:item.authorId,articleId:item.bindId}}" class="author_color">
+                                    {{item.title}}
+                                </router-link>
                             </div>
 
                             <div class="handle">
-                                <span style="color: #CA0C16;" @click="open">删除</span>
+                                <span style="color: #CA0C16;" @click="open(item.id)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
                             <i class="el-icon-position"></i>
-                            牛仔配碎花/民族花纹还出现在好几套其他穿搭里，都搭配得让人眼前一亮
+                            {{item.comment}}
                         </div>
                         <!--                 <div style="margin-top:10rem;font-size: 1.8rem;letter-spacing: .5rem;color:#999;">当前没有任何评论</div>-->
                     </li>
@@ -99,10 +105,54 @@
                 activeName: 'first',
                 replay: '',
                 repaly_flag: false,
-                checkAll: false
+                checkAll: false,
+                author: "",//当前登陆者
+                comment_data: [],//所有文章的评论
+                comment_data_mine: [],//我发表的文章评论
             }
         },
         methods: {
+            handleClick(tab){//页签跳转
+                // console.log(tab.index);
+                switch (parseInt(tab.index)) {
+                    case 0:
+                        this.get_comment(1);
+                        console.log("我的文章评论");
+                        break;
+                    case 1:
+                        console.log('待我审核的评论');
+                        break;
+                    case 2:
+                        this.get_comment(2);
+                        console.log('我发表的评论');
+                        break;
+                    default:
+                        console.log("nothing!");
+                }
+            },
+            get_comment(status=1){//获取自己所有文章的评论
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/comment_manage',{
+                    params: {
+                        status: status,//1.获取自己所有文章的评论，2.获取我发布的评论
+                        id: self.author
+                    }
+                }).then(function(res){
+                    self.comment_data = res.data;
+                    console.log(res.data);
+                });
+            },
+            // get_comment_mine(){//我发表的评论
+            //     let self = this;
+            //     this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/comment_manage_mine',{
+            //         params: {
+            //             id: self.author
+            //         }
+            //     }).then(function(res){
+            //         self.comment_data = res.data;
+            //         console.log(res.data);
+            //     });
+            // },
             replay_now(flag){
                 this.repaly_flag = flag;
             },
@@ -112,7 +162,8 @@
             comment_replay(){
                 this.repaly_flag = false;
             },
-            open() {
+            open(id) {
+                let self = this;
                 this.$confirm('评论一旦删除，不可恢复，确定要删除吗?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -122,6 +173,14 @@
                         type: 'success',
                         message: '删除成功!'
                     });
+                    this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/comment_delete',{
+                        params: {
+                            id: id
+                        }
+                    }).then(function(res){
+                        console.log(res);
+                        self.get_comment();
+                    });
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -129,6 +188,10 @@
                     });
                 });
             }
+        },
+        mounted() {
+            this.author = localStorage.getItem('email');//当前登陆id
+            this.get_comment();
         }
     }
 </script>

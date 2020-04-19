@@ -252,7 +252,7 @@
                 });
 
                 // console.log(self.author,self.wr_title,self.wr_content,self.wr_tag,self.wr_category,self.wr_type, self.links);
-                if(self.wr_title&&self.wr_content){
+                if(self.wr_title&&self.wr_content){//文章编写的时候要注意部分词义可能与mysql中语法冲突 导致无法保存而报错。
                     this.$axios.post('http://localhost/graduation_project/blog2/src/php/article/article',{
                         related: self.author,//当前登陆者
                         nickName: self.nickName,//昵称
@@ -267,12 +267,12 @@
                         uniqueIdFlag: self.uniqueId,//文章的唯一ID
                     },{
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-                    }).then(function (res) {
+                    }).then(function (res) {//返回了文章id
                         // console.log(res);
                         //发布成功跳转
                         if(self.draftsFlag){//直接发布
                             let content = self.wr_content;
-                            self.$router.push({ path: '/md/mavon/released', query: { title: self.wr_title,content: content }});
+                            self.$router.push({ path: '/md/mavon/released', query: { title: self.wr_title,content: content,articleId:res.data,userId:self.author }});
                             //清空数据
                             self.wr_title = '';
                             self.wr_content = '';
@@ -343,12 +343,29 @@
                     });
                     console.log(self.category);
                 });
-            }
+            },
+            getArticle(userId,articleId){//更新文章(先获取文章再提交文章)
+                if(!userId||!articleId) return;
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/article/article_get_item',{
+                    params: {
+                        uniqueId: articleId,
+                        related: userId
+                    }
+                }).then(function(res){
+                    self.wr_title = res.data.title;
+                    self.wr_content = res.data.content;
+                    self.uniqueId = articleId;
+                });
+            },
         },
         mounted() {
             this.author = localStorage.getItem('email');//当前登陆id
             this.nickName = localStorage.getItem('nickName');//当前登录者昵称
             this.uniqueId = '';
+            let userId = this.$route.query.userId;
+            let articleId = this.$route.query.articleId;
+            this.getArticle(userId,articleId);//直接获取文章，更新文章
             this.get_sort_clip();
         }
     }

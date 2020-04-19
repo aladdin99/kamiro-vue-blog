@@ -113,18 +113,18 @@ export default {
                     // this.alldata.forEach((item,index)=>{
                     //     console.log(item,index);
                     // });
-                    this.alldata.sort(this.compare('sortFlag',true));
+                    this.alldata.sort(this.compare('sortFlag',false));
                     break;
                 case 1:
                     // all_data = all_data.reverse();
                     // this.alldata = all_data;
-                    this.alldata.sort(this.compare('sortFlag',false));
+                    this.alldata.sort(this.compare('sortFlag',true));
                     break;
                 case 2:
-                    alert(flag);
+                    alert("访问量待开发中......");
                     break;
                 case 3:
-                    alert(flag);
+                    alert("RSS订阅待开发中......");
                     break;
                 default:
                     break;
@@ -140,7 +140,7 @@ export default {
                 self.collection_clip = res.data;
                 self.collection_clip = self.collection_clip?self.collection_clip:[];
                 self.alldata.forEach(item=>{
-                    if(item.category){
+                    if(item.category[0]){
                         let ins = item.category[0].id;
                         self.collection_clip.forEach(info=>{
                             if(!info.essay){//如果不存在该字段 那么就添加
@@ -173,11 +173,13 @@ export default {
 
 <style lang="less">
     .user{
-        height: 100%;
-        background-color: #343536;
+        height: 100vh;
+        /*background-color: #343536;*/
+        background: url("../../../assets/theme.jpg");
+        background-attachment: fixed;
     }
-    .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
-    .UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
+    .UbannerMenu {position: fixed;top: -5rem;width: 100%;z-index: 101;}
+    /*.UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)*/
 
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
         .mainstay{padding: 0 2rem;text-align: left;height: 100%;}

@@ -7,11 +7,11 @@
         </div>
         <el-container class="mainbody">
             <!--Left navigation bar-->
-            <el-aside width="10rem">
-                <div :class="{'leftMenu':leftScroll}">
-                    <leftSidebar></leftSidebar>
-                </div>
-            </el-aside>
+<!--            <el-aside width="10rem">-->
+<!--                <div :class="{'leftMenu':leftScroll}">-->
+<!--                    <leftSidebar></leftSidebar>-->
+<!--                </div>-->
+<!--            </el-aside>-->
             <!--Content preview section-->
             <el-main class="mainstay_index">
 <!--                <div class="advert">MDSN已关闭该广告</div>-->
@@ -46,8 +46,8 @@
                     </div>
                 </div>
             </el-main>
-            <el-aside width="28rem" class="partRight">
-                <div >
+            <el-aside width="35rem" class="partRight">
+                <div>
                     <rightSidebar :class="{'rightMenu':rightScroll}"></rightSidebar>
                     <span ref="searchBar"></span>
                 </div>
@@ -59,13 +59,14 @@
 <script>
 // @ is an alias to /src  /Integration style properties
 import navigationBar from "components/navigationBar.vue";
-import leftSidebar from "components/index/leftSidebar.vue";
+// import leftSidebar from "components/index/leftSidebar.vue";
 import rightSidebar from "components/index/rightSidebar.vue";
 
 export default {
     name: "login",
     components: {
-        navigationBar,leftSidebar,rightSidebar
+        navigationBar,rightSidebar
+        // leftSidebar,
     },
     data(){
         return{
@@ -111,11 +112,13 @@ export default {
 <style lang="less">
     .home{
         height: 100%;
-        background-color: #f5f6f7;
+        /*background-color: #f5f6f7;*/
+        background: url("../../assets/theme.jpg");
+        background-attachment: fixed;
     }
     .bannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
     .leftMenu {position: fixed;top: 6rem;z-index: 100;}
-    .rightMenu {position: fixed;z-index: 100;width: 28rem;bottom: 0;}//上滑超出直接将右侧组件置bottom为零(无需计算超出多少高度)
+    .rightMenu {position: fixed;z-index: 100;width: 35rem;bottom: 0;}//上滑超出直接将右侧组件置bottom为零(无需计算超出多少高度)
     //轮播图
     .el-carousel__item h3 {color: #475669;font-size: 1.4rem;opacity: 0.75;line-height: 1.5rem;margin: 0;}
     .el-carousel__item:nth-child(2n) {background-color: #99a9bf;}
@@ -128,7 +131,7 @@ export default {
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
         .partLeft{}
         .partRight{position: relative;
-            .advert{display:inline-block;width:100%;height: 8rem;background: #fafafa;text-align: center;line-height: 8rem;color: rgba(0,0,0,.4);font-size: 16px;}
+            .advert{display:inline-block;width:100%;height: 8rem;text-align: center;line-height: 8rem;color: rgba(0,0,0,.4);font-size: 16px;}
             .recommend{margin-top: 2rem;display: flex;height: 19rem;border: 1px solid pink;background-color: #ca0c16;margin-bottom: 2rem;}
         }
         .mainstay_index{padding: 0 2rem;text-align: left;height: 100%;

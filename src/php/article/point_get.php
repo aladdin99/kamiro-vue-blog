@@ -9,6 +9,7 @@ $data = array();
 $status = $_GET['status'];//操作状态 2.查询点赞 1.点赞 0.取消点赞
 $articleId = $_GET['articleId'];//文章ID
 $userId = $_GET['userId'];//登陆者ID
+$authorId = $_GET['authorId'];//文章作者id
 
 // 包含数据库配置信息
 include_once('../config.php');
@@ -62,9 +63,10 @@ $back['flag'] = $flag; //是否已点赞
 if($status!=2){
 $back=[];
     if($exit){//如果已存在用户点赞 那么更新
-        $sql_opera = "UPDATE points SET `status` = '$status' WHERE `articleId` = '$articleId' AND '$userId' = '$userId'";
+        $sql_opera = "DELETE FROM points WHERE `articleId` LIKE '$articleId' AND '$userId' = '$userId'";
+//        $sql_opera = "UPDATE points SET `status` = '$status' WHERE `articleId` = '$articleId' AND '$userId' = '$userId'";
     }else{//如果不存在该用户点赞 那么新增
-        $sql_opera = "INSERT INTO points (userId, `articleId`, `status`) VALUES ('$userId','$articleId','$status')";
+        $sql_opera = "INSERT INTO points (userId, `articleId`, `status`, `authorId`) VALUES ('$userId','$articleId','$status','$authorId')";
     }
     // 操作成功(更新或新增)
     if($conn->query($sql_opera) === TRUE) {

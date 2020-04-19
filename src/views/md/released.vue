@@ -1,7 +1,7 @@
 <template>
     <div class="related">
         <div class="success">
-            <div class="banner"><i class="el-icon-arrow-left"></i><span style="cursor: pointer;">管理博文</span></div>
+            <div class="banner" @click="goToManage"><i class="el-icon-arrow-left"></i><span style="cursor: pointer;">管理博文</span></div>
             <div class="pubcontent">
                 <span class="title">{{title}}</span>
                 <div class="content">
@@ -23,7 +23,11 @@
                 仗剑天涯，从你的摘要开始
             </div>
             <div class="next">
-                <span><i class="el-icon-circle-check"></i>发布成功并查看文章<i class="el-icon-arrow-right"></i></span>
+                <span>
+                    <router-link :to="{path:'/index/user/details',query:{userId:userId,articleId:articleId}}" style="color: #3399ea;">
+                        <i class="el-icon-circle-check"></i>发布成功并查看文章<i class="el-icon-arrow-right"></i>
+                    </router-link>
+                </span>
                 <span><router-link to="/md/mavon" style="text-decoration: none;color: #3399ea;">再写一篇</router-link></span>
             </div>
         </div>
@@ -35,16 +39,22 @@
         data(){
             return{
                 title: '',
-                content: ''
+                content: '',
+                articleId: "",
+                userId: ""
             }
         },
         methods:{
-
+            goToManage(){//回到管理博文页面
+                this.$router.push('/manage/managing');
+            },
         },
         mounted() {
             this.title = this.$route.query.title?this.$route.query.title:'underfined';
             this.content = this.$route.query.content?this.$route.query.content:'underfined';
-            console.log(this.title,this.content);
+            this.articleId = this.$route.query.articleId?this.$route.query.articleId:'underfined';
+            this.userId = this.$route.query.userId?this.$route.query.userId:'underfined';
+            console.log(this.title,this.content,this.articleId,this.userId);
         }
     }
 </script>

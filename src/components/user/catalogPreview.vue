@@ -28,10 +28,10 @@
             </div>
             <div class="bottomMark">
                 <span class="time">{{item.time}}</span>
-                <el-divider direction="vertical"></el-divider>
-                <span class="readingNum" @click="sort_time(item.content)">阅读数 <span style="color: #428bca;">419</span></span>
-                <el-divider direction="vertical"></el-divider>
-                <span class="commentNum">评论数 <span style="color: #428bca;">4</span></span>
+<!--                <el-divider direction="vertical"></el-divider>-->
+<!--                <span class="readingNum" @click="sort_time(item.content)">阅读数 <span>419</span></span>-->
+<!--                <el-divider direction="vertical"></el-divider>-->
+<!--                <span class="commentNum">评论数 <span>4</span></span>-->
             </div>
         </div>
 <!--        底部分页 后期再添加-->
@@ -62,9 +62,9 @@
             sort_time(content){
                 console.log(content);
             },
-            handleClick(tab, event) {
+            handleClick(tab) {
                 this.$emit('changeData',tab.index);
-                console.log(tab.index, event);
+                // console.log(tab.index, event);
             },
             updated(){
                 alert('挂载完成!');
@@ -76,6 +76,8 @@
 <style lang="less">
     .catalogPreview{
         height: 100%;
+        min-height: 78rem;
+        width: 100%;
         background-color: #fff;
         padding: 0 0 10rem 0;
     }
@@ -102,7 +104,9 @@
         }
         .bottomMark{flex: 1;padding: .5rem;font-size: 1.3rem;
             .time{color: #6b6b6b;}
-            .readingNum,.commentNum{color: #999;}
+            .readingNum,.commentNum{color: #999;
+                span{color: #428bca;}
+            }
         }
     }
 

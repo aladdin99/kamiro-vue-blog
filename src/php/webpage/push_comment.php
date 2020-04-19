@@ -20,6 +20,8 @@
     $comment = $body->comment;//评论
     $userName = $body->userName;//评论者昵称
     $articleId = $body->articleId;//文章id
+    $title = $body->title;//文章标题
+    $authorId = $body->authorId;//文章作者id
 
     // mysqli 面向对象 编程
     // 1、创建连接
@@ -41,7 +43,7 @@
             echo "Error: " . $sql_reply_flag . "<br>" . $conn->error;
         }
     }else if($status == 0){//评论
-        $sql_insert = "INSERT INTO comment (userId, `userName`,`avarUrl`,`comment`,`bindId`) VALUES ('$userId','$userName','$avarUrl','$comment','$bindId')";
+        $sql_insert = "INSERT INTO comment (userId, `userName`,`avarUrl`,`comment`,`bindId`,`title`,`authorId`) VALUES ('$userId','$userName','$avarUrl','$comment','$bindId','$title','$authorId')";
     }
 
     // 4、检查是否插入成功

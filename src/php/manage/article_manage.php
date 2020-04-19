@@ -32,6 +32,7 @@ if($result->num_rows > 0){
     // 输出数据 fetch_assoc，遍历表中的每一行数据
     while($row = $result->fetch_assoc()) {
         $tmp = array(); // 临时数组整合信息
+        $tmp['related'] = $row['related'];
         $tmp['title'] = $row['title'];
         $tmp['category'] = $row['category'];
         $tmp['type'] = $row['type'];

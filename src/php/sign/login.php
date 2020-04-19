@@ -39,5 +39,16 @@
     } else {
       $back['isLogin'] = '-1';//账号不存在
     }
+
+    if($back['isLogin']=='1'){
+        $sql_personal = "SELECT * FROM `personal_info`  WHERE `id` = '$email'";
+        $result2 = $conn->query($sql_personal);
+        if($result2->num_rows > 0){
+            // 输出数据 fetch_assoc，遍历表中的每一行数据
+            while($row = $result2->fetch_assoc()) {
+                $back['avarUrl'] = $row['avatarUrl'];;//账号密码正确
+            }
+        }
+    }
     echo json_encode($back,JSON_UNESCAPED_UNICODE); //JSON_UNESCAPED_UNICODE防止中文乱码
 ?>

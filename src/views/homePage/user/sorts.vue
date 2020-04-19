@@ -122,7 +122,7 @@
                 }).then(function (res) {
                     self.collection_clip = res.data;
                     self.alldata.forEach(item => {
-                        if (item.category) {
+                        if (item.category[0]) {
                             let ins = item.category[0].id;
                             self.collection_clip.forEach(info => {
                                 if (!info.essay) {//如果不存在该字段 那么就添加
@@ -189,9 +189,11 @@
 <style lang="less">
     .sorts{
         height: 100%;
-        background-color: #343536;
+        /*background-color: #343536;*/
+        background: url("../../../assets/theme.jpg");
+        background-attachment: fixed;
     }
-    .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
+    .UbannerMenu {position: fixed;top: -5rem;width: 100%;z-index: 101;}
     .UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
 
     .banner_title{color:#fff;display:flex;justify-content: space-between;padding: 2rem 12vw 1rem 12vw;
