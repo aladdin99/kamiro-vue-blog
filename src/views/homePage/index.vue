@@ -34,7 +34,10 @@
                         <router-link :to="{path:'/index/user/details',query:{userId:item.related,articleId:item.uniqueId}}" style="text-decoration: none;"><div class="title">{{item.title}}</div></router-link>
                         <div class="introduction">可能最近不少读者也像我一样被某公号的那篇《清华毕业生开发新特效编程语言，99行代码实现《冰雪奇缘》，网友：大神碉堡！创世的快乐》吓了一大跳</div>
                         <div class="root">
-                            <div><el-avatar size="small" :src="item.avatarUrl"></el-avatar><router-link to="/index/user"><span class="nickName">{{item.author}}</span></router-link></div>
+                            <div><router-link :to="{path:'/index/webpage',query:{userId:item.related}}">
+                                <el-avatar size="small" :src="item.avatarUrl"></el-avatar>
+                                <span class="nickName">{{item.author}}</span>
+                            </router-link></div>
                             <div class="partake">
                                 <span><icon-svg icon-class="icon-dianzan"/></span>
                                 <el-divider direction="vertical"></el-divider>
@@ -94,6 +97,7 @@ export default {
             let self = this;
             this.$axios.get('http://localhost/graduation_project/blog2/src/php/index/get_index_article').then(function(res){
                 self.article_data = res.data;
+                self.article_data.reverse();
             });
         }
     },
@@ -112,13 +116,14 @@ export default {
 <style lang="less">
     .home{
         height: 100%;
+        min-height: 100vh;
         /*background-color: #f5f6f7;*/
         background: url("../../assets/theme.jpg");
         background-attachment: fixed;
     }
     .bannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
     .leftMenu {position: fixed;top: 6rem;z-index: 100;}
-    .rightMenu {position: fixed;z-index: 100;width: 35rem;bottom: 0;}//上滑超出直接将右侧组件置bottom为零(无需计算超出多少高度)
+    /*.rightMenu {position: fixed;z-index: 100;width: 35rem;bottom: 0;}//上滑超出直接将右侧组件置bottom为零(无需计算超出多少高度)*/
     //轮播图
     .el-carousel__item h3 {color: #475669;font-size: 1.4rem;opacity: 0.75;line-height: 1.5rem;margin: 0;}
     .el-carousel__item:nth-child(2n) {background-color: #99a9bf;}

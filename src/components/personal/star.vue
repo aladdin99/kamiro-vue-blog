@@ -62,16 +62,16 @@
                 let self = this;
                 let data = [];
                 if((starData.length>0)&&(followData.length>0)){//查找自己的关注表与粉丝表中是否有相同的，如果有，那么就是互粉！
-                    for(let i=0;i<starData.length;i++){
-                        for (let j=0;j<followData.length;j++){
+                    for(let i=0;i<starData.length;i++){//粉丝表
+                        self.starData[i].crossFlag = false;
+                        for (let j=0;j<followData.length;j++){//关注表
                             if(starData[i].noticer==followData[j].sufferId){
                                 self.starData[i].crossFlag = true;
-                            }else{
-                                self.starData[i].crossFlag = false;
                             }
-                            data = self.starData;
                         }
                     }
+                    data = self.starData;
+                    console.log(data);
                 }
                 setTimeout(function () {
                     data.forEach(item=>{

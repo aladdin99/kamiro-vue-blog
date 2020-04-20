@@ -1,6 +1,6 @@
 <!--一篇博文内容-->
 <template>
-    <div class="user">
+    <div class="user_detail">
         <!-- Top navigation bar-->
         <div :class="{'UbannerMenu':bannerScroll}" style="z-index: 9999;">
             <navigationBar></navigationBar>
@@ -9,7 +9,7 @@
             <!--Left user information bar-->
             <el-aside width="30rem" style="position: relative;" :class="{'leftScroll':leftScroll}">
                 <userLeftBar
-                        :class="{'UleftMenu':leftScroll}"
+                        :class="{'UleftMenu_detail':leftScroll}"
                         :userId="userId"
                         :originalNum="original.length"
                         :lastest="lastest"
@@ -139,7 +139,7 @@
 </script>
 
 <style lang="less">
-    .user{
+    .user_detail{
         height: 100%;
         min-height: 100vh;
         background: url("../../../../assets/theme.jpg");
@@ -147,10 +147,12 @@
         background-attachment:fixed;//固定背景图位置
         /*background-color: rgba(0,0,0,.3);*/
     }
-    .UbannerMenu {position: fixed;top:-5rem;width: 100%;z-index: 10000001;}
-    .UleftMenu {position: fixed;z-index: 100;width:30rem;top: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
+    .user_detail{
+        .UbannerMenu {position: fixed;top:-5rem;width: 100%;z-index: 10000001;}
+        .UleftMenu_detail {position: fixed;z-index: 100;width:30rem;top: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
 
-    .mainbody{padding: 0 12vw;margin-top: 1.5rem;
-        .mainstay{padding: 0 2rem;text-align: left;height: 100%;}
+        .mainbody{padding: 0 12vw;margin-top: 1.5rem;
+            .mainstay{padding: 0 2rem;text-align: left;height: 100%;}
+        }
     }
 </style>

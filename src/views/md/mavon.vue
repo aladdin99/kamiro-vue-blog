@@ -89,7 +89,7 @@
         data(){
             return{
                 img_file: {},
-                circleUrl:"http://localhost/graduation_project/blog2/src/assets/avatar/IMG_1066(20200214-130610).JPG",
+                circleUrl:"",
                 dialogFormVisible: false,
                 options: [{//文章标签数据
                     value: 'shujvku',
@@ -362,6 +362,8 @@
         mounted() {
             this.author = localStorage.getItem('email');//当前登陆id
             this.nickName = localStorage.getItem('nickName');//当前登录者昵称
+            this.circleUrl = localStorage.getItem('imageUrl');//当前登录者头像
+            console.log(this.circleUrl);
             this.uniqueId = '';
             let userId = this.$route.query.userId;
             let articleId = this.$route.query.articleId;

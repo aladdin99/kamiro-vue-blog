@@ -6,7 +6,7 @@
                 <li v-for="(item,index) in bannerData" :key="index" @click="nextInfo(index)"><span :class="{'checked':(item.flag)}" :title="item.name">{{item.name}}</span></li>
             </ul>
             <el-select
-                    size="small" v-model="value" filterable remote reserve-keyword
+                    size="small" v-model="value" filterable remote reserve-keyword  @keyup.enter="searchInfo"
                     placeholder="Python进阶之路" :remote-method="remoteMethod" :loading="loading"
             >
                 <el-option
@@ -27,7 +27,7 @@
             <span class="logister" v-show="!isLogin" style="z-index: 9999;">
                 <router-link to="/personal/index"><img :src="circleUrl"></router-link>
                 <ul class="lohisterInner">
-                    <li><icon-svg icon-class="icon-guanzhu" class="iconClass" style="padding-left: 1rem;"/><span>我的关注</span></li>
+                    <li><icon-svg icon-class="icon-guanzhu" class="iconClass" style="padding-left: 1rem;"/><span><router-link :to="{path:'/personal/index',query:{activeCode:'3'}}" style="text-decoration: none;color: #fff;">我的关注</router-link></span></li>
                     <li><icon-svg icon-class="icon-icon-test" class="iconClass"/><span><router-link :to="{path:'/personal/index',query:{activeCode:'1'}}" style="text-decoration: none;color: #fff;">我的收藏</router-link></span></li>
                     <li><icon-svg icon-class="icon-gerenzhongxin" class="iconClass"/><span><router-link to="/personal/index">个人中心</router-link></span></li>
                     <li><icon-svg icon-class="icon-Account-Settings" class="iconClass"/><span><router-link to="/settings/account_settings">账号设置</router-link></span></li>
@@ -67,7 +67,7 @@
         data() {
             return {
                 author: '',//当前用户id
-                bannerData: [{name:"首页",flag:true},{name:"博客",flag:false},{name:"软件工具",flag:false},{name:"生活",flag:false}],
+                bannerData: [{name:"首页",flag:true},{name:"个人主页",flag:false},{name:"软件工具",flag:false},{name:"生活",flag:false}],
                 options: [],
                 value: [],
                 list: [],
@@ -94,6 +94,9 @@
             }
         },
         methods: {
+            searchInfo(){
+              alert(11);
+            },
             remoteMethod(query) {//快捷搜索
                 if (query !== '') {
                     this.loading = true;
@@ -112,7 +115,23 @@
                 this.bannerData.forEach(item=>{
                     item.flag = false;
                 });
-                this.$router.push('/index');//跳转到首页
+                switch (index) {
+                    case 0:
+                        this.$router.push('/index');//跳转到首页
+                        break;
+                    case 1:
+                        this.$router.push({path:'/index/webpage',query:{userId:this.author}});//跳转到首页
+                        break;
+                    case 2:
+                        alert("延期开发...");
+                        break;
+                    case 3:
+                        alert("延期开发...");
+                        break;
+                    default:
+                        alert("延期开发...");
+                        break;
+                }
                 this.bannerData[index].flag=true;
             },
             getavata(){

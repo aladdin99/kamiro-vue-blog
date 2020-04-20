@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="relaction" v-show="!(currentId==userId)">
-                <div><span class="follower" :class="{ stared: starFlag }" @click="follow(true)">关注</span></div>
+                <div><span class="follower" :class="{ stared: starFlag }" @click="follow()">关注</span></div>
 <!--                <div><span class="priLetter">私信</span></div>-->
             </div>
         </div>
@@ -56,7 +56,7 @@
             </ul>
         </div>
         <!--commonArticles-->
-        <div class="commonArticles" v-show="collection_clip.length">
+        <div class="commonArticles">
             <span class="commonName">分类专栏</span>
             <ul class="special commonUl">
                 <li v-for="(item,index) in collection_clip" :key="index" @click="router_link(item.id)" v-show="parseInt(item.show)">
@@ -187,14 +187,12 @@ export default {
             currentImg: "",
             starTotal: "",//粉丝数量
             pointTotal: "",//点赞量
-            starFlag: false,//是否已关注
+            starFlag: true,//是否已关注
         }
     },
     methods: {
-        follow(flag=false){//关注
-            if(flag){
-                this.starFlag = !this.starFlag;
-            }
+        follow(){//关注（遗留bug 必须要点击两次关注才生效！）
+            this.starFlag = !this.starFlag;
             let self = this;
             this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/saveStar',{
                 params: {
@@ -227,8 +225,8 @@ export default {
                 self.starTotal = res.data.length;
                 if(self.starTotal){
                     res.data.forEach(item=>{
-                        if(item.sufferId == self.userId){
-                            self.starFlag = true;
+                        if(item.sufferId == self.currentId){
+                            self.starFlag = false;
                         }
                     });
                 }
@@ -270,9 +268,8 @@ export default {
         this.currentImg = localStorage.getItem('imageUrl');//当前登陆头像
     },
     watch:{
-        userId:function(newVal){
+        userId:function(){
             let self = this;
-            console.log(newVal);
             this.$nextTick(function(){
                 self.getInfo();
                 self.star();

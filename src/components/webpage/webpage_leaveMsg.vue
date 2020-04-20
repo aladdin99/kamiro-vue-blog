@@ -98,6 +98,7 @@
                     }
                 }).then(function(res){
                     self.msgData = res.data;
+                    self.msgData.reverse();
                 });
             }
         }
