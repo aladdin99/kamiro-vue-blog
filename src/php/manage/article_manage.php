@@ -34,7 +34,7 @@ if($result->num_rows > 0){
         $tmp = array(); // 临时数组整合信息
         $tmp['related'] = $row['related'];
         $tmp['title'] = $row['title'];
-        $tmp['category'] = $row['category'];
+        $tmp['category'] = json_decode($row['category'],JSON_UNESCAPED_UNICODE);
         $tmp['type'] = $row['type'];
         $tmp['time'] = $row['time'];
         $tmp['uniqueId'] = $row['uniqueId'];

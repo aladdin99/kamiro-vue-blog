@@ -7,20 +7,20 @@
            <el-calendar v-model="dateNote">
            </el-calendar>
        </div>
-       <div class="recommend-today">
-           <div class="category"><span class="bgColor vertical-line"></span>今日推荐</div>
-           <div>
-               <div style="display: flex;margin-bottom: 1.5rem;" v-for="item in 10" :key="item">
-                   <span style="display: flex;flex: 1;">
-                        <el-image
-                                style="width: 6rem; height: 4.8rem;border-radius: .5rem;"
-                                :src="url"
-                                :fit="fits[0]"></el-image>
-                   </span>
-                   <div class="title">机器推理文本+视觉，跨模态预训练新进展</div>
-               </div>
-           </div>
-       </div>
+<!--       <div class="recommend-today">-->
+<!--           <div class="category"><span class="bgColor vertical-line"></span>今日推荐</div>-->
+<!--           <div>-->
+<!--               <div style="display: flex;margin-bottom: 1.5rem;" v-for="item in 10" :key="item">-->
+<!--                   <span style="display: flex;flex: 1;">-->
+<!--                        <el-image-->
+<!--                                style="width: 6rem; height: 4.8rem;border-radius: .5rem;"-->
+<!--                                :src="url"-->
+<!--                                :fit="fits[0]"></el-image>-->
+<!--                   </span>-->
+<!--                   <div class="title">机器推理文本+视觉，跨模态预训练新进展</div>-->
+<!--               </div>-->
+<!--           </div>-->
+<!--       </div>-->
        <!--gateway-->
 <!--       <div class="extra">-->
 <!--           <div class="QRcode">-->

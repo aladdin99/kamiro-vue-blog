@@ -49,7 +49,7 @@ if($status==1){
     }
     $return = json_encode($return[0]);
 }else if($status==3){
-    $sql_star = "DELETE FROM `star` WHERE `sufferId` LIKE '$sufferId'";
+    $sql_star = "DELETE FROM `star` WHERE `sufferId` LIKE '$sufferId' AND `noticer` LIKE '$noticer'";
 }
 
 // 4、检查是否插入成功

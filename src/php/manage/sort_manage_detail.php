@@ -34,9 +34,14 @@ if($result->num_rows > 0){
         $tmp = array(); // 临时数组整合信息
         $tmp['related'] = $row['related'];
         $tmp['title'] = $row['title'];
-        $tmp['category'] = json_decode($row['category'],true)[0];
         $tmp['uniqueId'] = $row['uniqueId'];
+        if(json_decode($row['category'],true)){//将字符串对象解压出来
+            $tmp['category'] = json_decode($row['category'],true)[0];
+        }else{
+            $tmp['category'] = [];
+        };
         $data[] = $tmp; // 自增
+
     }
     $return[] = $data;//赋值输出的每一组数据
 } else {

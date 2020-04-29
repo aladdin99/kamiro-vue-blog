@@ -2,7 +2,7 @@
 <template>
     <div class="personal">
         <!-- Top navigation bar-->
-        <div :class="{'UbannerMenu':bannerScroll}">
+        <div :class="{'UbannerMenu':bannerScroll}" class="special_bar">
             <navigationBar></navigationBar>
         </div>
         <el-container class="mainbody" style="width: 100%;">
@@ -12,12 +12,12 @@
                     style="background-color: rgba(255,255,255,.8);" @tab-click="blogManage">
                 <el-tab-pane label="个人资料" name="0"><personalData></personalData></el-tab-pane>
                 <el-tab-pane label="我的收藏" name="1"><collection></collection></el-tab-pane>
-                <el-tab-pane label="我的勋章" name="2"><medal></medal></el-tab-pane>
+<!--                <el-tab-pane label="我的勋章" name="2"><medal></medal></el-tab-pane>-->
                 <el-tab-pane label="我的关注" name="3"><follow ref="follow"></follow></el-tab-pane>
                 <el-tab-pane label="我的粉丝" name="4"><star ref="star"></star></el-tab-pane>
 <!--                <el-tab-pane label="我的标签" name="5">我的标签（暂未开发）</el-tab-pane>-->
                 <el-tab-pane label="我的博客" name="6" ></el-tab-pane>
-                <el-tab-pane label="签到赢福利" name="7"><clockIn></clockIn></el-tab-pane>
+<!--                <el-tab-pane label="签到赢福利" name="7"><clockIn></clockIn></el-tab-pane>-->
 <!--                <el-tab-pane label="抽奖" name="8">抽奖（暂未开发）</el-tab-pane>-->
             </el-tabs>
 <!--            <el-aside width="20rem">-->
@@ -50,12 +50,13 @@
     import collection from "components/personal/collection.vue";
     import follow from "components/personal/follow.vue";
     import star from "components/personal/star.vue";
-    import medal from "components/personal/medal.vue";
-    import clockIn from "components/personal/clockIn.vue";
+    // import medal from "components/personal/medal.vue";
+    // import clockIn from "components/personal/clockIn.vue";
     export default {
         name: "user",
         components: {
-            navigationBar,personalData,collection,follow,star,medal,clockIn
+            //medal clockIn
+            navigationBar,personalData,collection,follow,star,
         },
         data(){
             return{
@@ -78,13 +79,13 @@
                 return {top,left}
             },
             blogManage(targetName){
-                if(targetName.index=='5'){
+                if(targetName.index=='4'){
                     this.$router.push('/manage/managing');
                 }
-                if(targetName.index=='3'){//关注
+                if(targetName.index=='2'){//关注
                     this.$refs.follow.getFollow();
                 }
-                if(targetName.index=='4'){//粉丝
+                if(targetName.index=='2'){//粉丝
                     this.$refs.star.init();
                 }
             },
@@ -94,7 +95,10 @@
         },
         mounted() {
             this.currentId = localStorage.getItem('email');//当前登陆id
-            console.log(this.currentId);
+            if(this.currentId==null){
+                this.$router.push({path: "/index",redirect: '/index'});//路由重定向
+            }
+
             this.activeCode = this.$route.query.activeCode?this.$route.query.activeCode:'0';
             //监听banner栏坐标
             window.addEventListener('scroll',this.getScrollPosition,false);
@@ -108,12 +112,14 @@
 
 <style lang="less">
     .personal{
-        height: 100vh;
+        height: 100%;
+        min-height: 100vh;
         /*background-color: #f5f6f7;*/
         background: url("../../assets/theme.jpg");
+        background-size: 100% 100%;
         background-attachment: fixed;
     }
-
+    .special_bar{background-color: rgba(85,84,85, 0.5);color: rgba(85,84,85, 0.5);z-index: 999;}
     .personal{
         .mainbody{padding: 0 12vw;margin-top: 1.5rem;
             .leftBar{list-style: none;text-align: left;cursor: pointer;font-size: 1.4rem;border: 1px solid #E6E6E6;display: inline-block;width: 100%;box-sizing: border-box;

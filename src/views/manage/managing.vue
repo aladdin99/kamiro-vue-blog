@@ -3,7 +3,7 @@
         <navigationBar></navigationBar>
         <div class="mainmanage">
             <el-container>
-                <el-aside width="200px" style="background-color: rgba(255,255,255,.8);">
+                <el-aside width="200px" style="background-color: rgba(255,255,255,1);">
                     <div class="leftManageBar" ref="leftHeight">
                         <router-link to="/md/mavon" style="text-decoration: none;" class="manage_edit_link">
                             <div class="manage_edit">
@@ -18,13 +18,15 @@
                         <el-collapse v-model="activeNames" @change="getHeight">
                             <el-collapse-item title="博客管理" name="1" style="text-align: center;">
                                 <ul>
-                                    <li v-for="(item,index) in manage" :key="index" @click="checked(index,item.label)" :class="{'checked':blog_value==item.label}">{{item.value}}</li>
+                                    <li v-for="(item,index) in manage" :key="index" @click="checked(index,item.label)" :class="{'checked':blog_value==item.label}">
+                                        {{item.value}}
+                                    </li>
                                 </ul>
                             </el-collapse-item>
                             <el-collapse-item title="设置管理" name="2">
                                 <ul>
-                                    <li>博客设置</li>
-                                    <li>博客模块管理</li>
+                                    <li @click="checked(3,3)" :class="{'checked':blog_value==3}">账号安全</li>
+                                    <li @click="checked(4,4)" :class="{'checked':blog_value==4}">博客设置</li>
                                 </ul>
                             </el-collapse-item>
                         </el-collapse>
@@ -35,6 +37,8 @@
                     <div v-show="blog_value==1"><comment_manage></comment_manage></div>
 <!--                    //点击左侧'分类专栏'才获取页面数据(父组件传值)-->
                     <div v-show="blog_value==2"><sort_manage :sortFlag="sortFlag"></sort_manage></div>
+                    <div v-show="blog_value==3"><updateAccount></updateAccount></div>
+                    <div v-show="blog_value==4"><setupBlog></setupBlog></div>
                 </el-main>
             </el-container>
         </div>
@@ -46,10 +50,12 @@ import navigationBar from "components/navigationBar.vue";
 import article_manage from "components/manage/article_manage.vue";
 import comment_manage from "components/manage/comment_manage.vue";
 import sort_manage from "components/manage/sort_manage.vue";
+import updateAccount from "components/setUp/updateAccount.vue";
+import setupBlog from "components/setUp/setupBlog.vue";
 export default {
     name: "managing",
     components: {
-        navigationBar,article_manage,comment_manage,sort_manage
+        navigationBar,article_manage,comment_manage,sort_manage,setupBlog,updateAccount
     },
     data(){
         return{
@@ -81,9 +87,12 @@ export default {
     },
     mounted() {
         this.userId = localStorage.getItem('email');//当前登陆id
+        if(this.userId==null){
+            this.$router.push({path: "/index",redirect: '/index'});//重定向
+        }
     },
     watch:{
-        listData:function(newVal){
+        listData:function(){
             let self = this;
             this.$nextTick(function(){
                 // let i = 0;
@@ -92,7 +101,7 @@ export default {
                     self.listValue++;
                 }
                 //some code
-                console.log(this.$refs.leftHeight.offsetHeight,newVal)//ul最新的高度
+                // console.log(this.$refs.leftHeight.offsetHeight,newVal)//ul最新的高度
             })
         }
     }

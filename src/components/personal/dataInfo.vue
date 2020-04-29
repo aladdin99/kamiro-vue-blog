@@ -291,7 +291,7 @@
                 span{display: inline-block;width: 10rem;height: 10rem;border-radius: 50%;margin-left: 50%;transform: translateX(-50%)}
                 div{text-align: center;color: #3399ea;}
             }
-            .means{flex: 7;padding-left: 1rem;display: inline-block;width: 100%;background-color: #fff;padding-right: 1.5rem;
+            .means{flex: 7;padding-left: 1rem;display: inline-block;width: 100%;padding-right: 1.5rem;
                 .part1{display: flex;justify-content: space-between;align-items: center;
                     span:nth-child(1){font-size: 1.4rem;color: #999;}
                     span:nth-child(2){color: #3399ea;cursor: pointer;}

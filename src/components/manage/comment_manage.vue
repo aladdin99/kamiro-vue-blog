@@ -20,7 +20,7 @@
                             <div class="handle">
 <!--                                <span @click="replay_now(true)">快速回复</span>-->
 <!--                                <el-divider direction="vertical"></el-divider>-->
-                                <span @click="open(item.id)">删除</span>
+                                <span @click="common_del(item.id,1)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
@@ -28,7 +28,7 @@
                             {{item.comment}}
                         </div>
                         <div class="replay" v-show="repaly_flag">
-                            <span style="display: inline-block;width: 3rem;height: 3rem;border-radius: 50%;background-color: #42b983;margin-left: 3.5rem;margin-right: 1rem;"></span>
+                            <span style="display: inline-block;width: 3rem;height: 3rem;border-radius: 50%;background-color: #2C3E50;margin-left: 3.5rem;margin-right: 1rem;"></span>
                             <el-input v-model="replay" placeholder="发表你的评论" style="width: 70%;" size="small"></el-input>
                             <button :disabled="replay?false:true" :class="{'replay_button':replay?true:false}" @click="comment_replay">回复评论</button>
                         </div>
@@ -60,7 +60,7 @@
                             <div class="handle">
                                 <span @click="public_now(item)">公开</span>
                                 <el-divider direction="vertical"></el-divider>
-                                <span @click="open(item.id)">删除</span>
+                                <span @click="common_del(item.id,3)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
@@ -88,7 +88,7 @@
                             </div>
 
                             <div class="handle">
-                                <span style="color: #CA0C16;" @click="open(item.id)">删除</span>
+                                <span style="color: #CA0C16;" @click="common_del(item.id,2)">删除</span>
                             </div>
                         </div>
                         <div class="comment_content">
@@ -140,18 +140,15 @@
                 switch (parseInt(tab.index)) {
                     case 0:
                         self.get_comment(1);
-                        console.log("我的文章评论");
                         break;
                     case 1:
                         self.get_comment(3);
-                        console.log('待我审核的评论');
                         self.comment_verify.forEach(item=>{//用于复选框的选中状态
                            item.single = false;
                         });
                         break;
                     case 2:
                         this.get_comment(2);
-                        console.log('我发表的评论');
                         break;
                     default:
                         console.log("nothing!");
@@ -198,12 +195,9 @@
                         }
                     });
                 }else{
-                    data.id = item.id;
-                    data.userId = item.userId;
-                    data.bindId = item.bindId;
-                    data.authorId = item.authorId;
+                    data.push({id:item.id,userId:item.userId,bindId:item.bindId,authorId:item.authorId});
                 }
-                if(!data.length) return;
+                // if(!data.length) return;
                 this.$axios.post('http://localhost/graduation_project/blog2/src/php/manage/comment_public',{
                     openList: data //传入更新集合(传入数组对象要使用post请求，get请求则无法被正确解析)
                 },{
@@ -216,7 +210,7 @@
             comment_replay(){
                 this.repaly_flag = false;
             },
-            open(id) {
+            common_del(id,flag) {
                 let self = this;
                 this.$confirm('评论一旦删除，不可恢复，确定要删除吗?', '提示', {
                     confirmButtonText: '确定',
@@ -232,7 +226,7 @@
                             id: id
                         }
                     }).then(function(){
-                        self.get_comment();
+                        self.get_comment(flag);
                     });
                 }).catch(() => {
                     this.$message({
@@ -252,7 +246,7 @@
 <style lang="less">
     .article_manage{background-color: #fff ;padding: 1.5rem 2rem;box-sizing: border-box;height: 100%;min-height:68rem;width: 100%;
         ul{list-style: none;
-            li{border-bottom: 1px solid #ddd;
+            li{border-bottom: 1px solid #ddd;overflow: hidden;display: inline-block;height: 8rem;width: 100%;
                 .comment{display: flex;justify-content: space-between;align-items: center;line-height: 3rem;
                     .comment_detail{font-size: 1.4rem;
                         span{}
@@ -263,13 +257,13 @@
                         span:nth-child(5){color: #999;cursor: pointer;margin-right: 1rem;}
                     }
                     .handle{cursor: pointer;display: none;
-                        span:nth-child(1){color: #349EDF;}
-                        span:nth-child(3){color: #CA0C16;}
+                        span:nth-child(1){color: #349EDF;color: #ca0c16;transition: all 1.5s;}
+                        span:nth-child(3){color: #CA0C16;color: #ca0c16;transition: all 1.5s;}
                     }
                 }
                 .comment_content{text-align: left;padding: 1.5rem 3.8rem 1rem 3.8rem;color: #4f4f4f;}
                 &:hover{
-                    .handle{display: block;}
+                    .handle{display: block;transition: all 1.5s;}
                 }
                 .replay{display: flex;justify-content: left;padding: 1rem 0;
                     button{padding: .35rem 1.5rem .3rem 1.5rem;text-align:center;border: 1px solid #D6D6D6;cursor: pointer;margin-left: 2rem;color:#D6D6D6;

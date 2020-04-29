@@ -1,6 +1,6 @@
 <template>
     <div class="sorts">
-        <div :class="{'UbannerMenu_sort':bannerScroll}">
+        <div :class="{'UbannerMenu_sort':bannerScroll}" class="special_bar">
             <navigationBar></navigationBar>
         </div>
         <div class="banner_title">
@@ -14,7 +14,6 @@
             <el-aside width="30rem" style="position: relative;">
                 <div>
                     <userLeftBar
-                            :class="{'UleftMenu':leftScroll}"
                             :userId="userId"
                             :originalNum="original.length"
                             :lastest="lastest"
@@ -145,7 +144,9 @@
                         this.collection_clip_detail = item;
                     }
                 });
-                // console.log(this.collection_clip_detail);
+                console.log("-----------");
+                console.log(this.collection_clip_detail);
+                console.log("-----------");
             },
             goBack () {//监听浏览器返回
                 sessionStorage.clear();
@@ -189,12 +190,15 @@
 <style lang="less">
     .sorts{
         height: 100%;
+        min-height: 100vh;
         /*background-color: #343536;*/
         background: url("../../../assets/theme.jpg");
         background-attachment: fixed;
+        padding-bottom: 10rem;
     }
-    .UbannerMenu_sort {position: fixed;top: 0rem;width: 100%;z-index: 101;}
+    .UbannerMenu_sort {position: fixed;top: 0rem;width: 100%;}
     /*.UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: 0;}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)*/
+    .special_bar{background-color: rgba(85,84,85, 0.5);color: rgba(85,84,85, 0.5);z-index: 999;}
 
     .banner_title{color:#fff;display:flex;justify-content: space-between;padding: 2rem 12vw 1rem 12vw;
         div{flex:1;display: flex;flex-direction: column;align-items: flex-start;text-align: left;

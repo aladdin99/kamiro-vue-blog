@@ -1,23 +1,23 @@
 <template>
     <div class="article_manage">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName">
             <el-tab-pane :label="'全部('+labelAll+')'" name="first">
                 <div class="article_banner">
-                    <el-select v-model="year_value" placeholder="年" size="small">
+                    <el-select v-model="year_value" placeholder="年" size="small" clearable>
                         <el-option
                                 v-for="item in year"
                                 :key="item.value"
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="type_value" placeholder="文章类型" size="small">
+                    <el-select v-model="type_value" placeholder="文章类型" size="small" clearable>
                         <el-option
                                 v-for="item in type"
                                 :key="item.value"
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="sort_value" placeholder="分类专栏" size="small">
+                    <el-select v-model="sort_value" placeholder="分类专栏" size="small" clearable>
                         <el-option
                                 v-for="item in sort"
                                 :key="item.value"
@@ -226,8 +226,6 @@
                 dialogVisible: false,
                 activeName: 'first',
                 year: [{
-                    value: '不限',
-                }, {
                     value: '2020',
                 }, {
                     value: '2019',
@@ -236,8 +234,6 @@
                 }],
                 year_value: '',
                 type: [{
-                    value: '不限类型',
-                }, {
                     value: '原创',
                 }, {
                     value: '转载',
@@ -245,19 +241,7 @@
                     value: '翻译',
                 }],
                 type_value: '',
-                sort: [{
-                    value: '不限',
-                }, {
-                    value: '程序人生',
-                }, {
-                    value: '前端',
-                }, {
-                    value: '后端',
-                }, {
-                    value: '数据结构与算法',
-                }, {
-                    value: '生活记录',
-                }],
+                sort: [],//分类专栏列表
                 sort_value: '',
                 keyword: '',//关键字
                 // comment_limit: 1,//1.代表评论公开 2.代表评论审核后公开
@@ -274,11 +258,24 @@
             }
         },
         methods:{
+            sortName_get(){//获取分类专栏名
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/sort_manage_get',{
+                    params: {
+                        bind: self.author,
+                    }
+                }).then(function(res){
+                    self.sort = [];
+                    res.data.forEach(item=>{
+                        self.sort.push({value:item.name});
+                    });
+                });
+            },
             //'全部'下通过条件检索文章
             searchInfo(){
                 this.showData = [];
                 //筛选时间段
-                if(this.year_value == '不限' || this.year_value == ''){
+                if(this.year_value == ''){
                     this.showData = this.getAllData;
                 }else{
                     this.getAllData.forEach(item=>{
@@ -288,7 +285,7 @@
                     });
                 }
                 //筛选文章类型
-                if(this.type_value == '不限类型' || this.type_value == ''){
+                if(this.type_value == ''){
                     this.showData = this.showData;
                 }else{
                     let type_data = [];
@@ -300,12 +297,13 @@
                     this.showData = type_data;
                 }
                 //筛选分类专栏
-                if(this.sort_value == '不限' || this.sort_value == ''){
+                // console.log(this.sort_value);
+                if(this.sort_value == ''){
                     this.showData = this.showData;
                 }else{
                     let sort_data = [];
-                    this.showData.forEach(item=>{
-                        if(item.category == this.sort_value){
+                    this.showData.forEach(item=>{//字符串数组对象要转成数组/1
+                        if(item.category[0].value == this.sort_value){
                             sort_data.push(item);
                         }
                     });
@@ -373,15 +371,10 @@
                     self.labelPublic = self.publicData.length;
                     self.labelPrivate = self.privateData.length;
                     self.labelDrafts = self.draftsData.length;
-                    console.log(self.publicData);
+                    // console.log(self.publicData);
                     // var date = self.getAllData[0].time;
                     // alert(date.split('-')[0]);
-                }).catch(function(res){
-                    console.log(res);
                 });
-            },
-            handleClick(tab, event) {
-                console.log(tab, event);
             },
             changeLimit(flag,limitValue,index,uniqueId){//flag.是在哪个列表下的(0-'全部'，1-'公开',2-'私密')  limitValue.评论权限值   index.文章位置  uniqueId.文章id
                 switch(flag){
@@ -403,15 +396,12 @@
                         uniqueId: uniqueId,
                         comment_limit: limitValue //评论权限 0.评论公开 1.审核后公开
                     }
-                }).then(function(res){
-                    console.log(res);
-                }).catch(function(res){
-                    console.log(res);
                 });
             },
         },
         mounted() {
             this.author = localStorage.getItem('email');//当前登陆id
+            this.sortName_get();
             this.searchAll();
         }
     }

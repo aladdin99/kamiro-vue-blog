@@ -6,7 +6,7 @@
         </div>
         <ul class="bannerMain" v-show="followData.length">
             <li v-for="(item,index) in followData" :key="index">
-                <router-link :to="{path:'/index/webpage',query:{userId:item.sufferId}}" class="bannerMain_left">
+                <router-link :to="{path:'/index/webpage',query:{userId:item.sufferId}}" target="_blank" class="bannerMain_left">
                     <img :src="item.sufferImg">
                     <span>{{item.sufferName}}</span>
                 </router-link>
@@ -36,7 +36,7 @@ export default {
                 }
             }).then(function(res) {
                 self.followData = res.data;
-                console.log(self.followData);
+                // console.log(self.followData);
             });
         },
         cancelFollow(item){//取消关注
@@ -60,8 +60,7 @@ export default {
                         noticerName: "",//关注者昵称
                         noticerImg: "",//关注头像者
                     }
-                }).then(function(res){
-                    console.log(res);
+                }).then(function(){
                     self.getFollow();
                 });
             }).catch(() => {

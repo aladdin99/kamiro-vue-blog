@@ -54,7 +54,7 @@
             this.content = this.$route.query.content?this.$route.query.content:'underfined';
             this.articleId = this.$route.query.articleId?this.$route.query.articleId:'underfined';
             this.userId = this.$route.query.userId?this.$route.query.userId:'underfined';
-            console.log(this.title,this.content,this.articleId,this.userId);
+            // console.log(this.title,this.content,this.articleId,this.userId);
         }
     }
 </script>

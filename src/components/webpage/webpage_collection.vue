@@ -17,9 +17,11 @@
                     </span>
                     <span>
                         <div>
-                            <span>{{item.amount}}条内容</span>
+                            <span v-show="item.amount">{{item.amount}}条内容</span>
+                            <span v-show="!item.amount">0条内容</span>
                             <el-divider direction="vertical"></el-divider>
-                            <span>{{item.followers}}人关注</span>
+                            <span v-show="item.followers">{{item.followers}}人关注</span>
+                            <span v-show="!item.followers">0人关注</span>
                         </div>
                         <div v-show="!item.following" class="follwed" @click="followClip(item)">关注</div>
                         <div v-show="item.following" class="following" @click="cancelClip(item)">取消关注</div>
@@ -42,8 +44,10 @@
                     </span>
                     <span>
                         <div>
-                            <span>{{item.sufferAmount}}条内容</span>
+                            <span v-show="item.sufferAmount">{{item.sufferAmount}}条内容</span>
+                            <span v-show="!item.sufferAmount">0条内容</span>
                             <el-divider direction="vertical"></el-divider>
+                            <span v-show="!item.sufferNum">0人关注</span>
                             <span v-show="item.sufferNum">{{item.sufferNum}}人关注</span>
                         </div>
                     </span>
@@ -113,7 +117,6 @@
                 }
             },
             clipFollow(){//Ta关注的收藏夹
-                console.log("这是创建地文件夹");
                 let self  = this;
                 this.$axios.get('http://localhost/graduation_project/blog2/src/php/webpage/clipGet',{
                     params: {

@@ -5,33 +5,34 @@
             <div>
                 <div class="sort_colum_name">
                     <span>{{collection_clip_detail.name}}</span>
-                    <span>关注</span>
+<!--                    <span>关注</span>-->
                 </div>
                 <div class="sort_colum_describe">
                     <span>{{collection_clip_detail.describe}}</span>
                 </div>
-                <div class="sort_colum_record">
-                    关注数:<span>0</span>
-                    文章数:<span>{{collection_clip_detail.essay.length}}</span>
-                    访问量:<span>null</span>
-                </div>
+<!--                <div class="sort_colum_record">-->
+<!--                    关注数:<span>0</span>-->
+<!--                    文章数:<span>0</span>-->
+<!--                    {{collection_clip_detail.essay.length}}-->
+<!--                    访问量:<span>null</span>-->
+<!--                </div>-->
             </div>
         </div>
         <div class="sort_brief">
             <div><span></span>作者介绍</div>
             <div>面朝大海,春暖花开!</div>
         </div>
-            <div class="sort_preview" v-for="(item,index) in collection_clip_detail.essay" :key="index">
-                <router-link target="_blank"  :to="{path:'/index/user/details',query:{userId:userId,articleId:item.uniqueId}}" style="text-decoration: none;">
-                    <div><span v-show="item.type=='原创'">{{item.type}}</span>{{item.title}}</div>
-                    <div>{{item.content}}</div>
-                    <div>
-                        <span>{{item.time}}</span>
-                        <span>阅读数 null</span>
-                        <span>评论数 5</span>
-                    </div>
-                </router-link>
-            </div>
+        <div class="sort_preview" v-for="(item,index) in collection_clip_detail.essay" :key="index">
+            <router-link target="_blank"  :to="{path:'/index/user/details',query:{userId:userId,articleId:item.uniqueId}}" style="text-decoration: none;">
+                <div><span v-show="item.type=='原创'">{{item.type}}</span>{{item.title}}</div>
+                <div>{{item.content}}</div>
+                <div>
+                    <span>{{item.time}}</span>
+                    <span>阅读数 null</span>
+                    <span>评论数 null</span>
+                </div>
+            </router-link>
+        </div>
     </div>
 </template>
 
@@ -49,9 +50,12 @@ export default {
 
 <style lang="less">
     .sortPreview{
+        display: flex;
+        flex-direction: column;
+        background-color: #2e2f30;
+        min-height: 68vh;
         height: 100%;
         width: 100%;
-        min-height: 100vh;
         /*background-color: #fff;*/
     }
     .sort_colum{display: flex;width: 100%;padding: 2rem;box-sizing: border-box;background-color: #2e2f30;
