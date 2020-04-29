@@ -1,18 +1,20 @@
 <template>
     <div class="catalogDetail_detail">
-        <div class="article_detail">
+        <div class="article_detail" v-if="article_data.title">
             <div class="bannera">
                 <div class="title">{{article_data.title}}</div>
                 <div class="detailInfo">
-                    <span class="autoName">{{article_data.author}}</span>
+                    <router-link :to="{path:'/index/webpage',query:{userId:userId}}">
+                        <span class="autoName">{{article_data.author}}</span>
+                    </router-link>
                     <span class="time">最后发布于{{article_data.time}}</span>
-                    <span>阅读数 10</span>
+<!--                    <span>阅读数 10</span>-->
                 </div>
             </div>
             <div class="contentArticle">
                 <div>
                     <mavon-editor
-                            style="z-index: 1000;"
+                            style="z-index: 2;"
                             class="md"
                             :value="rd_content"
                             :subfield = "false"
@@ -23,10 +25,10 @@
                             :ishljs = "true"
                     ></mavon-editor>
                 </div>
-                <div class="operate_one">
+                <div class="operate_one" v-show="MyInfo.id">
                     <span @click="point" :class="{'pinted':pointData.flag==1}">点赞 <i v-show="pointData.total">{{pointData.total}}</i></span>
                     <span @click="collected">收藏</span>
-<!--                    <span>转发</span>-->
+                    <!--                    <span>转发</span>-->
                 </div>
             </div>
         </div>
@@ -87,7 +89,7 @@
         </el-dialog>
 
         <!--评论-->
-        <div class="commentt">
+        <div class="comment_catalog" v-if="article_data.title&&MyInfo.id">
             <div style="display: flex;">
                 <div>
                     <router-link target="_blank" :to="{path:'/index/webpage',query:{userId:MyInfo.id}}" >
@@ -95,13 +97,13 @@
                     </router-link>
                 </div>
                 <div class="textarea">
-                    <textarea :placeholder="placeholder" maxlength="200" v-model="commit_conent" id="editor"
-                              @blur.prevent="onChange"></textarea>
+                <textarea :placeholder="placeholder" maxlength="200" v-model="commit_conent" id="editor"
+                          @blur.prevent="onChange"></textarea>
                 </div>
             </div>
             <div class="bottomTip">
                 <span class="tip">还能输入{{200-commit_conent.length}}个字符</span>
-                <span @click="commit">发表评论</span>
+                <span class="pushComment" @click="commit">发表评论</span>
             </div>
             <div class="commentt_box" v-for="(item,index) in comment_data" :key="index">
                 <div>
@@ -130,6 +132,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!--文章失效，找不到了-->
+        <div class="article_none" v-if="!article_data.title">
+            文章被外星人叼走啦！！！
         </div>
     </div>
 </template>
@@ -180,14 +187,11 @@
                     id: ""//收藏夹的id号（新建收藏夹时时没有,更新编辑收藏夹时才有）
                 },{
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
-                }).then(function(res){
-                    console.log(res);
+                }).then(function(){
                     self.radioFlag = false;
                     self.input_title = "";
                     self.textarea_content= "";
-                    self.get_collection();
-                }).catch(function(res){
-                    console.log(res);
+                    // self.get_collection();
                 });
             },
             collected(){//点击弹窗收藏
@@ -218,7 +222,7 @@
                 this.$delete(item,'amount');//先删除
                 this.$set(item, 'amount', amount);//后设置
 
-                console.log(statusFlag,amount,self.userId,self.articleId);
+                // console.log(statusFlag,amount,self.userId,self.articleId);
                 this.$axios.post('http://localhost/graduation_project/blog2/src/php/user/saveCollection',{
                     statusFlag: statusFlag,// 1.收藏 2.取消收藏
                     pathId: item.id,//收录者收藏夹
@@ -244,31 +248,31 @@
                     self.collection_detail = res.data;
                 });
             },
-            get_collection(){//获取收藏夹信息（通过比对收藏夹表与收录表赋予收藏夹新字段status标识 用于判断该文章是否被收录了）
-                let self = this;
-                this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/getCollectionClip',{
-                    params: {
-                        bind: self.MyId,//当前登陆者id
-                    }
-                }).then(function(res){
-                    self.collection_clip = res.data;
-                    console.log(self.collection_detail);
-                    self.collection_clip.forEach(item=>{//遍历所有的收藏夹
-                        let status = false;
-                        item.status = status;
-                        if(self.collection_detail){
-                            for(let i=0;i<self.collection_detail.length;i++){//遍历该用户对当前文章的收录情况
-                                console.log(self.collection_detail[i].pathId,item.id);
-                                if(self.collection_detail[i].pathId==item.id){
-                                    item.status = true;
-                                    break;
-                                }
-                            }
-                        }
-                    });
-                    console.log(self.collection_clip);
-                });
-            },
+            // get_collection(){//获取收藏夹信息（通过比对收藏夹表与收录表赋予收藏夹新字段status标识 用于判断该文章是否被收录了）
+            //     let self = this;
+            //     this.$axios.get('http://localhost/graduation_project/blog2/src/php/user/getCollectionClip',{
+            //         params: {
+            //             bind: self.MyId,//当前登陆者id
+            //         }
+            //     }).then(function(res){
+            //         self.collection_clip = res.data;
+            //         console.log(self.collection_detail);
+            //         self.collection_clip.forEach(item=>{//遍历所有的收藏夹
+            //             let status = false;
+            //             item.status = status;
+            //             if(self.collection_detail){
+            //                 for(let i=0;i<self.collection_detail.length;i++){//遍历该用户对当前文章的收录情况
+            //                     console.log(self.collection_detail[i].pathId,item.id);
+            //                     if(self.collection_detail[i].pathId==item.id){
+            //                         item.status = true;
+            //                         break;
+            //                     }
+            //                 }
+            //             }
+            //         });
+            //         console.log(self.collection_clip);
+            //     });
+            // },
             point(){//点赞事件
                 // console.log(this.pointData.total);
                 if(this.pointData.flag!=2){
@@ -332,7 +336,7 @@
             },
             commit(){//提交评论
                 let self = this;
-                console.log(self.article_data.commentLimit);
+                // console.log(self.article_data.commentLimit);
                 if(!self.commit_conent){
                     alert("请填写评论内容！");
                     return;
@@ -390,7 +394,7 @@
             this.get_article();
             this.point();
             this.getCollection();
-            this.get_collection();
+            // this.get_collection();
         }
     }
 </script>
@@ -400,8 +404,13 @@
         height: 100%;
         width: 100%;
         min-height: 100vh;
+        z-index: 99999;
         /*background-color: #FDE0EC;*/
         /*padding: 4rem 2rem 0 2rem;*/
+        .article_none{
+            display: flex;width: 100%;min-height: 90vh;align-items: center;justify-content: center;
+            color: #99a9bf;font-size: 3rem;user-select:none;
+        }
 
         .dialogCollection{padding: 0;margin: 0;
             .title{border-bottom: 1px solid #2e2f30;padding: 0 0 .5rem 0;}
@@ -455,7 +464,7 @@
             }
         }
 
-        .commentt{margin: 1rem 0;background-color: #fff;padding: 2rem;
+        .comment_catalog{margin: 1rem 0;background-color: #fff;padding: 2rem;z-index: 1000;
             div:nth-child(1){flex:1;position: relative;
                 img{display: inline-block;width: 3rem;height: 3rem;border-radius: 50%;position: absolute;right: .5rem;}
             }
@@ -466,11 +475,11 @@
             }
             .bottomTip{margin: .5rem 0;display: inline-block;display: flex;align-items: center;justify-content: flex-end;border-radius: .5rem;
                 .tip{font-size: 1.2rem;color: #999;margin-right: 2rem;}
-                span:nth-child(2){display: inline-block;width: 8rem;height: 3rem;text-align: center;line-height: 3rem;border-radius:.25rem;background-color: #CA0C16;color: #fff;cursor: pointer;}
+                .pushComment{display: inline-block;width: 8rem;height: 3rem;text-align: center;line-height: 3rem;border-radius:.25rem;background-color: #CA0C16;color: #fff;cursor: pointer;}
             }
         }
 
-        .commentt_box{padding: 1rem 0;border-bottom: 1px dashed #999;
+        .commentt_box{padding: 1rem 0;border-bottom: 1px dashed #999;z-index:1000;
             img{display: inline-block; width: 3rem;height: 3rem;border-radius: 50%;z-index: 100;cursor: pointer;}
             &>div:nth-child(1){display: flex;align-items: center;
                 a{display: flex;align-items: center;}

@@ -2,12 +2,12 @@
 <template>
     <div class="user">
         <!-- Top navigation bar-->
-        <div :class="{'UbannerMenu':bannerScroll}">
+        <div :class="{'UbannerMenu':bannerScroll}" class="special_bar">
             <navigationBar></navigationBar>
         </div>
-        <el-container class="mainbody">
+        <el-container class="mainbody_user">
             <!--Left user information bar-->
-            <el-aside width="30rem" style="position: relative;">
+            <el-aside width="30rem" class="leftAside">
                 <div>
                     <userLeftBar
                             :class="{'UleftMenu':leftScroll}"
@@ -173,15 +173,21 @@ export default {
 
 <style lang="less">
     .user{
-        height: 100vh;
+        height: 100%;
+        min-height: 100vh;
         /*background-color: #343536;*/
         background: url("../../../assets/theme.jpg");
+        background-size: 100% 100%;
         background-attachment: fixed;
     }
-    .UbannerMenu {position: fixed;top: -5rem;width: 100%;z-index: 101;}
+    .special_bar{background-color: rgba(85,84,85, 0.5);color: rgba(85,84,85, 0.5);z-index: 999;}
+    .UbannerMenu {position: fixed;top: -5rem;width: 100%;}
     /*.UleftMenu {position: fixed;z-index: 100;width:30rem;bottom: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)*/
 
-    .mainbody{padding: 0 12vw;margin-top: 1.5rem;
-        .mainstay{padding: 0 2rem;text-align: left;height: 100%;}
+    .mainbody_user{padding: 0 12vw 0 0;margin-top: 1.5rem;
+        .leftAside{position: relative;margin-right: 0vw; opacity:0;transition: all 2.5s;
+            &:hover{opacity:1;transition: all 2.5s;}
+        }
+        .mainstay{padding: 0 2rem;text-align: left;height: 100%;transition: all 2.5s;}
     }
 </style>

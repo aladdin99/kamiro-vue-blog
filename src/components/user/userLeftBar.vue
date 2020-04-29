@@ -65,7 +65,7 @@
                             <img :src="item.picture">
                         </span>
                         <span class="colum">{{item.name}}</span>
-                        <span>{{item.essay.length}}</span>
+<!--                        <span>{{item.essay.length}}</span>-->
 <!--                    </router-link>-->
                 </li>
 <!--                <div class="develop">展开</div>-->

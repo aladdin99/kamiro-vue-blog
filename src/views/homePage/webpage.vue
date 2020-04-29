@@ -1,6 +1,6 @@
 <template>
     <div class="webpage">
-        <div :class="{'UbannerMenu':bannerScroll}" style="background-color: #fff;">
+        <div :class="{'UbannerMenu':bannerScroll}" class="special_bar">
             <navigationBar></navigationBar>
         </div>
         <el-container class="mainbody">
@@ -14,9 +14,9 @@
                         <div class="part2">
                             <div>
                                 <div>{{base_data.nickName}}</div>
-                                <div>
-                                    <span>关注</span>
-                                    <span>私信</span>
+                                <div v-show="currentId">
+                                    <span class="following" @click="following" :class="{'followed':followedFlag}">关注</span>
+                                    <span @click="privateLeter">私信</span>
                                 </div>
                             </div>
                             <div style="width: 70%;margin: 1rem 0;">{{base_data.introduction}}</div>
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="article_content">{{item.content}}</div>
                                     <div class="article_record">
-                                        <span>49次阅读</span>
+<!--                                        <span>49次阅读</span>-->
                                         <span>{{item.time}}</span>
                                     </div>
                                 </div>
@@ -45,12 +45,12 @@
 <!--                                    <span style="padding: .8rem 2rem;color: #ca0c16;border: 1px solid #ca0c16;border-radius: .5rem;">查看更多</span>-->
 <!--                                </div>-->
                             </el-tab-pane>
-                            <el-tab-pane :label="'收藏 '+collection_data.length" name="second">
-                                <webpageCollection ref="wepage_clip" :userId="userId"></webpageCollection>
-                            </el-tab-pane>
-                            <el-tab-pane :label="'专栏 '+sort_colum_data.length" name="third">
-                                <webpageSort ref="wepage_sort" :userId="userId"></webpageSort>
-                            </el-tab-pane>
+<!--                            <el-tab-pane :label="'收藏 '+collection_data.length" name="second">-->
+<!--                                <webpageCollection ref="wepage_clip" :userId="userId"></webpageCollection>-->
+<!--                            </el-tab-pane>-->
+<!--                            <el-tab-pane :label="'专栏 '+sort_colum_data.length" name="third">-->
+<!--                                <webpageSort ref="wepage_sort" :userId="userId"></webpageSort>-->
+<!--                            </el-tab-pane>-->
                             <el-tab-pane label="留言" name="fourth">
                                 <webpageMsg ref="wepage_msg" :userId="userId"></webpageMsg>
 <!--                                <div style="display: flex;align-items: center;justify-content: center;"><h1>欢迎留言</h1></div>-->
@@ -81,57 +81,58 @@
                 </div>
             </el-main>
             <!--Right user information bar -->
-            <el-aside width="30rem" style="position: relative;box-sizing: border-box;">
-                    <div class="right_record">
-                        <div class="medal">
-                            <div>
-                                <span>ALADDIN身份</span>
-                            </div>
-                            <div>
-                                <div class="medal_item" v-for="(item,index) in gained" :key="index" v-show="index<3">
-                                    <span><img :src="item.img" style="display: inline-block;width: 100%;height: 100%;"></span>
-                                    <span>{{item.name}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="focus" style="background-color: #fff;">
-                            <span>
-                                <div>2</div>
-                                <div>他的粉丝</div>
-                            </span>
-                            <span>
-                                <div>3</div>
-                                <div>他的关注</div>
-                            </span>
-                        </div>
-                        <div class="medal">
-                            <div>
-                                <span>勋章</span>
-                                <span>我的勋章</span>
-                            </div>
-                            <div>
-                                <div class="medal_item" v-for="(item,index) in gained" :key="index">
-                                    <span><img :src="item.img" style="display: inline-block;width: 100%;height: 100%;"></span>
-                                    <span>{{item.name}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </el-aside>
+<!--            <el-aside width="30rem" style="position: relative;box-sizing: border-box;">-->
+<!--                    <div class="right_record">-->
+<!--                        <div class="medal">-->
+<!--                            <div>-->
+<!--                                <span>浮生博客_身份</span>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="medal_item" v-for="(item,index) in gained" :key="index" v-show="index<1">-->
+<!--                                    <span><img :src="item.img" style="display: inline-block;width: 100%;height: 100%;"></span>-->
+<!--                                    <span>{{item.name}}</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="focus" style="background-color: #fff;">-->
+<!--                            <span>-->
+<!--                                <div>{{startData.length}}</div>-->
+<!--                                <div>他的粉丝</div>-->
+<!--                            </span>-->
+<!--                            <span>-->
+<!--                                <div>{{followData.length}}</div>-->
+<!--                                <div>他的关注</div>-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                        <div class="medal">-->
+<!--                            <div>-->
+<!--                                <span>勋章</span>-->
+<!--                                <span>我的勋章</span>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="medal_item" v-for="(item,index) in gained" :key="index">-->
+<!--                                    <span><img :src="item.img" style="display: inline-block;width: 100%;height: 100%;"></span>-->
+<!--                                    <span>{{item.name}}</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--            </el-aside>-->
         </el-container>
     </div>
 </template>
 
 <script>
     import navigationBar from "components/navigationBar.vue";
-    import webpageCollection from "components/webpage/webpage_collection.vue";
-    import webpageSort from "components/webpage/webpage_sort.vue";
+    // import webpageCollection from "components/webpage/webpage_collection.vue";
+    // import webpageSort from "components/webpage/webpage_sort.vue";
     import webpageMsg from "components/webpage/webpage_leaveMsg.vue";
     import none from "assets/none.jpg";//1.引入图片地址
     export default {
         name: "webpage",
         components: {
-            navigationBar,webpageCollection,webpageSort,webpageMsg
+            // webpageCollection,webpageSort,
+            navigationBar,webpageMsg
         },
         data(){
             return{
@@ -162,25 +163,78 @@
                 collection_data: "",//收藏夹
                 sort_colum_data: [],//专栏
                 activeCollectName: 'first',//默认选中的收藏夹为第一个
+                followedFlag: false,//默认为非关注状态
+                startData: [],//粉丝数据
+                followData: [],//关注的数据
+                currentId: localStorage.getItem('email')//当前登录用户
             }
         },
         methods: {
+            following(){//关注/取消关注
+                // alert("我正在看着你看着你~");
+                let self = this;
+
+                this.$axios.post('http://localhost/graduation_project/blog2/src/php/webpage/followingStatus',{
+                    status: self.followedFlag?2:1,//1.关注 2.取消关注
+                    sufferId: self.userId,//当前空间用户id
+                    sufferName: self.base_data.nickName,//当前空间用户昵称
+                    sufferImg: self.base_data.avatarUrl,//当前空间用户头像
+                    noticer: localStorage.getItem('email'),//关注者(当前登录者)
+                    noticerName: localStorage.getItem('nickName'),//关注者(当前登录者昵称)
+                    noticerImg: localStorage.getItem('imageUrl'),//关注者(当前登录者头像)
+                },{
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'} //加上这个
+                }).then(function(){
+                    self.getfollow();
+                });
+            },
+            getStar(){//获取关注数据或者粉丝数据
+                let self = this;
+                this.startData = [];
+                this.followData = [];
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/webpage/getStar',{
+                    params: {
+                        sufferId: self.userId//当前空间用户
+                    }
+                }).then(function(res){
+                    if(res.data){
+                        res.data.forEach(item=>{
+                            if(item.sufferId==self.userId){//粉丝数据
+                                self.startData.push(item);
+                            }else if(item.noticer==self.userId){
+                                self.followData.push(item);
+                            }
+                        })
+                    }
+                });
+            },
+            privateLeter(){//私信
+                alert("谢谢你这么可爱还要私信我~");
+            },
+            getfollow(){//检验是否已关注
+                let self = this;
+                this.$axios.get('http://localhost/graduation_project/blog2/src/php/webpage/followingCheck',{
+                    params: {
+                        noticer: localStorage.getItem('email'),//关注者(当前登录者)
+                        sufferId: self.userId//当前空间用户
+                    }
+                }).then(function(res){
+                    self.followedFlag = (res.data==0)?false:true;
+                });
+            },
             handleClick(tab) {
                 switch (parseInt(tab.index)) {
-                    case 0:
-                        console.log("博客");
+                    case 0://博客
                         break;
-                    case 1:
-                        console.log("收藏");
-                        this.$refs.wepage_clip.init();
-                        break;
-                    case 2:
-                        console.log("专栏");
-                        break;
-                    case 3:
+                    case 1://留言
                         this.$refs.wepage_msg.init();
-                        console.log("留言");
+
                         break;
+                    // case 2://专栏
+                    //     break;
+                    // case 3://收藏
+                    //     this.$refs.wepage_clip.init();
+                    //     break;
                     default:
                         break;
                 }
@@ -192,11 +246,13 @@
                         id: self.userId//账户id
                     }
                 }).then(function(res){
-                    let article = res.data;
-                    article.forEach(item=>{
-                        item.content = self.getSimpleText(item.content);//文章预览页面.只展示纯文本!
-                    });
-                    self.article_data = article;
+                    if(res.data){
+                        let article = res.data;
+                        article.forEach(item=>{
+                            item.content = self.getSimpleText(item.content);//文章预览页面.只展示纯文本!
+                        });
+                        self.article_data = article;
+                    }
                 });
             },
             getSimpleText(html){//富文本中提取纯文本(删掉所有的样式和图片,只保留纯文本和标点符号)
@@ -247,6 +303,8 @@
                 this.get_base_info();
                 this.get_collection();
                 this.get_sort_colum();
+                this.getStar();
+                this.getfollow();
             }
         },
         mounted() {
@@ -254,6 +312,11 @@
             this.activeName = this.$route.query.activeName?this.$route.query.activeName:'first';
             this.activeCollectName = this.$route.query.activeCollectName?this.$route.query.activeCollectName:'first';
             this.restart();
+        },
+        watch: {//监听浏览器地址栏变化
+            $route(){
+                this.$router.go(0);
+            }
         }
     }
 </script>
@@ -266,9 +329,10 @@
         background: url("../../assets/theme.jpg");
         background-attachment: fixed;
     }
-    .UbannerMenu {position: fixed;top: 0;width: 100%;z-index: 101;}
+    .special_bar{background-color: rgba(85,84,85, 0.5);color: rgba(85,84,85, 0.5);z-index: 999;}
+    .UbannerMenu {position: fixed;top: 0;width: 100%;}
     .mainbody{padding: 0 12vw;margin-top: 1.5rem;
-        .mainstay{text-align: left;height: 100%;color: #42b983;display: flex;}
+        .mainstay{text-align: left;height: 100%;color: #2C3E50;display: flex;}
     }
 
     .none_sort{display: flex;align-items: center;justify-content: center;padding: 2rem 0;flex-direction: column;
@@ -284,11 +348,13 @@
             &>div{flex: 1;justify-content: space-between;display: flex;
                 &>div:nth-child(1){font-size: 2.6rem;color: #4d4d4d;}
                 &>div:nth-child(2) {
-                    span{display: inline-block; padding: .5rem 1.5rem;border: 1px solid #e8eaed;color: #ca0c16;border-radius: .5rem;cursor: pointer;}
+                    span{display: inline-block; padding: .5rem 1.5rem;border-radius: .5rem;cursor: pointer;border: 1px solid #e8eaed;color: #ca0c16;}
                     span:nth-child(1){margin: 0 1rem 0 0;}
                     span:nth-child(1){margin: 0 2rem 0 0;}
                 }
             }
+            .following{border: 1px solid #e8eaed;color: #ca0c16;}
+            .followed{color: #fff!important;background-color: #ca0c16;z-index: 100;}
             &>div:nth-child(2){flex: 1;color: #999;font-size: 1.4rem;}
         }
         .blogInfo{background-color: #fff;margin-top: 1rem;}
@@ -326,12 +392,12 @@
 
     .right_record{display: inline-block;width: 30rem;box-sizing: border-box;
         .focus{width:28rem;display: flex;justify-content: center;align-items: center;text-align: center;background-color: #177cb0;
-            box-sizing: border-box;padding: 2rem 0;margin: 0rem 0rem 1rem 1rem;
+            box-sizing: border-box;padding: 2rem 0;margin: 0rem 0rem 0rem 1rem;border-bottom: 1px solid #d2d4d7;
             span{flex:1;}
             span:nth-child(2){border-left: 1px solid red;}
         }
         .medal{width:28rem;background-color: #fff;display: flex;justify-content: center;align-items: center;flex-direction: column;
-            text-align: center;box-sizing: border-box;padding: 1rem .5rem;margin: 0rem 0rem 1rem 1rem;
+            text-align: center;box-sizing: border-box;padding: 1rem .5rem;margin: 0rem 0rem 0rem 1rem;
             &>div:nth-child(1){display: flex;justify-content: space-between;width: 100%;padding: 0 .5rem;box-sizing: border-box;}
             &>div:nth-child(2){display: flex;width: 100%;flex-wrap:wrap;}
             .medal_item{width: 32%;height: 10rem;display: flex;flex-direction: column;justify-content: center;align-items: center;box-sizing: border-box;flex-wrap:wrap;

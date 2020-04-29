@@ -3,12 +3,12 @@
         <div class="bannerTop">
             <span v-show="changeFlag">我的收藏夹</span>
             <span @click="dialogForm(true)" v-show="changeFlag"><i class="el-icon-plus"></i>新建收藏夹</span>
-            <div style="cursor: pointer;" @click="done(true)" v-show="!changeFlag"><i class="el-icon-arrow-left" style="margin-right: .5rem;font-weight: bold;"></i>返回我的收藏夹列表</div>
+            <div style="cursor: pointer;" @click="done(true)" v-show="!changeFlag"><i class="el-icon-arrow-left" style="margin-right: .1rem;font-weight: bold;"></i>返回我的收藏夹列表</div>
         </div>
         <ul class="collect" v-show="markFlag" v-if="changeFlag">
             <li v-for="item in favorites" :key="item.id">
                 <div class="collectionName">
-                    <span><i class="el-icon-lock" v-show="item.power==2" style="margin-right: .5rem;font-weight: bold;"></i>{{item.title}}</span>
+                    <span @click="done(false,item.title,item.describe,item.power,item.id,item.amount)"><i class="el-icon-lock" v-show="item.power==2" style="margin-right: .5rem;font-weight: bold;"></i>{{item.title}}</span>
                     <div>
                         <span>{{item.amount}}条内容</span>
                         <span>0人关注</span>
@@ -69,7 +69,7 @@
             </div>
             <div class="collect-article" v-for="(item,index) in collectArticles" :key="index" v-show="collectArticles.length">
                 <div class="collect-article-title">
-                    <router-link :to="{path:'/index/user/details',query:{userId:item.authorId,articleId:item.articleId}}"><span>{{item.title}}</span></router-link>
+                    <router-link target="_blank" :to="{path:'/index/user/details',query:{userId:item.authorId,articleId:item.articleId}}"><span>{{item.title}}</span></router-link>
                     <span @click="delCollect(item.pathId,item.bindId,item.articleId,index)">取消收藏</span>
                 </div>
 <!--                <div class="collect-article-describe">简介：1、用处vue的脚手架弄成功后(用命令 vue init webpack my-project)，是JavaScript</div>-->
@@ -238,11 +238,13 @@
 
 <style lang="less">
     .collectionPik{display: inline-block;width: 65vw;padding-right: 5rem;padding-left:2em;margin-bottom: 4rem;min-height: 68rem;
-        .bannerTop{font-size: 1.6rem;color: #3d3d3d;line-height: 5rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;display: flex;justify-content: space-between;
-            span:nth-child(1){border-bottom: .2rem solid #ca0c16;}
+        .bannerTop{
+            font-size: 1.6rem;color: #3d3d3d;line-height: 5rem;border-bottom: 1px solid #e0e0e0;font-weight: bold;
+            display: flex;justify-content: space-between;padding-right: 2rem;
+            span:nth-child(1){border-bottom: .2rem solid #ca0c16;cursor: pointer;}
             span:nth-child(2){color: #6b6b6b;font-weight: 400;cursor: pointer; i{padding-right: .5rem;}}
         }
-        .collect{border-bottom: 1px solid #e0e0e0;list-style: none;
+        .collect{border-bottom: 1px solid #e0e0e0;list-style: none;padding-right: 2rem;
             li{display: flex;height: 6rem;justify-content: space-between;align-items: center;font-size: 1.4rem;color: #3d3d3d;font-weight: bold;cursor: pointer;border-bottom: 1px solid #e0e0e0;
                 .collectionName{display: flex;height: 100%;align-items: center;
                     &>span{display: inline-block;min-width: 15rem;text-align: left;}
@@ -265,8 +267,8 @@
         }
         .collect-detail{display: flex;flex-direction: column;align-items: flex-start;margin-top: 1.5rem;border-bottom: 1px solid #e0e0e0;;
             &>div{line-height: 3.5rem;
-                &:nth-child(1){font-weight: bold;font-size: 1.6rem;
-                    i{margin-right: .5rem;font-weight: bold;font-size: 1.6rem;}
+                &:nth-child(1){font-weight: bold;
+                    i{margin-right: .5rem;font-weight: bold;}
                 }
                 &:nth-child(2){color: #6B6B6B;font-weight: 400;letter-spacing:1px;}
                 &:nth-child(3){color: #999;

@@ -117,7 +117,6 @@
                 }
             },
             clipFollow(){//Ta关注的收藏夹
-                console.log("这是创建地文件夹");
                 let self  = this;
                 this.$axios.get('http://localhost/graduation_project/blog2/src/php/webpage/clipGet',{
                     params: {

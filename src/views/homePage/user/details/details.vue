@@ -2,22 +2,21 @@
 <template>
     <div class="user_detail">
         <!-- Top navigation bar-->
-        <div :class="{'UbannerMenu':bannerScroll}" style="z-index: 9999;">
+        <div class="special_bar" style="z-index: 100;">
             <navigationBar></navigationBar>
         </div>
         <el-container class="mainbody">
             <!--Left user information bar-->
-            <el-aside width="30rem" style="position: relative;" :class="{'leftScroll':leftScroll}">
-                <userLeftBar
-                        :class="{'UleftMenu_detail':leftScroll}"
-                        :userId="userId"
-                        :originalNum="original.length"
-                        :lastest="lastest"
-                        :leftScroll="leftScroll"
-                        :collection_clip="collection_clip"
-                ></userLeftBar>
-                <span ref="searchBar"></span>
-            </el-aside>
+<!--            <el-aside width="30rem" style="position: relative;" :class="{'leftScroll':leftScroll}">-->
+<!--                <userLeftBar-->
+<!--                        :userId="userId"-->
+<!--                        :originalNum="original.length"-->
+<!--                        :lastest="lastest"-->
+<!--                        :leftScroll="leftScroll"-->
+<!--                        :collection_clip="collection_clip"-->
+<!--                ></userLeftBar>-->
+<!--                <span ref="searchBar"></span>-->
+<!--            </el-aside>-->
             <!--Middle content preview section-->
             <el-main class="mainstay">
                 <catalogDetail></catalogDetail>
@@ -28,12 +27,12 @@
 
 <script>
     import navigationBar from "components/navigationBar.vue";
-    import userLeftBar from "components/user/userLeftBar.vue";
+    // import userLeftBar from "components/user/userLeftBar.vue";
     import catalogDetail from "components/user/catalogDetail.vue";
     export default {
         name: "user",
         components: {
-            navigationBar,userLeftBar,catalogDetail
+            navigationBar,catalogDetail
         },
         data(){
             return{
@@ -49,15 +48,15 @@
         methods:{
             getScrollPosition(){//监听banner栏坐标
                 let top = document.documentElement.scrollTop || document.body.scrollTop;
-                let left = document.documentElement.scrollLeft || document.body.scrollLeft;
-                if(top){//获取右边栏底部标签'searchBar'距顶部的距离
-                    var searchBar = this.$refs.searchBar.getBoundingClientRect().top;
-                }
-                let currentHeigh = window.innerHeight;//当前内容高度  1235///680
+                // let left = document.documentElement.scrollLeft || document.body.scrollLeft;
+                // if(top){//获取右边栏底部标签'searchBar'距顶部的距离
+                //     var searchBar = this.$refs.searchBar.getBoundingClientRect().top;
+                // }
+                // let currentHeigh = window.innerHeight;//当前内容高度  1235///680
                 this.bannerScroll = (top>45)?true:false;
-                this.leftScroll = (searchBar<currentHeigh)?true:false;
-                console.log(this.leftScroll);
-                return {top,left}
+                // this.leftScroll = (searchBar<currentHeigh)?true:false;
+                // console.log(this.bannerScroll);
+                return {top}
             },
             getArticle(){//获取文章信息
                 let self = this;
@@ -82,7 +81,7 @@
                             self.lastest.push(item);//最新文章
                         }
                     });
-                    console.log(self.lastest);
+                    // console.log(self.lastest);
                 });
             },
             compare(property,flag){//根据数组中的某个元素的值进行排序;property传入的数组 flag：true正序 false倒序
@@ -100,36 +99,36 @@
                 time_out = parseInt(time_out);
                 return time_out;
             },
-            get_collection_clip(){
-                let self = this;
-                this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/sort_manage_get',{
-                    params: {
-                        bind: self.userId,//账户id
-                    }
-                }).then(function(res){
-                    self.collection_clip = res.data;
-                    self.alldata.forEach(item=>{
-                        if(item.category[0]){
-                            let ins = item.category[0].id;
-                            self.collection_clip.forEach(info=>{
-                                if(!info.essay){//如果不存在该字段 那么就添加
-                                    info.essay = [];
-                                }
-                                if(ins == info.id) {
-                                    info.essay.push(item);
-                                }
-                            });
-                        }
-                    });
-                });
-            }
+            // get_collection_clip(){
+            //     let self = this;
+            //     this.$axios.get('http://localhost/graduation_project/blog2/src/php/manage/sort_manage_get',{
+            //         params: {
+            //             bind: self.userId,//账户id
+            //         }
+            //     }).then(function(res){
+            //         self.collection_clip = res.data;
+            //         self.alldata.forEach(item=>{
+            //             if(item.category[0]){
+            //                 let ins = item.category[0].id;
+            //                 self.collection_clip.forEach(info=>{
+            //                     if(!info.essay){//如果不存在该字段 那么就添加
+            //                         info.essay = [];
+            //                     }
+            //                     if(ins == info.id) {
+            //                         info.essay.push(item);
+            //                     }
+            //                 });
+            //             }
+            //         });
+            //     });
+            // }
         },
         mounted() {
             //监听banner栏坐标
             window.addEventListener('scroll',this.getScrollPosition,false);
             this.userId = this.$route.query.userId;
             this.getArticle();
-            this.get_collection_clip();
+            // this.get_collection_clip();
         },
         destroyed() {
             //监听banner栏坐标(摧毁)
@@ -147,8 +146,9 @@
         background-attachment:fixed;//固定背景图位置
         /*background-color: rgba(0,0,0,.3);*/
     }
+    .special_bar{background-color: rgba(85,84,85, 0.5);color: rgba(85,84,85, 0.5);}
     .user_detail{
-        .UbannerMenu {position: fixed;top:-5rem;width: 100%;z-index: 10000001;}
+        .UbannerMenu {position: fixed;top: 0!important;width: 100%;}
         .UleftMenu_detail {position: fixed;z-index: 100;width:30rem;top: calc(0% + 6rem);}//上滑超出直接将左侧组件置bottom为零(无需计算超出多少高度)
 
         .mainbody{padding: 0 12vw;margin-top: 1.5rem;
