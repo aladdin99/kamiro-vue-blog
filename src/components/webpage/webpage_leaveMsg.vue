@@ -21,7 +21,7 @@
                 <div class="msg_read_content">
                     <div>
                         <span @click="goTo(item.msger)">{{item.msgName}}__{{item.msger}}</span>
-                        <span>第{{index+1}}楼</span>
+                        <span>第{{msgData.length-index}}楼</span>
                     </div>
                     <div>{{item.msgContent}}</div>
                     <div>{{item.msgTime}}</div>
@@ -54,12 +54,10 @@
                 });
                 window.open(routeUrl.href, '_blank');
             },
-            init(){//初始化
-                console.log('留言模板');
+            init(){//初始化 留言模板
                 this.currentObj.msger = localStorage.getItem('email');//当前登陆id
                 this.currentObj.msgImg = localStorage.getItem('imageUrl');//当前登陆头像
                 this.currentObj.msgName = localStorage.getItem('nickName');//当前登陆昵称
-                console.log(this.currentObj);
                 this.msgPull();
             },
             onChange(){//失去光标事件
@@ -98,9 +96,10 @@
                     }
                 }).then(function(res){
                     self.msgData = res.data;
+                    self.msgData.reverse();
                 });
             }
-        }
+        },
     };
 </script>
 

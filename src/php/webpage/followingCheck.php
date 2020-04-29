@@ -5,8 +5,9 @@ header('Access-Control-Allow-Origin:*');  // 解决跨域问题
 // 用于返回数据
 $return = array();
 $data = array();
-//接受前端数据
-$id = $_GET['id'];//邮箱账号
+//接受前端数据status
+$noticer = $_GET['noticer'];//关注者(当前登录者)
+$sufferId = $_GET['sufferId'];//当前空间用户
 
 // 包含数据库配置信息
 include_once('../config.php');
@@ -21,32 +22,29 @@ if ($conn->connect_error) {
 }
 
 // 3、查询数据
-$sql_search = "SELECT * FROM `article`  WHERE `related` = '$id'";
+$sql_search = "SELECT * FROM `star`  WHERE `sufferId` = '$sufferId' AND `noticer` = '$noticer'";
 
 //转换库中数据
 $result = $conn->query($sql_search);
 
-$back = array();
-
 if($result->num_rows > 0){
-    $num = 0;
     // 输出数据 fetch_assoc，遍历表中的每一行数据
     while($row = $result->fetch_assoc()) {
-        $num++;
-        if($num>4) break;//获取10篇文章的数量
         $tmp = array(); // 临时数组整合信息
-        $tmp['uniqueId'] = $row['uniqueId'];
-        $tmp['title'] = $row['title'];
-        $tmp['content'] = $row['content'];
-        $tmp['time'] = $row['time'];
+        $tmp['noticer'] = $row['noticer'];
+        $tmp['sufferId'] = $row['sufferId'];
+        $tmp['sufferName'] = $row['sufferName'];
         $data[] = $tmp; // 自增
     }
     $return[] = $data;
+    print_r(json_encode($return[0])); //JSON_UNESCAPED_UNICODE防止中文乱码
 } else {
-    $return[0] = 0;
+    echo $return[] = 0;
 }
 //$get = json_encode($data[0]['region'],JSON_UNESCAPED_UNICODE);
-print_r(json_encode($return[0])); //JSON_UNESCAPED_UNICODE防止中文乱码
+
 //print_r(json_decode($region,true)); 解码（取数据库）
 
+// 5、关闭数据库
+$conn->close();
 ?>

@@ -27,7 +27,7 @@ if($status==1){//1.获取自己所有文章的评论
 }else if($status==2){//2.获取我发布的评论
     $sql_search = "SELECT * FROM `comment`  WHERE `userId` = '$id'";
 }else if($status==3){//3.待我审核的评论
-    $sql_search = "SELECT * FROM `comment`  WHERE `userId` = '$id' AND `showFlag` = 1";
+    $sql_search = "SELECT * FROM `comment`  WHERE `authorId` = '$id' AND `showFlag` = 1";
 }
 
 

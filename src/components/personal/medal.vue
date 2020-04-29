@@ -23,7 +23,7 @@
                         <div>
                             <span>
                                 <span>{{item.name}}</span>
-                                <span style="padding: .5rem 1.5rem;border:1px solid #d74850;position:absolute;right:.5rem;bottom:-.5rem;border-radius: .2rem;color: #ca0c16;font-weight:400;cursor:pointer;">立即激活</span>
+                                <span class="activeNow" @click="activate">立即激活</span>
                             </span>
                             <span>{{item.content}}</span>
                         </div>
@@ -90,15 +90,18 @@
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event);
+            },
+            activate(){//立即激活
+                alert("该功能暂未开放，请您稍后再试噢~~~");
             }
         }
     };
 </script>
 
 <style lang="less">
-    .medal{display: inline-block;width: 65vw;padding-right: 5rem;padding-left:2em;
-        .gained{display:flex;justify-content:space-between;flex-wrap:wrap;
-            .gained_item{width:48%;height:20rem;border:1px solid #f5f5f5;display:flex;background-color:#fff;transition:transform .2s,box-shadow .2s;
+    .medal{display: inline-block;width: 65vw;padding: 0 5rem 5rem 5rem;min-height: 68rem;box-sizing: border-box;
+        .gained{display:flex;justify-content:space-between;flex-wrap:wrap;padding-right: 2rem;
+            .gained_item{width:calc(50% - 2px);height:20rem;border:1px solid #f5f5f5;display:flex;background-color:#fff;transition:transform .2s,box-shadow .2s;
                 &:hover{transform: translate3d(0,-2px,0);box-shadow: 0 1.5rem 3rem rgba(0,0,0,.1);transition:transform .2s,box-shadow .2s;}
                 div:nth-child(1){flex:3;display:flex;align-items:center;justify-content:center;
                     img{width:9rem;height:9rem;}
@@ -106,6 +109,11 @@
                 div:nth-child(2){flex:5;display:flex;flex-direction:column;box-sizing:border-box;text-align:left;
                     &>span:nth-child(1){margin-top:6rem;box-sizing:border-box;padding: 0 2rem;color: #3d3d3d;font-weight:700;display:flex;position:relative;}
                     &>span:nth-child(2){margin-top:2rem;box-sizing:border-box;padding: 0 2rem;color: #666;}
+                }
+                .activeNow{
+                    padding: .5rem 1.5rem;border:1px solid #d74850;position:absolute;right:.5rem;bottom:-.5rem;border-radius: .2rem;
+                    color: #ca0c16;font-weight:400;cursor:pointer;transition: all .5s;
+                    &:hover{color: #fff;background-color: #d74850;transition: all .5s;}
                 }
             }
         }

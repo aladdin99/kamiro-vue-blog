@@ -1,85 +1,87 @@
 <template>
     <div class="mavon">
-        <div class="mavon_articleTitle">
-            <div>
-                <i class="el-icon-arrow-left"></i><router-link to="/manage/managing" style="text-decoration: none;color: #2c3e50;">文章管理</router-link>
-                <div><input type="text" placeholder="输入文章标题" v-model="wr_title"></div>
+        <div style="padding: 0 12vw;">
+            <div class="mavon_articleTitle">
+                <div>
+                    <i class="el-icon-arrow-left" style="color:#fff;"></i><router-link to="/manage/managing" style="text-decoration: none;color: #fff;">文章管理</router-link>
+                    <div><input type="text" placeholder="输入文章标题" v-model="wr_title"></div>
+                </div>
+                <div>
+                    <span class="mavon_save" @click="save()">保存草稿</span>
+                    <span class="mavon_release" @click="dialogFormVisible = true">发布文章</span>
+                    <span class="mavon_avatar"><router-link to="/personal/index"><img :src="circleUrl"></router-link></span>
+                </div>
             </div>
-            <div>
-                <span class="mavon_save" @click="save()">保存草稿</span>
-                <span class="mavon_release" @click="dialogFormVisible = true">发布文章</span>
-                <span class="mavon_avatar"><router-link to="/personal/index"><img :src="circleUrl"></router-link></span>
+            <div class="md">
+                <mavon-editor
+                        v-model = "wr_content"
+                        ref=md
+                        defaultOpen="edit"
+                        @imgAdd="$imgAdd"
+                        @imgDel="$imgDel"
+                        @save="saveMavon"
+                        style="height: 100%;border: 1px solid #ccc ;box-shadow: none;"/>
             </div>
+            <!--        <div> 这个html片段可以用来转化md文档格式-->
+            <!--            <mavon-editor-->
+            <!--                    class="md"-->
+            <!--                    :value="wr_content"-->
+            <!--                    :subfield = "false"-->
+            <!--                    :defaultOpen = "'preview'"-->
+            <!--                    :toolbarsFlag = "false"-->
+            <!--                    :editable="false"-->
+            <!--                    :scrollStyle="true"-->
+            <!--                    :ishljs = "true"-->
+            <!--            ></mavon-editor>-->
+            <!--        </div>-->
+            <el-dialog title="发布文章"
+                       :visible.sync="dialogFormVisible"
+                       :show-close="false"
+                       width="3"
+                       style="text-align: left;">
+                <div style="margin-bottom: 2.5rem;">
+                    <span>文章标签：</span>
+                    <el-cascader :options="options" :show-all-levels="false" v-model="tag"></el-cascader>
+                </div>
+                <div style="margin-bottom: 2.5rem;">
+                    <span>分类专栏：</span>
+                    <el-select v-model="wr_category" placeholder="请选择">
+                        <el-option
+                                v-for="(item,index) in category"
+                                :key="index"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div style="margin-bottom: 2.5rem;">
+                    <span>文章类型：</span>
+                    <el-select v-model="type" placeholder="请选择">
+                        <el-option
+                                v-for="item in mold"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-input v-show="type==1" v-model="links" placeholder="请填写原文链接" style="display: inline-block;width: 50%;margin-left: 1.5rem;"></el-input>
+                </div>
+                <div>
+                    <span>发布形式：</span>
+                    <el-select v-model="shape" placeholder="请选择">
+                        <el-option
+                                v-for="(item,index) in form"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="pushArticle(),dialogFormVisible = false">发布文章</el-button>
+                </div>
+            </el-dialog>
         </div>
-        <div class="md">
-            <mavon-editor
-                    v-model = "wr_content"
-                    ref=md
-                    defaultOpen="edit"
-                    @imgAdd="$imgAdd"
-                    @imgDel="$imgDel"
-                    @save="saveMavon"
-                    style="height: 100%;border: 1px solid #ccc ;box-shadow: none;"/>
-        </div>
-        <!--        <div> 这个html片段可以用来转化md文档格式-->
-        <!--            <mavon-editor-->
-        <!--                    class="md"-->
-        <!--                    :value="wr_content"-->
-        <!--                    :subfield = "false"-->
-        <!--                    :defaultOpen = "'preview'"-->
-        <!--                    :toolbarsFlag = "false"-->
-        <!--                    :editable="false"-->
-        <!--                    :scrollStyle="true"-->
-        <!--                    :ishljs = "true"-->
-        <!--            ></mavon-editor>-->
-        <!--        </div>-->
-        <el-dialog title="发布文章"
-                   :visible.sync="dialogFormVisible"
-                   :show-close="false"
-                   width="3"
-                   style="text-align: left;">
-            <div style="margin-bottom: 2.5rem;">
-                <span>文章标签：</span>
-                <el-cascader :options="options" :show-all-levels="false" v-model="tag"></el-cascader>
-            </div>
-            <div style="margin-bottom: 2.5rem;">
-                <span>分类专栏：</span>
-                <el-select v-model="wr_category" placeholder="请选择">
-                    <el-option
-                            v-for="(item,index) in category"
-                            :key="index"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-            </div>
-            <div style="margin-bottom: 2.5rem;">
-                <span>文章类型：</span>
-                <el-select v-model="type" placeholder="请选择">
-                    <el-option
-                            v-for="item in mold"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-                <el-input v-show="type==1" v-model="links" placeholder="请填写原文链接" style="display: inline-block;width: 50%;margin-left: 1.5rem;"></el-input>
-            </div>
-            <div>
-                <span>发布形式：</span>
-                <el-select v-model="shape" placeholder="请选择">
-                    <el-option
-                            v-for="(item,index) in form"
-                            :key="index"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="pushArticle(),dialogFormVisible = false">发布文章</el-button>
-            </div>
-        </el-dialog>
     </div>
 </template>
 
@@ -89,7 +91,7 @@
         data(){
             return{
                 img_file: {},
-                circleUrl:"http://localhost/graduation_project/blog2/src/assets/avatar/IMG_1066(20200214-130610).JPG",
+                circleUrl:"",
                 dialogFormVisible: false,
                 options: [{//文章标签数据
                     value: 'shujvku',
@@ -306,7 +308,7 @@
             },
             // 绑定@imgAdd event
             $imgAdd(pos, $file) {
-                console.log("触发图片上传");
+                // console.log("触发图片上传");
                 // 第一步.将图片上传到服务器.
                 var formdata = new FormData();
                 formdata.append('image', $file);
@@ -341,7 +343,7 @@
                         obj.value = item.name;
                         self.category.push(obj);
                     });
-                    console.log(self.category);
+                    // console.log(self.category);
                 });
             },
             getArticle(userId,articleId){//更新文章(先获取文章再提交文章)
@@ -361,7 +363,12 @@
         },
         mounted() {
             this.author = localStorage.getItem('email');//当前登陆id
+            if(this.author==null){
+                this.$router.push({path: "/index",redirect: '/index'});//路由重定向
+            }
             this.nickName = localStorage.getItem('nickName');//当前登录者昵称
+            this.circleUrl = localStorage.getItem('imageUrl');//当前登录者头像
+            // console.log(this.circleUrl);
             this.uniqueId = '';
             let userId = this.$route.query.userId;
             let articleId = this.$route.query.articleId;
@@ -372,7 +379,12 @@
 </script>
 
 <style lang="less">
-    .mavon{background-color: #f3f3f3;margin: 0;padding: 0;padding-top: 1rem;
+    .mavon{
+        background: url("../../assets/theme.jpg");
+        background-size: 100% 100%;
+        background-attachment: fixed;
+    }
+    .mavon{display:inline-block;margin: 0;height: 100%;min-height: calc(100vh - 1rem);padding-top: 1rem;width: 100vw;
         .mavon_articleTitle{display: flex;justify-content: space-between;align-items: center;padding: 0 1rem;
             &>div:nth-child(1){flex: 1;font-size: 1.8rem;text-align: left;cursor: pointer;line-height: 3rem;display:flex;align-items: center;
                 i{padding-right: 5px;font-size: 2rem;}
@@ -395,12 +407,12 @@
                 /* .release,.save{display:inline-block;text-align:center;line-height:3.5rem;width: 9rem;height: 3.5rem;background-color: #CA0C16;color: #fff;border-radius: .5rem;cursor: pointer;}*!*!*/
                 /* .save{margin-right: 1rem;background-color: #fff;color: #CA0C16;border: 1px solid #CA0C16;height: 3.5rem;}*/
                 .mavon_save{background-color: #fff;display: inline-block;height: 3.5rem;line-height:3.5rem;width: 9rem;border-radius: .5rem;border: 1px solid #CA0C16;color: #CA0C16;margin-right: 1.5rem;cursor: pointer;}
-                .mavon_release{background-color: #CA0C16;display: inline-block;height: 3.5rem;line-height:3.5rem;width: 9rem;border-radius: .5rem;border: 1px solid #fff;color: #fff;cursor: pointer;}
+                .mavon_release{background-color: #CA0C16;display: inline-block;height: 3.5rem;line-height:3.5rem;width: 9rem;border-radius: .5rem;color: #fff;cursor: pointer;}
                 .mavon_avatar{padding-left: 2rem;
                     img{width: 3.5rem;height: 3.5rem;border-radius: 50%;}
                 }
             }
         }
-        .md{height: 80vh;background-color: #428bca;margin-top: 2rem;}
+        .md{height: 80vh;margin-top: 2rem;}
     }
 </style>
